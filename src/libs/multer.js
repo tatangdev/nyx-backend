@@ -39,6 +39,17 @@ module.exports = {
         }
     }),
 
+    image: multer({
+        fileFilter: generateFileFilter([
+            'image/png',
+            'image/jpg',
+            'image/jpeg'
+        ]),
+        onError: (err, next) => {
+            next(err);
+        }
+    }),
+
     // videoStorage: multer({
     //     storage: generateStorage('./public/videos'),
     //     fileFilter: generateFileFilter([
