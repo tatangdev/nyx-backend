@@ -38,7 +38,8 @@ model Player {
 model CoinCategory {
   id         Int      @id @default(autoincrement())
   name       String
-  icon_url   String
+  icon_url   String?
+  is_active  Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -50,6 +51,7 @@ model Coin {
   name             String
   icon_url         String
   coin_category_id Int
+  is_active        Boolean  @default(true)
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt
 

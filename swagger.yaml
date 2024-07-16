@@ -109,10 +109,6 @@ paths:
                             type: boolean
                           is_superadmin:
                             type: boolean
-                          created_at:
-                            type: string
-                          updated_at:
-                            type: string
       security:
         - bearerAuth: []
     get:
@@ -153,10 +149,6 @@ paths:
                               type: boolean
                             is_superadmin:
                               type: boolean
-                            created_at:
-                              type: string
-                            updated_at:
-                              type: string
       security:
         - bearerAuth: []
   /v1/admin/users/{id}:
@@ -191,10 +183,6 @@ paths:
                             type: boolean
                           is_superadmin:
                             type: boolean
-                          created_at:
-                            type: string
-                          updated_at:
-                            type: string
       security:
         - bearerAuth: []
     put:
@@ -247,10 +235,165 @@ paths:
                             type: boolean
                           is_superadmin:
                             type: boolean
-                          created_at:
+      security:
+        - bearerAuth: []
+  /v1/admin/coin-categories:
+    post:
+      summary: Create coin category
+      tags:
+        - Admin - Coin Categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                icon_url:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
                             type: string
-                          updated_at:
+                          icon_url:
                             type: string
+                          is_active:
+                            type: boolean
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all coin categories
+      tags:
+        - Admin - Coin Categories
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: is_active
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            icon_url:
+                              type: string
+                            is_active:
+                              type: boolean
+      security:
+        - bearerAuth: []
+  /v1/admin/coin-categories/{id}:
+    get:
+      summary: Get coin category by id
+      tags:
+        - Admin - Coin Categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          icon_url:
+                            type: string
+                          is_active:
+                            type: boolean
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update coin category by id
+      tags:
+        - Admin - Coin Categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                icon_url:
+                  type: string
+                is_active:
+                  type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          icon_url:
+                            type: string
+                          is_active:
+                            type: boolean
       security:
         - bearerAuth: []
 components:
