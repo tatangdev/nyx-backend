@@ -8,7 +8,8 @@ module.exports = {
         try {
             let user = await prisma.user.findUnique({
                 where: {
-                    username: req.body.username
+                    username: req.body.username,
+                    is_active: true
                 }
             });
             if (!user) {
@@ -30,12 +31,7 @@ module.exports = {
                 });
             }
 
-            let payload = {
-                id: user.id,
-                username: user.username,
-                is_superadmin: user.is_superadmin
-            };
-            let token = jwt.sign(payload, process.env.JWT_SECRET, {
+            let token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
                 expiresIn: '1h'
             });
 

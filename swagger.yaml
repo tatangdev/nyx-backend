@@ -64,6 +64,8 @@ paths:
                             type: integer
                           username:
                             type: string
+                          is_active:
+                            type: boolean
                           is_superadmin:
                             type: boolean
       security:
@@ -100,16 +102,16 @@ paths:
                         type: object
                         properties:
                           id:
-                            type: string
+                            type: integer
                           username:
                             type: string
-                          email:
+                          is_active:
+                            type: boolean
+                          is_superadmin:
+                            type: boolean
+                          created_at:
                             type: string
-                          role:
-                            type: string
-                          createdAt:
-                            type: string
-                          updatedAt:
+                          updated_at:
                             type: string
       security:
         - bearerAuth: []
@@ -117,28 +119,44 @@ paths:
       summary: Get all users
       tags:
         - Admin - Users
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: is_active
+          in: query
+          required: false
+          schema:
+            type: boolean
       responses:
         "200":
           description: Success
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    username:
-                      type: string
-                    email:
-                      type: string
-                    role:
-                      type: string
-                    createdAt:
-                      type: string
-                    updatedAt:
-                      type: string
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            username:
+                              type: string
+                            is_active:
+                              type: boolean
+                            is_superadmin:
+                              type: boolean
+                            created_at:
+                              type: string
+                            updated_at:
+                              type: string
       security:
         - bearerAuth: []
   /v1/admin/users/{id}:
@@ -158,20 +176,81 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  username:
-                    type: string
-                  email:
-                    type: string
-                  role:
-                    type: string
-                  createdAt:
-                    type: string
-                  updatedAt:
-                    type: string
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          username:
+                            type: string
+                          is_active:
+                            type: boolean
+                          is_superadmin:
+                            type: boolean
+                          created_at:
+                            type: string
+                          updated_at:
+                            type: string
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update user by id
+      tags:
+        - Admin - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: user
+                password:
+                  type: string
+                  example: password
+                is_active:
+                  type: boolean
+                  example: true
+                is_superadmin:
+                  type: boolean
+                  example: false
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          username:
+                            type: string
+                          is_active:
+                            type: boolean
+                          is_superadmin:
+                            type: boolean
+                          created_at:
+                            type: string
+                          updated_at:
+                            type: string
       security:
         - bearerAuth: []
 components:

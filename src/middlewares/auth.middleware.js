@@ -1,3 +1,5 @@
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient({ log: ['query'] });
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -6,7 +8,7 @@ module.exports = {
         if (!token) {
             return res.status(401).json({
                 status: false,
-                message: "Token not found",
+                message: "You are not authorized to access this resource",
                 error: null,
                 data: null
             });
@@ -16,18 +18,42 @@ module.exports = {
             token = token.slice(7, token.length);
         }
 
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) {
                 return res.status(401).json({
                     status: false,
-                    message: "Token is not valid",
+                    message: "You are not authorized to access this resource",
                     error: err,
                     data: null
                 });
             }
 
-            req.user = decoded;
+            let user = await prisma.user.findUnique({ where: { id: decoded.id } });
+            if (!user || !user.is_active) {
+                return res.status(401).json({
+                    status: false,
+                    message: "You are not authorized to access this resource",
+                    error: null,
+                    data: null
+                });
+            }
+
+            delete user.password;
+            req.user = user;
             next();
         });
+    },
+
+    isAdmin: (req, res, next) => {
+        if (!req.user.is_superadmin) {
+            return res.status(403).json({
+                status: false,
+                message: "You are not authorized to access this resource",
+                error: null,
+                data: null
+            });
+        }
+
+        next();
     }
 };

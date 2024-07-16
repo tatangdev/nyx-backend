@@ -17,6 +17,7 @@ model User {
   id            Int      @id @default(autoincrement())
   username      String   @unique
   password      String
+  is_active     Boolean  @default(true)
   is_superadmin Boolean  @default(false)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
