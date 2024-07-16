@@ -237,11 +237,11 @@ paths:
                             type: boolean
       security:
         - bearerAuth: []
-  /v1/admin/coin-categories:
+  /v1/admin/card-categories:
     post:
-      summary: Create coin category
+      summary: Create card category
       tags:
-        - Admin - Coin Categories
+        - Admin - Card Categories
       requestBody:
         required: true
         content:
@@ -277,9 +277,9 @@ paths:
       security:
         - bearerAuth: []
     get:
-      summary: Get all coin categories
+      summary: Get all card categories
       tags:
-        - Admin - Coin Categories
+        - Admin - Card Categories
       parameters:
         - name: search
           in: query
@@ -316,11 +316,11 @@ paths:
                               type: boolean
       security:
         - bearerAuth: []
-  /v1/admin/coin-categories/{id}:
+  /v1/admin/card-categories/{id}:
     get:
-      summary: Get coin category by id
+      summary: Get card category by id
       tags:
-        - Admin - Coin Categories
+        - Admin - Card Categories
       parameters:
         - name: id
           in: path
@@ -351,9 +351,9 @@ paths:
       security:
         - bearerAuth: []
     put:
-      summary: Update coin category by id
+      summary: Update card category by id
       tags:
-        - Admin - Coin Categories
+        - Admin - Card Categories
       parameters:
         - name: id
           in: path

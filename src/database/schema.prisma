@@ -35,7 +35,7 @@ model Player {
   @@map("players")
 }
 
-model CoinCategory {
+model CardCategory {
   id         Int      @id @default(autoincrement())
   name       String
   icon_url   String?
@@ -43,29 +43,29 @@ model CoinCategory {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map("coin_categories")
+  @@map("card_categories")
 }
 
-model Coin {
-  id               Int      @id @default(autoincrement())
-  name             String
-  icon_url         String
-  coin_category_id Int
-  is_active        Boolean  @default(true)
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
+model Card {
+  id          Int      @id @default(autoincrement())
+  name        String
+  icon_url    String
+  category_id Int
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
-  @@map("coins")
+  @@map("cards")
 }
 
-model CoinLevel {
+model CardLevel {
   id         Int      @id @default(autoincrement())
-  coin_id    Int
+  card_id    Int
   level      Int
   price      Int
   profit     Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@map("coin_levels")
+  @@map("card_levels")
 }

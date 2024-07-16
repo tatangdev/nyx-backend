@@ -15,7 +15,7 @@ module.exports = {
                 });
             }
 
-            let coinCategory = await prisma.coinCategory.create({
+            let cardCategory = await prisma.cardCategory.create({
                 data: {
                     name: name,
                     icon_url: icon_url
@@ -24,9 +24,9 @@ module.exports = {
 
             return res.status(201).json({
                 status: true,
-                message: "Coin category created",
+                message: "Card category created",
                 error: null,
-                data: coinCategory
+                data: cardCategory
             });
 
         } catch (error) {
@@ -54,12 +54,12 @@ module.exports = {
                 }
             }
 
-            let coinCategories = await prisma.coinCategory.findMany(filter);
+            let cardCategories = await prisma.cardCategory.findMany(filter);
             return res.status(200).json({
                 status: true,
-                message: "Coin categories found",
+                message: "Card categories found",
                 error: null,
-                data: coinCategories
+                data: cardCategories
             });
 
         } catch (error) {
@@ -69,16 +69,16 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
-            let coinCategory = await prisma.coinCategory.findUnique({
+            let cardCategory = await prisma.cardCategory.findUnique({
                 where: {
                     id: parseInt(req.params.id)
                 }
             });
             return res.status(200).json({
                 status: true,
-                message: "Coin category found",
+                message: "Card category found",
                 error: null,
-                data: coinCategory
+                data: cardCategory
             });
 
         } catch (error) {
@@ -98,7 +98,7 @@ module.exports = {
                 });
             }
 
-            let coinCategory = await prisma.coinCategory.update({
+            let cardCategory = await prisma.cardCategory.update({
                 where: {
                     id: parseInt(req.params.id)
                 },
@@ -107,10 +107,10 @@ module.exports = {
                     icon_url: icon_url
                 }
             });
-            if (!coinCategory) {
+            if (!cardCategory) {
                 return res.status(404).json({
                     status: false,
-                    message: "Coin category not found",
+                    message: "Card category not found",
                     error: null,
                     data: null
                 });
@@ -127,7 +127,7 @@ module.exports = {
                 data.is_active = is_active;
             }
 
-            coinCategory = await prisma.coinCategory.update({
+            cardCategory = await prisma.cardCategory.update({
                 where: {
                     id: parseInt(req.params.id)
                 },
@@ -136,9 +136,9 @@ module.exports = {
 
             return res.status(200).json({
                 status: true,
-                message: "Coin category updated",
+                message: "Card category updated",
                 error: null,
-                data: coinCategory
+                data: cardCategory
             });
 
         } catch (error) {

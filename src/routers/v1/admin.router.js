@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const admin = require('../../controllers/v1/admin.controller');
 const user = require('../../controllers/v1/admin/user.controller');
-const coinCategory = require('../../controllers/v1/admin/coinCategory.controller');
+const cardCategory = require('../../controllers/v1/admin/cardCategory.controller');
 const auth = require('../../middlewares/auth.middleware');
 
 // auth
@@ -14,10 +14,10 @@ router.get('/users', auth.validate, user.index);
 router.get('/users/:id', auth.validate, user.show);
 router.put('/users/:id', auth.validate, auth.isAdmin, user.update);
 
-// coin categories
-router.post('/coin-categories', auth.validate, coinCategory.create);
-router.get('/coin-categories', auth.validate, coinCategory.index);
-router.get('/coin-categories/:id', auth.validate, coinCategory.show);
-router.put('/coin-categories/:id', auth.validate, coinCategory.update);
+// card categories
+router.post('/card-categories', auth.validate, cardCategory.create);
+router.get('/card-categories', auth.validate, cardCategory.index);
+router.get('/card-categories/:id', auth.validate, cardCategory.show);
+router.put('/card-categories/:id', auth.validate, cardCategory.update);
 
 module.exports = router;
