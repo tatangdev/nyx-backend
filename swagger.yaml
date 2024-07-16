@@ -4,7 +4,7 @@ info:
   description: Nyx API
   version: 1.0.0
 servers:
-  - url: https://nyx-api.up.railway.app/api
+  - url: https://nyx-backend.up.railway.app/api
   - url: http://localhost:3000/api
 security:
   - bearerAuth: []
