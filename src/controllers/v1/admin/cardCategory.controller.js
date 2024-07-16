@@ -1,5 +1,4 @@
 const { PrismaClient } = require('@prisma/client');
-const { update } = require('./user.controller');
 const prisma = new PrismaClient({ log: ['query'] });
 
 module.exports = {
@@ -89,22 +88,10 @@ module.exports = {
     update: async (req, res, next) => {
         try {
             let { name, icon_url, is_active } = req.body;
-            if (!name && !icon_url) {
-                return res.status(400).json({
-                    status: false,
-                    message: "Name or icon_url is required",
-                    error: null,
-                    data: null
-                });
-            }
 
-            let cardCategory = await prisma.cardCategory.update({
+            let cardCategory = await prisma.cardCategory.findUnique({
                 where: {
                     id: parseInt(req.params.id)
-                },
-                data: {
-                    name: name,
-                    icon_url: icon_url
                 }
             });
             if (!cardCategory) {

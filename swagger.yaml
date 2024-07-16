@@ -396,6 +396,179 @@ paths:
                             type: boolean
       security:
         - bearerAuth: []
+  /v1/admin/cards:
+    post:
+      summary: Create card
+      tags:
+        - Admin - Cards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                icon_url:
+                  type: string
+                category_id:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          title:
+                            type: string
+                          description:
+                            type: string
+                          category_id:
+                            type: integer
+                          image_url:
+                            type: string
+                          is_active:
+                            type: boolean
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all cards
+      tags:
+        - Admin - Cards
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: is_active
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            icon_url:
+                              type: string
+                            category_id:
+                              type: integer
+                            is_active:
+                              type: boolean
+      security:
+        - bearerAuth: []
+  /v1/admin/cards/{id}:
+    get:
+      summary: Get card by id
+      tags:
+        - Admin - Cards
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          icon_url:
+                            type: string
+                          category_id:
+                            type: integer
+                          is_active:
+                            type: boolean
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update card by id
+      tags:
+        - Admin - Cards
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                icon_url:
+                  type: string
+                category_id:
+                  type: integer
+                is_active:
+                  type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          icon_url:
+                            type: string
+                          category_id:
+                            type: integer
+                          is_active:
+                            type: boolean
+      security:
+        - bearerAuth: []
 components:
   schemas:
     AnyValue:
