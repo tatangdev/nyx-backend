@@ -4,16 +4,27 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node srt/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js"
+  },
+  "prisma": {
+    "schema": "./src/database/schema.prisma",
+    "seed": "node ./src/database/seeders/index.js"
   },
   "dependencies": {
+    "@prisma/client": "5.16.2",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "googleapis": "^140.0.1",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "path": "^0.12.7",
-    "stream": "^0.0.3"
+    "prisma": "^5.16.2",
+    "stream": "^0.0.3",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.4.5"
   }
 }

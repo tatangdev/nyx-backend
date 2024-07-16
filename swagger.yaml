@@ -1,0 +1,201 @@
+openapi: "3.0.0"
+info:
+  title: Nyx API
+  description: Nyx API
+  version: 1.0.0
+servers:
+  - url: https://nyx-api.up.railway.app/api
+  - url: http://localhost:3000/api
+security:
+  - bearerAuth: []
+paths:
+  /v1/admin/login:
+    post:
+      summary: Admin login
+      tags:
+        - Admin - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: superadmin
+                password:
+                  type: string
+                  example: password
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          token:
+                            type: string
+  /v1/admin/whoami:
+    get:
+      summary: Get current admin
+      tags:
+        - Admin - Auth
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          username:
+                            type: string
+                          is_superadmin:
+                            type: boolean
+      security:
+        - bearerAuth: []
+  /v1/admin/users:
+    post:
+      summary: Create user
+      tags:
+        - Admin - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: user
+                password:
+                  type: string
+                  example: password
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          username:
+                            type: string
+                          email:
+                            type: string
+                          role:
+                            type: string
+                          createdAt:
+                            type: string
+                          updatedAt:
+                            type: string
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all users
+      tags:
+        - Admin - Users
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    username:
+                      type: string
+                    email:
+                      type: string
+                    role:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+      security:
+        - bearerAuth: []
+  /v1/admin/users/{id}:
+    get:
+      summary: Get user by id
+      tags:
+        - Admin - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  role:
+                    type: string
+                  createdAt:
+                    type: string
+                  updatedAt:
+                    type: string
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    AnyValue:
+      anyOf:
+        - type: string
+        - type: number
+        - type: integer
+        - type: boolean
+        - type: array
+          items: {}
+        - type: object
+    BasicResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        error:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

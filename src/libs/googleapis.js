@@ -11,67 +11,71 @@ const drive = google.drive({
     auth: oauth2Client
 });
 
-function grantPermission(fileId) {
-    return new Promise((resolve, reject) => {
-        drive.permissions.create({
+async function grantPermission(fileId) {
+    try {
+        await drive.permissions.create({
             fileId: fileId,
             requestBody: {
                 role: 'reader',
                 type: 'anyone',
             }
-        }, (err, permission) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(permission.data.id);
-            }
         });
-    });
+        console.log('fileId', fileId);
+        return;
+    } catch (error) {
+        throw new Error(`Failed to grant permission: ${error.message}`);
+    }
 }
 
-// https://drive.google.com/file/d/168Kewn52MSvp5nIGj-l5RNQcsEdUD_DM/view
-module.exports = {
-    upload: ({ originalname, mimetype, buffer }) => {
-        return new Promise((resolve, reject) => {
-            drive.files.create({
-                resource: {
-                    name: originalname,
-                    parents: [DEFAULT_FOLDER_ID]
-                },
-                media: {
-                    mimeType: mimetype,
-                    body: Readable.from(buffer)
-                },
-                fields: 'id'
-            }, (err, file) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(file.data.id);
-                }
-            });
+async function upload({ originalname, mimetype, buffer }) {
+    try {
+        const file = await drive.files.create({
+            resource: {
+                name: originalname,
+                parents: [DEFAULT_FOLDER_ID]
+            },
+            media: {
+                mimeType: mimetype,
+                body: Readable.from(buffer)
+            },
+            fields: 'id'
         });
-    },
-
-    list: () => {
-        return new Promise((resolve, reject) => {
-            drive.files.list({
-                pageSize: 10,
-                q: `'${DEFAULT_FOLDER_ID}' in parents and trashed = false`,
-                fields: 'nextPageToken, files(id, name)',
-            }, (err, res) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    res.data.files.forEach(file => {
-                        grantPermission(file.id);
-                    });
-                    resolve(res.data.files);
-                }
-            });
-        });
-    },
-
-    grantPermission
+        grantPermission(file.data.id);
+        return {
+            file_id: file.data.id,
+            file_name: originalname,
+            file_url: `https://drive.google.com/file/d/${file.data.id}/view`,
+            thumbnail_url: `https://drive.google.com/thumbnail?id=${file.data.id}&sz=w1000`
+        };
+    } catch (error) {
+        throw new Error(`Failed to upload file: ${error.message}`);
+    }
 }
 
+async function list() {
+    try {
+        const res = await drive.files.list({
+            pageSize: 10,
+            q: `'${DEFAULT_FOLDER_ID}' in parents and trashed = false`,
+            fields: 'nextPageToken, files(id, name)',
+        });
+        const files = res.data.files;
+        if (files.length) {
+            const filesWithUrls = await Promise.all(files.map(async (file) => {
+                return {
+                    file_id: file.id,
+                    file_name: file.name,
+                    file_url: `https://drive.google.com/file/d/${file.id}/view`,
+                    thumbnail_url: `https://drive.google.com/thumbnail?id=${file.id}&sz=w1000`
+                };
+            }));
+            return filesWithUrls;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        throw new Error(`Failed to list files: ${error.message}`);
+    }
+}
+
+module.exports = { upload, list, };
