@@ -569,6 +569,75 @@ paths:
                             type: boolean
       security:
         - bearerAuth: []
+  /v1/login:
+    post:
+      summary: Player login
+      tags:
+        - Player - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                telegram_id:
+                  type: string
+                  example: 123456789
+                username:
+                  type: string
+                  example: player
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Doe
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          token:
+                            type: string
+  /v1/whoami:
+    get:
+      summary: Get current player
+      tags:
+        - Player - Auth
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          telegram_id:
+                            type: string
+                          username:
+                            type: string
+                          first_name:
+                            type: string
+                          last_name:
+                            type: string
+      security:
+        - bearerAuth: []
 components:
   schemas:
     AnyValue:
