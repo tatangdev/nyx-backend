@@ -50,25 +50,15 @@ model CardCategory {
 }
 
 model Card {
-  id          Int      @id @default(autoincrement())
-  name        String
-  icon_url    String
-  category_id Int
-  is_active   Boolean  @default(true)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  name         String
+  icon_url     String
+  category_id  Int
+  is_active    Boolean  @default(true)
+  levels       String?
+  requirements String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 
   @@map("cards")
-}
-
-model CardLevel {
-  id         Int      @id @default(autoincrement())
-  card_id    Int
-  level      Int
-  price      Int
-  profit     Int
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  @@map("card_levels")
 }

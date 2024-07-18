@@ -414,6 +414,15 @@ paths:
                   type: string
                 category_id:
                   type: integer
+                levels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      uprade_price:
+                        type: integer
+                      profit_per_hour:
+                        type: integer
       responses:
         "200":
           description: Success
@@ -439,6 +448,17 @@ paths:
                             type: string
                           is_active:
                             type: boolean
+                          levels:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                level:
+                                  type: integer
+                                uprade_price:
+                                  type: integer
+                                profit_per_hour:
+                                  type: integer
       security:
         - bearerAuth: []
     get:
