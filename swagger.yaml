@@ -569,11 +569,11 @@ paths:
                             type: boolean
       security:
         - bearerAuth: []
-  /v1/login:
+  /v1/auth/login:
     post:
       summary: Player login
       tags:
-        - Player - Auth
+        - Auth
       requestBody:
         required: true
         content:
@@ -608,11 +608,11 @@ paths:
                         properties:
                           token:
                             type: string
-  /v1/whoami:
+  /v1/auth/whoami:
     get:
       summary: Get current player
       tags:
-        - Player - Auth
+        - Auth
       responses:
         "200":
           description: Success
@@ -636,6 +636,61 @@ paths:
                             type: string
                           last_name:
                             type: string
+      security:
+        - bearerAuth: []
+  /v1/media/images:
+    post:
+      summary: Upload image
+      tags:
+        - Media
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all images
+      tags:
+        - Media
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            url:
+                              type: string
       security:
         - bearerAuth: []
 components:
