@@ -3,9 +3,10 @@ const prisma = new PrismaClient({ log: ['query'] });
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    validate: (req, res, next) => {
+    validate: async (req, res, next) => {
         let token = req.headers['authorization'];
-        if (!token) {
+
+        if (!token || !token.startsWith('Bearer ')) {
             return res.status(401).json({
                 status: false,
                 message: "You are not authorized to access this resource",
@@ -14,9 +15,7 @@ module.exports = {
             });
         }
 
-        if (token.startsWith('Bearer ')) {
-            token = token.slice(7, token.length);
-        }
+        token = token.slice(7);
 
         jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
             if (err) {
@@ -26,6 +25,11 @@ module.exports = {
                     error: err,
                     data: null
                 });
+            }
+
+            if (decoded.role === 'player') {
+                req.user = decoded;
+                return next();
             }
 
             let user = await prisma.user.findUnique({ where: { id: decoded.id } });
@@ -39,13 +43,26 @@ module.exports = {
             }
 
             delete user.password;
-            req.user = user;
+            req.user = { ...user, role: decoded.role };
             next();
         });
     },
 
     isAdmin: (req, res, next) => {
-        if (!req.user.is_superadmin) {
+        if (req.user.role != 'admin') {
+            return res.status(403).json({
+                status: false,
+                message: "You are not authorized to access this resource",
+                error: null,
+                data: null
+            });
+        }
+
+        next();
+    },
+
+    isSuperadmin: (req, res, next) => {
+        if (req.user.role != 'admin' || !req.user.is_superadmin) {
             return res.status(403).json({
                 status: false,
                 message: "You are not authorized to access this resource",

@@ -5,7 +5,7 @@ module.exports = {
     uploadImage: async (req, res, next) => {
         try {
             let response = await googleapis.upload(req.file);
-            res.json({
+            return res.json({
                 status: true,
                 message: 'Image uploaded',
                 err: null,
@@ -19,7 +19,7 @@ module.exports = {
     listImages: async (req, res) => {
         try {
             let response = await googleapis.list();
-            res.json({
+            return res.json({
                 status: true,
                 message: 'List of images',
                 err: null,

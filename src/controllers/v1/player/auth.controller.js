@@ -13,7 +13,7 @@ module.exports = {
                 create: { telegram_id, username, first_name, last_name, created_at: Math.floor(Date.now() / 1000) }
             });
 
-            let token = jwt.sign(player, process.env.JWT_SECRET, { expiresIn: '1d' });
+            let token = jwt.sign({ ...player, role: 'player' }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
             return res.status(200).json({
                 status: true,
@@ -32,7 +32,7 @@ module.exports = {
                 status: true,
                 message: "Player details",
                 error: null,
-                data: req.player
+                data: req.user
             });
         } catch (error) {
             next(error);

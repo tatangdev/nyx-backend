@@ -31,7 +31,7 @@ module.exports = {
                 });
             }
 
-            let token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+            let token = jwt.sign({ id: user.id, role: 'admin' }, process.env.JWT_SECRET, {
                 expiresIn: '1h'
             });
 
