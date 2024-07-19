@@ -16,26 +16,26 @@ module.exports = {
 
             // validate levels
             levels.forEach((level, index) => {
-                if (typeof level.uprade_price !== 'number' || typeof level.profit_per_hour !== 'number') {
+                if (typeof level.upgrade_price !== 'number' || typeof level.profit_per_hour !== 'number') {
                     return res.status(400).json({
                         status: false,
-                        message: "uprade_price and profit_per_hour must be a number",
+                        message: "upgrade_price and profit_per_hour must be a number",
                         error: null,
                         data: null
                     });
                 }
 
-                if (level.uprade_price <= 0 || level.profit_per_hour <= 0) {
+                if (level.upgrade_price <= 0 || level.profit_per_hour <= 0) {
                     return res.status(400).json({
                         status: false,
-                        message: "uprade_price and profit_per_hour must be greater than 0",
+                        message: "upgrade_price and profit_per_hour must be greater than 0",
                         error: null,
                         data: null
                     });
                 }
 
                 if (index > 0) {
-                    if (level.uprade_price <= levels[index - 1].uprade_price) {
+                    if (level.upgrade_price <= levels[index - 1].upgrade_price) {
                         return res.status(400).json({
                             status: false,
                             message: "upgrade_price must be greater than previous upgrade_price",
@@ -208,26 +208,26 @@ module.exports = {
             // validate levels
             if (levels.length) {
                 levels.forEach((level, index) => {
-                    if (typeof level.uprade_price !== 'number' || typeof level.profit_per_hour !== 'number') {
+                    if (typeof level.upgrade_price !== 'number' || typeof level.profit_per_hour !== 'number') {
                         return res.status(400).json({
                             status: false,
-                            message: "uprade_price and profit_per_hour must be a number",
+                            message: "upgrade_price and profit_per_hour must be a number",
                             error: null,
                             data: null
                         });
                     }
 
-                    if (level.uprade_price <= 0 || level.profit_per_hour <= 0) {
+                    if (level.upgrade_price <= 0 || level.profit_per_hour <= 0) {
                         return res.status(400).json({
                             status: false,
-                            message: "uprade_price and profit_per_hour must be greater than 0",
+                            message: "upgrade_price and profit_per_hour must be greater than 0",
                             error: null,
                             data: null
                         });
                     }
 
                     if (index > 0) {
-                        if (level.uprade_price <= levels[index - 1].uprade_price) {
+                        if (level.upgrade_price <= levels[index - 1].upgrade_price) {
                             return res.status(400).json({
                                 status: false,
                                 message: "upgrade_price must be greater than previous upgrade_price",

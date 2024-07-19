@@ -419,7 +419,7 @@ paths:
                   items:
                     type: object
                     properties:
-                      uprade_price:
+                      upgrade_price:
                         type: integer
                       profit_per_hour:
                         type: integer
@@ -455,7 +455,7 @@ paths:
                               properties:
                                 level:
                                   type: integer
-                                uprade_price:
+                                upgrade_price:
                                   type: integer
                                 profit_per_hour:
                                   type: integer
@@ -564,6 +564,15 @@ paths:
                   type: integer
                 is_active:
                   type: boolean
+                levels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      upgrade_price:
+                        type: integer
+                      profit_per_hour:
+                        type: integer
       responses:
         "200":
           description: Success
@@ -587,6 +596,17 @@ paths:
                             type: integer
                           is_active:
                             type: boolean
+                          levels:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                level:
+                                  type: integer
+                                upgrade_price:
+                                  type: integer
+                                profit_per_hour:
+                                  type: integer
       security:
         - bearerAuth: []
   /v1/auth/login:
