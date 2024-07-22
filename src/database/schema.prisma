@@ -62,3 +62,32 @@ model Card {
 
   @@map("cards")
 }
+
+model CardLevel {
+  id      Int    @id @default(autoincrement())
+  card_id Int
+  user_id Int
+  level   Int
+  data    String
+
+  @@map("card_levels")
+}
+
+model Point {
+  id        Int @id @default(autoincrement())
+  player_id Int
+  amount    Int
+
+  @@map("points")
+}
+
+model PointHistory {
+  id        Int    @id @default(autoincrement())
+  player_id Int
+  point_id  Int
+  amount    Int
+  type      String
+  data      String
+
+  @@map("point_histories")
+}

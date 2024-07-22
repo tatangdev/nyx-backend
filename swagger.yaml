@@ -738,6 +738,91 @@ paths:
                               type: string
       security:
         - bearerAuth: []
+  /v1/cards:
+    get:
+      summary: Get all cards
+      tags:
+        - Cards
+      parameters:
+        - name: category_id
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            icon_url:
+                              type: string
+                            level:
+                              type: integer
+                            upgrade: 
+                              type: object
+                              properties:
+                                level:
+                                  type: integer
+                                uprade_price:
+                                  type: integer
+                                profit_per_hour:
+                                  type: integer
+                            category: 
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+  /v1/card-upgrade:
+    post:
+      summary: Upgrade card
+      tags:
+        - Cards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                card_id:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          card_id:
+                            type: integer
+                          level:
+                            type: integer
+                          profit_per_hour:
+                            type: integer
 components:
   schemas:
     AnyValue:
