@@ -20,11 +20,13 @@ module.exports = {
                     c.levels
                 FROM
                     cards c
-                    LEFT JOIN card_levels cl ON cl.card_id = c.id AND cl.user_id = ${req.user.id}
-                    INNER JOIN card_categories cat ON cat.id = c.category_id
+                LEFT JOIN 
+                    card_levels cl ON cl.card_id = c.id AND cl.user_id = ${req.user.id}
+                INNER JOIN 
+                    card_categories cat ON cat.id = c.category_id
                 WHERE ${filter}
-                ORDER BY
-                    c.id;`);
+                ORDER BY c.id;
+            `);
 
             cards = cards.map(card => {
                 card.upgrade = null;
@@ -65,6 +67,8 @@ module.exports = {
 
     upgrade: async (req, res, next) => {
         try {
+            const cardId = parseInt(req.body.card_id);
+
             let cards = await prisma.$queryRawUnsafe(`
                 SELECT 
                     c.id, 
@@ -77,11 +81,14 @@ module.exports = {
                     cl.data AS level_data
                 FROM
                     cards c
-                    LEFT JOIN card_levels cl ON cl.card_id = c.id AND cl.user_id = ${req.user.id}
-                    INNER JOIN card_categories cat ON cat.id = c.category_id
-                WHERE c.id = ${req.body.card_id}
-                ORDER BY
-                    c.id;`);
+                LEFT JOIN 
+                    card_levels cl ON cl.card_id = c.id AND cl.user_id = ${req.user.id}
+                INNER JOIN 
+                    card_categories cat ON cat.id = c.category_id
+                WHERE c.id = ${cardId}
+                ORDER BY c.id;
+            `);
+
             if (!cards || cards.length === 0) {
                 return res.status(404).json({
                     status: false,
@@ -127,24 +134,23 @@ module.exports = {
                 });
             }
 
-
-            // Start transaction
             await prisma.$transaction(async (prisma) => {
-                // Retrieve player points
                 let point = await prisma.point.findFirst({
                     where: {
                         player_id: req.user.id
                     }
                 });
+
                 if (!point) {
                     throw new Error("Point not found");
                 }
+
                 if (point.balance < card.upgrade.uprade_price) {
                     throw new Error("Insufficient balance");
                 }
 
-                // Update player points
-                let newBalance = point.amount - card.upgrade.uprade_price;
+                const newBalance = point.amount - card.upgrade.uprade_price;
+
                 point = await prisma.point.update({
                     where: {
                         id: point.id
@@ -154,7 +160,6 @@ module.exports = {
                     }
                 });
 
-                // Save player points history
                 let pointHistory = await prisma.pointHistory.create({
                     data: {
                         player_id: req.user.id,
@@ -169,11 +174,11 @@ module.exports = {
                     }
                 });
 
-                // Upgrade card
                 let levelData = [];
                 if (card.level_data) {
                     levelData = JSON.parse(card.level_data);
                 }
+
                 levelData.push({
                     ...card.upgrade,
                     history_id: pointHistory.id,
@@ -187,6 +192,7 @@ module.exports = {
                         user_id: req.user.id
                     }
                 });
+
                 if (cardLevel) {
                     cardLevel = await prisma.cardLevel.update({
                         where: {

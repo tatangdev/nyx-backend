@@ -1,0 +1,201 @@
+{
+    "categories": [
+        {
+            "name": "PR&Team",
+            "cards": [
+                {
+                    "name": "CEO",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+                },
+                {
+                    "name": "Marketing",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png"
+                },
+                {
+                    "name": "IT Team",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"
+                },
+                {
+                    "name": "Support Team",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png"
+                },
+                {
+                    "name": "HamsterBook",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png"
+                },
+                {
+                    "name": "HamsterTube",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/52.png"
+                }
+            ]
+        },
+        {
+            "name": "Markets",
+            "cards": [
+                {
+                    "name": "Fan Tokens",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png"
+                },
+                {
+                    "name": "Staking",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+                },
+                {
+                    "name": "BTC Pairs",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png"
+                },
+                {
+                    "name": "ETH Pairs",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png"
+                },
+                {
+                    "name": "GamiFi tokens",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png"
+                },
+                {
+                    "name": "SociaFi tokens",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png"
+                }
+            ]
+        },
+        {
+            "name": "Legal",
+            "cards": [
+                {
+                    "name": "KYC",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png"
+                },
+                {
+                    "name": "KYB",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/2.png"
+                },
+                {
+                    "name": "Legal Opinion",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3957.png"
+                },
+                {
+                    "name": "SEC Transparency",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png"
+                },
+                {
+                    "name": "Anti Money Laundering",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/8916.png"
+                },
+                {
+                    "name": "Data Protection",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png"
+                }
+            ]
+        },
+        {
+            "name": "Web3",
+            "cards": [
+                {
+                    "name": "Dex",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/20396.png"
+                },
+                {
+                    "name": "Oracle",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3773.png"
+                },
+                {
+                    "name": "Vesting",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1321.png"
+                },
+                {
+                    "name": "Launchpad",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/512.png"
+                },
+                {
+                    "name": "NFT Marketplace",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/4847.png"
+                },
+                {
+                    "name": "NFT Farming",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/5690.png"
+                }
+            ]
+        },
+        {
+            "name": "Specials",
+            "cards": [
+                {
+                    "name": "Call for BTC to Rise",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/2280.png"
+                },
+                {
+                    "name": "CX Hub Istanbul",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/4642.png"
+                },
+                {
+                    "name": "Business Jet",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1518.png"
+                },
+                {
+                    "name": "Green Energy",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3897.png"
+                },
+                {
+                    "name": "Premarket Launch",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/7226.png"
+                },
+                {
+                    "name": "Web3 Summit",
+                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png"
+                }
+            ]
+        }
+    ],
+    "levels": [
+        {
+            "level": 1,
+            "uprade_price": 1107,
+            "profit_per_hour": 221
+        },
+        {
+            "level": 2,
+            "uprade_price": 2214,
+            "profit_per_hour": 531
+        },
+        {
+            "level": 3,
+            "uprade_price": 4428,
+            "profit_per_hour": 1275
+        },
+        {
+            "level": 4,
+            "uprade_price": 8856,
+            "profit_per_hour": 3061
+        },
+        {
+            "level": 5,
+            "uprade_price": 17712,
+            "profit_per_hour": 7346
+        },
+        {
+            "level": 6,
+            "uprade_price": 35424,
+            "profit_per_hour": 17629
+        },
+        {
+            "level": 7,
+            "uprade_price": 70848,
+            "profit_per_hour": 42310
+        },
+        {
+            "level": 8,
+            "uprade_price": 141696,
+            "profit_per_hour": 101544
+        },
+        {
+            "level": 9,
+            "uprade_price": 283392,
+            "profit_per_hour": 243707
+        },
+        {
+            "level": 10,
+            "uprade_price": 566784,
+            "profit_per_hour": 584896
+        }
+    ]
+}
