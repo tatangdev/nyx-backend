@@ -114,6 +114,9 @@ module.exports = {
                         break;
                 }
             }
+            if (req.query.category_id) {
+                filter.where.category_id = parseInt(req.query.category_id);
+            }
 
             let cards = await prisma.card.findMany(filter);
             cards = cards.map(card => {
