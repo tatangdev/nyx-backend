@@ -41,11 +41,17 @@ module.exports = {
 
     whoami: async (req, res, next) => {
         try {
+            let user = { ...req.user };
+            let point = await prisma.point.findFirst({ where: { player_id: req.user.id } });
+            if (point) {
+                user.point = point.amount;
+                user.profit_per_hour = point.profit_per_hour;
+            }
             return res.status(200).json({
                 status: true,
                 message: "Player details",
                 error: null,
-                data: req.user
+                data: user
             });
         } catch (error) {
             next(error);
