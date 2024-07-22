@@ -72,5 +72,18 @@ module.exports = {
         }
 
         next();
+    },
+
+    isPlayer: (req, res, next) => {
+        if (req.user.role != 'player') {
+            return res.status(403).json({
+                status: false,
+                message: "You are not authorized to access this resource",
+                error: null,
+                data: null
+            });
+        }
+
+        next();
     }
 };

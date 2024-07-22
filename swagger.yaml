@@ -772,16 +772,16 @@ paths:
                               type: string
                             level:
                               type: integer
-                            upgrade: 
+                            upgrade:
                               type: object
                               properties:
                                 level:
                                   type: integer
-                                uprade_price:
+                                upgrade_price:
                                   type: integer
                                 profit_per_hour:
                                   type: integer
-                            category: 
+                            category:
                               type: object
                               properties:
                                 id:

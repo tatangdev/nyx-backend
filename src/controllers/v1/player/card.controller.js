@@ -42,7 +42,7 @@ module.exports = {
                     if (nextLevel) {
                         card.upgrade = {
                             level: nextLevel.level,
-                            uprade_price: nextLevel.uprade_price,
+                            upgrade_price: nextLevel.upgrade_price,
                             profit_per_hour: nextLevel.profit_per_hour
                         };
                     }
@@ -112,7 +112,7 @@ module.exports = {
                     if (nextLevel) {
                         card.upgrade = {
                             level: nextLevel.level,
-                            uprade_price: nextLevel.uprade_price,
+                            upgrade_price: nextLevel.upgrade_price,
                             profit_per_hour: nextLevel.profit_per_hour
                         };
                     }
@@ -145,18 +145,24 @@ module.exports = {
                     throw new Error("Point not found");
                 }
 
-                if (point.balance < card.upgrade.uprade_price) {
+                if (point.balance < card.upgrade.upgrade_price) {
                     throw new Error("Insufficient balance");
                 }
 
-                const newBalance = point.amount - card.upgrade.uprade_price;
+                const newBalance = point.amount - card.upgrade.upgrade_price;
+                const newProfitPerHour = point.profit_per_hour + card.upgrade.profit_per_hour;
+
+                console.log("newBalance", newBalance);
+                console.log("point.amount", point.amount);
+                console.log("card.upgrade.upgrade_price", card.upgrade.upgrade_price);
 
                 point = await prisma.point.update({
                     where: {
                         id: point.id
                     },
                     data: {
-                        amount: newBalance
+                        amount: newBalance,
+                        profit_per_hour: newProfitPerHour
                     }
                 });
 
@@ -164,7 +170,7 @@ module.exports = {
                     data: {
                         player_id: req.user.id,
                         point_id: point.id,
-                        amount: -card.upgrade.uprade_price,
+                        amount: -card.upgrade.upgrade_price,
                         type: 'CARD_UPGRADE',
                         data: JSON.stringify({
                             ...card.upgrade,

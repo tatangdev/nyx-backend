@@ -149,52 +149,52 @@
     "levels": [
         {
             "level": 1,
-            "uprade_price": 1107,
+            "upgrade_price": 1107,
             "profit_per_hour": 221
         },
         {
             "level": 2,
-            "uprade_price": 2214,
+            "upgrade_price": 2214,
             "profit_per_hour": 531
         },
         {
             "level": 3,
-            "uprade_price": 4428,
+            "upgrade_price": 4428,
             "profit_per_hour": 1275
         },
         {
             "level": 4,
-            "uprade_price": 8856,
+            "upgrade_price": 8856,
             "profit_per_hour": 3061
         },
         {
             "level": 5,
-            "uprade_price": 17712,
+            "upgrade_price": 17712,
             "profit_per_hour": 7346
         },
         {
             "level": 6,
-            "uprade_price": 35424,
+            "upgrade_price": 35424,
             "profit_per_hour": 17629
         },
         {
             "level": 7,
-            "uprade_price": 70848,
+            "upgrade_price": 70848,
             "profit_per_hour": 42310
         },
         {
             "level": 8,
-            "uprade_price": 141696,
+            "upgrade_price": 141696,
             "profit_per_hour": 101544
         },
         {
             "level": 9,
-            "uprade_price": 283392,
+            "upgrade_price": 283392,
             "profit_per_hour": 243707
         },
         {
             "level": 10,
-            "uprade_price": 566784,
+            "upgrade_price": 566784,
             "profit_per_hour": 584896
         }
     ]
