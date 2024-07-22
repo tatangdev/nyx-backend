@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 
 // 500 handler
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.log(err);
     res.status(500).json({
         status: false,
         message: 'Something broke!',
