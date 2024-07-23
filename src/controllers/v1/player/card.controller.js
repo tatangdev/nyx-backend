@@ -30,6 +30,10 @@ module.exports = {
 
             cards = cards.map(card => {
                 card.upgrade = null;
+                card.current = {
+                    level: card.level,
+                    profit_per_hour: 0
+                };
                 card.category = {
                     id: card.category_id,
                     name: card.category_name
@@ -37,8 +41,15 @@ module.exports = {
 
                 if (card.levels) {
                     const levels = JSON.parse(card.levels);
+                    const currentLevel = levels.find(item => item.level === card.level);
                     const nextLevel = levels.find(item => item.level === card.level + 1);
 
+                    if (currentLevel) {
+                        card.current = {
+                            level: currentLevel.level,
+                            profit_per_hour: currentLevel.profit_per_hour
+                        };
+                    }
                     if (nextLevel) {
                         card.upgrade = {
                             level: nextLevel.level,
@@ -48,6 +59,7 @@ module.exports = {
                     }
                 }
 
+                delete card.level;
                 delete card.category_id;
                 delete card.category_name;
                 delete card.levels;
