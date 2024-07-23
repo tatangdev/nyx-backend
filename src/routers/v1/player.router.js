@@ -17,4 +17,7 @@ router.get('/media/images', validate, isAdmin, media.imageKitList);
 router.get('/cards', validate, isPlayer, card.list);
 router.post('/card-upgrade', validate, isPlayer, card.upgrade);
 
+// home
+router.get('/', validate, isPlayer, auth.home);
+
 module.exports = router;

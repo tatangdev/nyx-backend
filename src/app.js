@@ -24,9 +24,9 @@ app.use('/videos', express.static('./src/public/videos'));
 app.use('/api/v1', v1);
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+// app.get('/', (req, res) => {
+//     res.send('Hello World!');
+// });
 
 // 404 handler
 app.use((req, res, next) => {

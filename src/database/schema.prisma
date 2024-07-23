@@ -78,6 +78,7 @@ model Point {
   player_id       Int
   amount          Int
   profit_per_hour Int @default(0)
+  spend_amount    Int @default(0)
 
   @@map("points")
 }

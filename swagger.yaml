@@ -897,6 +897,72 @@ paths:
                             type: integer
                           profit_per_hour:
                             type: integer
+  /v1:
+    get:
+      summary: Get Player Data
+      tags:
+        - Player
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          telegram_id:
+                            type: string
+                          username:
+                            type: string
+                          first_name:
+                            type: string
+                          last_name:
+                            type: string
+                          balance:
+                            type: integer
+                          cards:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                icon_url:
+                                  type: string
+                                level:
+                                  type: integer
+                                upgrade:
+                                  type: object
+                                  properties:
+                                    level:
+                                      type: integer
+                                    upgrade_price:
+                                      type: integer
+                                    profit_per_hour:
+                                      type: integer
+                                current:
+                                  type: object
+                                  properties:
+                                    level:
+                                      type: integer
+                                    profit_per_hour:
+                                      type: integer
+                                category:
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: integer
+                                    name:
+                                      type: string
 components:
   schemas:
     AnyValue:
