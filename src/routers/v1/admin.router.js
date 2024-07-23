@@ -2,6 +2,7 @@ const router = require('express').Router();
 const admin = require('../../controllers/v1/admin.controller');
 const user = require('../../controllers/v1/admin/user.controller');
 const cardCategory = require('../../controllers/v1/admin/cardCategory.controller');
+const level = require('../../controllers/v1/admin/level.controller');
 const card = require('../../controllers/v1/admin/card.controller');
 const { validate, isAdmin, isSuperadmin } = require('../../middlewares/auth.middleware');
 
@@ -26,5 +27,8 @@ router.post('/cards', validate, isAdmin, card.create);
 router.get('/cards', validate, isAdmin, card.index);
 router.get('/cards/:id', validate, isAdmin, card.show);
 router.put('/cards/:id', validate, isAdmin, card.update);
+
+router.post('/levels', validate, isAdmin, level.update);
+router.get('/levels', validate, isAdmin, level.get);
 
 module.exports = router;

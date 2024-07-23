@@ -92,3 +92,12 @@ model PointHistory {
 
   @@map("point_histories")
 }
+
+model Config {
+  id        Int     @id @default(autoincrement())
+  key       String
+  value     String
+  is_active Boolean @default(true)
+
+  @@map("configs")
+}

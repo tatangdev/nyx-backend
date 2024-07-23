@@ -614,6 +614,73 @@ paths:
                                   type: integer
       security:
         - bearerAuth: []
+  /v1/admin/levels:
+    post:
+      summary: Create level
+      tags:
+        - Admin - Levels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                levels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      level:
+                        type: integer
+                      minimum_score:
+                        type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            level:
+                              type: integer
+                            minimum_score:
+                              type: integer
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all levels
+      tags:
+        - Admin - Levels
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            level:
+                              type: integer
+                            minimum_score:
+                              type: integer
+      security:
+        - bearerAuth: []
   /v1/auth/login:
     post:
       summary: Player login
@@ -778,6 +845,13 @@ paths:
                                 level:
                                   type: integer
                                 upgrade_price:
+                                  type: integer
+                                profit_per_hour:
+                                  type: integer
+                            current:
+                              type: object
+                              properties:
+                                level:
                                   type: integer
                                 profit_per_hour:
                                   type: integer
