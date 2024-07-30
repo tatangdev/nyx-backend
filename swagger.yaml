@@ -964,54 +964,33 @@ paths:
                       data:
                         type: object
                         properties:
-                          id:
+                          point:
                             type: integer
-                          telegram_id:
-                            type: string
-                          username:
-                            type: string
-                          first_name:
-                            type: string
-                          last_name:
-                            type: string
-                          balance:
+                            example: 971908
+                          profit_per_hour:
                             type: integer
-                          cards:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                id:
-                                  type: integer
-                                name:
-                                  type: string
-                                icon_url:
-                                  type: string
-                                level:
-                                  type: integer
-                                upgrade:
-                                  type: object
-                                  properties:
-                                    level:
-                                      type: integer
-                                    upgrade_price:
-                                      type: integer
-                                    profit_per_hour:
-                                      type: integer
-                                current:
-                                  type: object
-                                  properties:
-                                    level:
-                                      type: integer
-                                    profit_per_hour:
-                                      type: integer
-                                category:
-                                  type: object
-                                  properties:
-                                    id:
-                                      type: integer
-                                    name:
-                                      type: string
+                            example: 15607
+                          points_per_click:
+                            type: integer
+                            example: 5
+                          level:
+                            type: object
+                            properties:
+                              current_level:
+                                type: integer
+                                example: 5
+                              current_level_score:
+                                type: integer
+                                example: 28092
+                              next_level:
+                                type: integer
+                                example: 6
+                              next_level_score:
+                                type: integer
+                                example: 50000
+                              next_level_percentage:
+                                type: integer
+                                example: 56
 components:
   schemas:
     AnyValue:

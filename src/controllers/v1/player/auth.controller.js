@@ -91,6 +91,7 @@ module.exports = {
                 let nextLevel = levels.find(level => level.level === currentLevel.level + 1);
 
                 respon.level.current_level = currentLevel.level;
+                respon.points_per_click = currentLevel.level;
                 if (nextLevel) {
                     respon.level.next_level = nextLevel.level;
                     respon.level.next_level_score = nextLevel.minimum_score;
