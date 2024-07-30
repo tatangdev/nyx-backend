@@ -681,6 +681,55 @@ paths:
                               type: integer
       security:
         - bearerAuth: []
+  /v1/admin/dashboard:
+    get:
+      summary: Get dashboard data
+      tags:
+        - Admin - Dashboard
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          player_count:
+                            type: integer
+                            example: 6
+                          card_category_count:
+                            type: integer
+                            example: 5
+                          card_count:
+                            type: integer
+                            example: 30
+                          level_count:
+                            type: integer
+                            example: 7
+                          player_level_count:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                level:
+                                  type: integer
+                                  example: 1
+                                count:
+                                  type: integer
+                                  example: 5
+                          spend_amount:
+                            type: integer
+                            example: 28092
+                          point_amount:
+                            type: integer
+                            example: 5971908
+      security:
+        - bearerAuth: []
   /v1/auth/login:
     post:
       summary: Player login
