@@ -25,6 +25,8 @@ module.exports = {
                 INNER JOIN 
                     card_categories cat ON cat.id = c.category_id
                 WHERE ${filter}
+                    AND c.is_active
+                    AND cat.is_active
                 ORDER BY c.id;
             `);
 
