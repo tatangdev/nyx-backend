@@ -112,34 +112,32 @@ module.exports = {
                 });
             }
 
-            cards = cards.map(card => {
-                card.upgrade = null;
-                card.category = {
-                    id: card.category_id,
-                    name: card.category_name
-                };
-
-                if (card.levels) {
-                    const levels = JSON.parse(card.levels);
-                    const nextLevel = levels.find(item => item.level === card.level + 1);
-
-                    if (nextLevel) {
-                        card.upgrade = {
-                            level: nextLevel.level,
-                            upgrade_price: nextLevel.upgrade_price,
-                            profit_per_hour: nextLevel.profit_per_hour
-                        };
-                    }
-                }
-
-                delete card.category_id;
-                delete card.category_name;
-                delete card.levels;
-                return card;
-            });
-
             let card = cards[0];
-            if (card.upgrade === null) {
+
+            card.upgrade = null;
+            card.category = {
+                id: card.category_id,
+                name: card.category_name
+            };
+
+            if (card.levels) {
+                const levels = JSON.parse(card.levels);
+                const nextLevel = levels.find(item => item.level === card.level + 1);
+
+                if (nextLevel) {
+                    card.upgrade = {
+                        level: nextLevel.level,
+                        upgrade_price: nextLevel.upgrade_price,
+                        profit_per_hour: nextLevel.profit_per_hour
+                    };
+                }
+            }
+
+            delete card.category_id;
+            delete card.category_name;
+            delete card.levels;
+
+            if (!card.upgrade) {
                 return res.status(400).json({
                     status: false,
                     message: "Card can't be upgraded",
@@ -159,28 +157,22 @@ module.exports = {
                     throw new Error("Point not found");
                 }
 
-                if (point.balance < card.upgrade.upgrade_price) {
+                if (point.amount < card.upgrade.upgrade_price) {
                     throw new Error("Insufficient balance");
                 }
 
                 const newBalance = point.amount - card.upgrade.upgrade_price;
                 const newProfitPerHour = point.profit_per_hour + card.upgrade.profit_per_hour;
 
-                console.log("newBalance", newBalance);
-                console.log("point.amount", point.amount);
-                console.log("card.upgrade.upgrade_price", card.upgrade.upgrade_price);
-
-                point = await prisma.point.update({
-                    where: {
-                        id: point.id
-                    },
+                await prisma.point.update({
+                    where: { id: point.id },
                     data: {
                         amount: newBalance,
                         profit_per_hour: newProfitPerHour
                     }
                 });
 
-                let pointHistory = await prisma.pointHistory.create({
+                const pointHistory = await prisma.pointHistory.create({
                     data: {
                         player_id: req.user.id,
                         point_id: point.id,
@@ -194,11 +186,7 @@ module.exports = {
                     }
                 });
 
-                let levelData = [];
-                if (card.level_data) {
-                    levelData = JSON.parse(card.level_data);
-                }
-
+                let levelData = card.level_data ? JSON.parse(card.level_data) : [];
                 levelData.push({
                     ...card.upgrade,
                     history_id: pointHistory.id,
@@ -214,17 +202,15 @@ module.exports = {
                 });
 
                 if (cardLevel) {
-                    cardLevel = await prisma.cardLevel.update({
-                        where: {
-                            id: cardLevel.id
-                        },
+                    await prisma.cardLevel.update({
+                        where: { id: cardLevel.id },
                         data: {
                             level: card.upgrade.level,
                             data: JSON.stringify(levelData)
                         }
                     });
                 } else {
-                    cardLevel = await prisma.cardLevel.create({
+                    await prisma.cardLevel.create({
                         data: {
                             card_id: card.id,
                             user_id: req.user.id,
