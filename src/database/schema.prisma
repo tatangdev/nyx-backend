@@ -83,6 +83,16 @@ model Point {
   @@map("points")
 }
 
+model PointLog {
+  id        Int    @id @default(autoincrement())
+  player_id Int
+  amount    Int
+  type      String
+  unix_time Int
+
+  @@map("point_logs")
+}
+
 model PointHistory {
   id        Int    @id @default(autoincrement())
   player_id Int

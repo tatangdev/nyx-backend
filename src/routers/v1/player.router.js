@@ -4,6 +4,7 @@ const { validate, isAdmin, isPlayer } = require('../../middlewares/auth.middlewa
 const { image } = require('../../libs/multer');
 const media = require('../../controllers/v1/media.controller');
 const card = require('../../controllers/v1/player/card.controller');
+const point = require('../../controllers/v1/player/point.controller');
 
 // auth
 router.post('/auth/login', auth.login);
@@ -19,5 +20,9 @@ router.post('/card-upgrade', validate, isPlayer, card.upgrade);
 
 // home
 router.get('/', validate, isPlayer, auth.home);
+
+// point
+router.get('/points/update/preview', validate, isPlayer, point.updatePreview);
+router.post('/points/update', validate, isPlayer, point.update);
 
 module.exports = router;
