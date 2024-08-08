@@ -21,8 +21,9 @@ module.exports = {
                 `
             ]);
 
-            const parsedLevels = JSON.parse(levels[0].value);
+            const parsedLevels = JSON.parse(levels[0]?.value || '[]');
             const levelCnt = parsedLevels.length;
+
             const playerLevelCnt = parsedLevels.map(level => ({
                 level: level.level,
                 count: 0
@@ -30,9 +31,10 @@ module.exports = {
 
             let spendAmount = 0;
             let pointAmount = 0;
+
             spends.forEach(player => {
-                spendAmount += player.spend_amount;
-                pointAmount += player.amount;
+                spendAmount += player.spend_amount || 0;
+                pointAmount += player.amount || 0;
 
                 const currentLevel = parsedLevels.reduce((acc, level) => (
                     level.minimum_score <= player.spend_amount ? level : acc
@@ -49,9 +51,9 @@ module.exports = {
                 message: "Dashboard data",
                 error: null,
                 data: {
-                    player_count: counter[0].player_cnt,
-                    card_category_count: counter[0].card_category_cnt,
-                    card_count: counter[0].card_cnt,
+                    player_count: counter[0]?.player_cnt || 0,
+                    card_category_count: counter[0]?.card_category_cnt || 0,
+                    card_count: counter[0]?.card_cnt || 0,
                     level_count: levelCnt,
                     player_level_count: playerLevelCnt,
                     spend_amount: spendAmount,

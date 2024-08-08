@@ -14,9 +14,10 @@ module.exports = {
                 });
             }
 
-            levels.forEach((l, i) => {
-                console.log("level bro:", l);
-                if (i == 0 && l.level != 1) {
+            for (let i = 0; i < levels.length; i++) {
+                const level = levels[i];
+
+                if (i === 0 && level.level !== 1) {
                     return res.status(400).json({
                         status: false,
                         message: "Level must start from 1",
@@ -24,7 +25,7 @@ module.exports = {
                         data: null
                     });
                 }
-                if (i == 0 && l.minimum_scrore <= 0) {
+                if (level.minimum_score <= 0) {
                     return res.status(400).json({
                         status: false,
                         message: "Minimum score must be greater than 0",
@@ -32,8 +33,7 @@ module.exports = {
                         data: null
                     });
                 }
-
-                if (i != 0 && l.level != i + 1) {
+                if (i !== 0 && level.level !== i + 1) {
                     return res.status(400).json({
                         status: false,
                         message: "Level must be sequential",
@@ -41,28 +41,27 @@ module.exports = {
                         data: null
                     });
                 }
-
-                if (i == 0 && l.minimum_scrore <= levels[i].minimum_scrore) {
+                if (i !== 0 && level.minimum_score <= levels[i - 1].minimum_score) {
                     return res.status(400).json({
                         status: false,
-                        message: "Minimum score must be greater than previous level",
+                        message: "Minimum score must be greater than the previous level",
                         error: null,
                         data: null
                     });
                 }
-            });
+            }
 
-            let level = await prisma.config.findFirst({ where: { key: 'level' } });
-            if (!level) {
-                level = await prisma.config.create({
+            let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
+            if (!levelConfig) {
+                levelConfig = await prisma.config.create({
                     data: {
                         key: 'level',
                         value: JSON.stringify(levels)
                     }
                 });
             } else {
-                level = await prisma.config.update({
-                    where: { id: level.id },
+                levelConfig = await prisma.config.update({
+                    where: { id: levelConfig.id },
                     data: {
                         value: JSON.stringify(levels)
                     }
@@ -82,8 +81,8 @@ module.exports = {
 
     get: async (req, res, next) => {
         try {
-            let level = await prisma.config.findFirst({ where: { key: 'level' } });
-            if (!level) {
+            let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
+            if (!levelConfig) {
                 return res.status(200).json({
                     status: true,
                     message: "Levels not found",
@@ -96,7 +95,7 @@ module.exports = {
                 status: true,
                 message: "Levels found",
                 error: null,
-                data: JSON.parse(level.value)
+                data: JSON.parse(levelConfig.value)
             });
         } catch (error) {
             next(error);

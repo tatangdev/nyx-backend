@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 module.exports = {
     create: async (req, res, next) => {
         try {
-            let { username, password } = req.body;
+            const { username, password } = req.body;
             if (!username || !password) {
                 return res.status(400).json({
                     status: false,
@@ -15,10 +15,8 @@ module.exports = {
                 });
             }
 
-            let user = await prisma.user.findUnique({
-                where: {
-                    username: username
-                }
+            const user = await prisma.user.findUnique({
+                where: { username }
             });
             if (user) {
                 return res.status(400).json({
@@ -29,12 +27,9 @@ module.exports = {
                 });
             }
 
-            let hashedPassword = bcrypt.hashSync(password, 10);
-            let newUser = await prisma.user.create({
-                data: {
-                    username: username,
-                    password: hashedPassword
-                }
+            const hashedPassword = bcrypt.hashSync(password, 10);
+            const newUser = await prisma.user.create({
+                data: { username, password: hashedPassword }
             });
 
             delete newUser.password;
@@ -51,8 +46,8 @@ module.exports = {
 
     index: async (req, res, next) => {
         try {
-            let filter = { where: {} };
-            console.log("req.query.search", req.query.search);
+            const filter = { where: {} };
+
             if (req.query.search) {
                 filter.where.username = {
                     contains: req.query.search,
@@ -60,14 +55,7 @@ module.exports = {
                 };
             }
             if (req.query.is_active) {
-                switch (req.query.is_active) {
-                    case 'true':
-                        filter.where.is_active = true;
-                        break;
-                    case 'false':
-                        filter.where.is_active = false;
-                        break;
-                }
+                filter.where.is_active = req.query.is_active === 'true';
             }
 
             let users = await prisma.user.findMany(filter);
@@ -89,10 +77,8 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
-            let user = await prisma.user.findUnique({
-                where: {
-                    id: parseInt(req.params.id)
-                }
+            const user = await prisma.user.findUnique({
+                where: { id: parseInt(req.params.id) }
             });
             if (!user) {
                 return res.status(404).json({
@@ -117,7 +103,9 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            if (req.user.id === parseInt(req.params.id)) {
+            const userId = parseInt(req.params.id);
+
+            if (req.user.id === userId) {
                 return res.status(403).json({
                     status: false,
                     message: "You are not authorized to update this resource",
@@ -126,10 +114,8 @@ module.exports = {
                 });
             }
 
-            let user = await prisma.user.findUnique({
-                where: {
-                    id: parseInt(req.params.id)
-                }
+            const user = await prisma.user.findUnique({
+                where: { id: userId }
             });
             if (!user) {
                 return res.status(404).json({
@@ -140,8 +126,9 @@ module.exports = {
                 });
             }
 
-            let { username, password, is_active, is_superadmin } = req.body;
-            let data = {};
+            const { username, password, is_active, is_superadmin } = req.body;
+            const data = {};
+
             if (username) {
                 data.username = username;
             }
@@ -155,11 +142,9 @@ module.exports = {
                 data.is_superadmin = is_superadmin;
             }
 
-            let updatedUser = await prisma.user.update({
-                where: {
-                    id: parseInt(req.params.id)
-                },
-                data: data
+            const updatedUser = await prisma.user.update({
+                where: { id: userId },
+                data
             });
 
             delete updatedUser.password;
@@ -172,5 +157,5 @@ module.exports = {
         } catch (error) {
             next(error);
         }
-    },
+    }
 };
