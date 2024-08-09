@@ -5,6 +5,7 @@ const cardCategory = require('../../controllers/v1/admin/cardCategory.controller
 const level = require('../../controllers/v1/admin/level.controller');
 const card = require('../../controllers/v1/admin/card.controller');
 const dashboard = require('../../controllers/v1/admin/dashboard.controller');
+const player = require('../../controllers/v1/admin/player.controller');
 const { validate, isAdmin, isSuperadmin } = require('../../middlewares/auth.middleware');
 
 // auth
@@ -34,6 +35,7 @@ router.get('/levels', validate, isAdmin, level.get);
 
 // dashboard
 router.get('/dashboard', dashboard.index);
+router.get('/players/network', player.network);
 // router.get('/dashboard', validate, isAdmin, dashboard.index);
 
 module.exports = router;

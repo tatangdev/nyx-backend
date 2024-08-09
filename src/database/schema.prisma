@@ -32,6 +32,7 @@ model Player {
   first_name  String
   last_name   String
   created_at  Int
+  referee_id  Int?
   // created_at  DateTime @default(now())
   // updated_at  DateTime @updatedAt
 

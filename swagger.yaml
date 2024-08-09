@@ -681,6 +681,27 @@ paths:
                               type: integer
       security:
         - bearerAuth: []
+  /v1/admin/players/network:
+    get:
+      summary: Get player network
+      tags:
+        - Admin - Players
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/UserReferral'
+      security:
+        - bearerAuth: []
   /v1/admin/dashboard:
     get:
       summary: Get dashboard data
@@ -1074,6 +1095,22 @@ components:
           type: string
         error:
           type: string
+    UserReferral:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "player"
+        name:
+          type: string
+          example: "John Doe"
+        referral:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserReferral'
   securitySchemes:
     bearerAuth:
       type: http
