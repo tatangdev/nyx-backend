@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 module.exports = {
     create: async (req, res, next) => {
         try {
-            const { username, password } = req.body;
+            let { username, password } = req.body;
             if (!username || !password) {
                 return res.status(400).json({
                     status: false,
@@ -15,7 +15,7 @@ module.exports = {
                 });
             }
 
-            const user = await prisma.user.findUnique({
+            let user = await prisma.user.findUnique({
                 where: { username }
             });
             if (user) {
@@ -27,8 +27,8 @@ module.exports = {
                 });
             }
 
-            const hashedPassword = bcrypt.hashSync(password, 10);
-            const newUser = await prisma.user.create({
+            let hashedPassword = bcrypt.hashSync(password, 10);
+            let newUser = await prisma.user.create({
                 data: { username, password: hashedPassword }
             });
 
@@ -46,7 +46,7 @@ module.exports = {
 
     index: async (req, res, next) => {
         try {
-            const filter = { where: {} };
+            let filter = { where: {} };
 
             if (req.query.search) {
                 filter.where.username = {
@@ -77,7 +77,7 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
-            const user = await prisma.user.findUnique({
+            let user = await prisma.user.findUnique({
                 where: { id: parseInt(req.params.id) }
             });
             if (!user) {
@@ -103,7 +103,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            const userId = parseInt(req.params.id);
+            let userId = parseInt(req.params.id);
 
             if (req.user.id === userId) {
                 return res.status(403).json({
@@ -114,7 +114,7 @@ module.exports = {
                 });
             }
 
-            const user = await prisma.user.findUnique({
+            let user = await prisma.user.findUnique({
                 where: { id: userId }
             });
             if (!user) {
@@ -126,8 +126,8 @@ module.exports = {
                 });
             }
 
-            const { username, password, is_active, is_superadmin } = req.body;
-            const data = {};
+            let { username, password, is_active, is_superadmin } = req.body;
+            let data = {};
 
             if (username) {
                 data.username = username;
@@ -142,7 +142,7 @@ module.exports = {
                 data.is_superadmin = is_superadmin;
             }
 
-            const updatedUser = await prisma.user.update({
+            let updatedUser = await prisma.user.update({
                 where: { id: userId },
                 data
             });

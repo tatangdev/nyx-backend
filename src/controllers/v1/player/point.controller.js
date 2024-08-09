@@ -4,10 +4,10 @@ const prisma = new PrismaClient({ log: ['query'] });
 module.exports = {
     update: async (req, res, next) => {
         try {
-            const { amount, timestamp } = req.body;
-            const playerId = req.user.id;
+            let { amount, timestamp } = req.body;
+            let playerId = req.user.id;
 
-            const playerDataResult = await prisma.$queryRawUnsafe(`
+            let playerDataResult = await prisma.$queryRawUnsafe(`
                 SELECT p.*, (
                     SELECT COALESCE(MAX(unix_time), 0)
                     FROM point_logs
@@ -27,7 +27,7 @@ module.exports = {
                 });
             }
 
-            const playerData = playerDataResult[0];
+            let playerData = playerDataResult[0];
 
             if (timestamp <= playerData.point_last_update) {
                 return res.status(400).json({
@@ -71,9 +71,9 @@ module.exports = {
 
     updatePreview: async (req, res, next) => {
         try {
-            const playerId = req.user.id;
+            let playerId = req.user.id;
 
-            const playerDataResult = await prisma.$queryRawUnsafe(`
+            let playerDataResult = await prisma.$queryRawUnsafe(`
                 SELECT p.*, (
                     SELECT COALESCE(MAX(unix_time), 0)
                     FROM point_logs
@@ -93,10 +93,10 @@ module.exports = {
                 });
             }
 
-            const playerData = playerDataResult[0];
-            const now = Math.floor(Date.now() / 1000);
-            const durationInSeconds = now - playerData.point_last_update;
-            const claimablePoints = Math.floor(playerData.profit_per_hour * (durationInSeconds / 3600));
+            let playerData = playerDataResult[0];
+            let now = Math.floor(Date.now() / 1000);
+            let durationInSeconds = now - playerData.point_last_update;
+            let claimablePoints = Math.floor(playerData.profit_per_hour * (durationInSeconds / 3600));
 
             return res.status(200).json({
                 status: true,

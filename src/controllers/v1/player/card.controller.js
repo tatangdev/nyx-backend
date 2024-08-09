@@ -42,9 +42,9 @@ module.exports = {
                 };
 
                 if (card.levels) {
-                    const levels = JSON.parse(card.levels);
-                    const currentLevel = levels.find(item => item.level === card.level);
-                    const nextLevel = levels.find(item => item.level === card.level + 1);
+                    let levels = JSON.parse(card.levels);
+                    let currentLevel = levels.find(item => item.level === card.level);
+                    let nextLevel = levels.find(item => item.level === card.level + 1);
 
                     if (currentLevel) {
                         card.current = {
@@ -81,7 +81,7 @@ module.exports = {
 
     upgrade: async (req, res, next) => {
         try {
-            const cardId = parseInt(req.body.card_id);
+            let cardId = parseInt(req.body.card_id);
 
             let cards = await prisma.$queryRawUnsafe(`
                 SELECT 
@@ -121,8 +121,8 @@ module.exports = {
             };
 
             if (card.levels) {
-                const levels = JSON.parse(card.levels);
-                const nextLevel = levels.find(item => item.level === card.level + 1);
+                let levels = JSON.parse(card.levels);
+                let nextLevel = levels.find(item => item.level === card.level + 1);
 
                 if (nextLevel) {
                     card.upgrade = {
@@ -161,8 +161,8 @@ module.exports = {
                     throw new Error("Insufficient balance");
                 }
 
-                const newBalance = point.amount - card.upgrade.upgrade_price;
-                const newProfitPerHour = point.profit_per_hour + card.upgrade.profit_per_hour;
+                let newBalance = point.amount - card.upgrade.upgrade_price;
+                let newProfitPerHour = point.profit_per_hour + card.upgrade.profit_per_hour;
 
                 await prisma.point.update({
                     where: { id: point.id },
@@ -172,7 +172,7 @@ module.exports = {
                     }
                 });
 
-                const pointHistory = await prisma.pointHistory.create({
+                let pointHistory = await prisma.pointHistory.create({
                     data: {
                         player_id: req.user.id,
                         point_id: point.id,

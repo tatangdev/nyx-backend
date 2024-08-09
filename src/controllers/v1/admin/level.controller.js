@@ -15,7 +15,7 @@ module.exports = {
             }
 
             for (let i = 0; i < levels.length; i++) {
-                const level = levels[i];
+                let level = levels[i];
 
                 if (i === 0 && level.level !== 1) {
                     return res.status(400).json({

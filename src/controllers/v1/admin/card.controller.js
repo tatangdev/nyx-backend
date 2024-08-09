@@ -3,7 +3,7 @@ const prisma = new PrismaClient({ log: ['query'] });
 
 const validateLevels = (levels) => {
     for (let i = 0; i < levels.length; i++) {
-        const level = levels[i];
+        let level = levels[i];
         if (typeof level.upgrade_price !== 'number' || typeof level.profit_per_hour !== 'number') {
             return {
                 isValid: false,
@@ -47,7 +47,7 @@ module.exports = {
                 });
             }
 
-            const validation = validateLevels(levels);
+            let validation = validateLevels(levels);
             if (!validation.isValid) {
                 return res.status(400).json({
                     status: false,
@@ -59,7 +59,7 @@ module.exports = {
 
             levels = levels.map((level, index) => ({ ...level, level: index + 1 }));
 
-            const cardCategory = await prisma.cardCategory.findUnique({
+            let cardCategory = await prisma.cardCategory.findUnique({
                 where: { id: category_id },
             });
             if (!cardCategory) {
@@ -71,7 +71,7 @@ module.exports = {
                 });
             }
 
-            const card = await prisma.card.create({
+            let card = await prisma.card.create({
                 data: {
                     name,
                     icon_url,
@@ -127,7 +127,7 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
-            const card = await prisma.card.findUnique({
+            let card = await prisma.card.findUnique({
                 where: { id: parseInt(req.params.id) },
             });
             if (!card) {
@@ -153,9 +153,9 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            const { name, icon_url, category_id, levels, is_active } = req.body;
+            let { name, icon_url, category_id, levels, is_active } = req.body;
 
-            const card = await prisma.card.findUnique({
+            let card = await prisma.card.findUnique({
                 where: { id: parseInt(req.params.id) },
             });
             if (!card) {
@@ -167,11 +167,11 @@ module.exports = {
                 });
             }
 
-            const data = {};
+            let data = {};
             if (name) data.name = name;
             if (icon_url) data.icon_url = icon_url;
             if (category_id) {
-                const cardCategory = await prisma.cardCategory.findUnique({
+                let cardCategory = await prisma.cardCategory.findUnique({
                     where: { id: category_id },
                 });
                 if (!cardCategory) {
@@ -187,7 +187,7 @@ module.exports = {
             if (is_active !== undefined) data.is_active = is_active;
 
             if (levels && levels.length) {
-                const validation = validateLevels(levels);
+                let validation = validateLevels(levels);
                 if (!validation.isValid) {
                     return res.status(400).json({
                         status: false,
@@ -200,7 +200,7 @@ module.exports = {
                 data.levels = JSON.stringify(levels);
             }
 
-            const updatedCard = await prisma.card.update({
+            let updatedCard = await prisma.card.update({
                 where: { id: parseInt(req.params.id) },
                 data,
             });

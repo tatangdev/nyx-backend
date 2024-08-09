@@ -29,7 +29,7 @@
 
 // async function upload({ originalname, mimetype, buffer }) {
 //     try {
-//         const file = await drive.files.create({
+//         let file = await drive.files.create({
 //             resource: {
 //                 name: originalname,
 //                 parents: [DEFAULT_FOLDER_ID]
@@ -54,14 +54,14 @@
 
 // async function list() {
 //     try {
-//         const res = await drive.files.list({
+//         let res = await drive.files.list({
 //             pageSize: 10,
 //             q: `'${DEFAULT_FOLDER_ID}' in parents and trashed = false`,
 //             fields: 'nextPageToken, files(id, name)',
 //         });
-//         const files = res.data.files;
+//         let files = res.data.files;
 //         if (files.length) {
-//             const filesWithUrls = await Promise.all(files.map(async (file) => {
+//             let filesWithUrls = await Promise.all(files.map(async (file) => {
 //                 return {
 //                     file_id: file.id,
 //                     file_name: file.name,

@@ -4,7 +4,7 @@ const prisma = new PrismaClient({ log: ['query'] });
 module.exports = {
     index: async (req, res, next) => {
         try {
-            const [counter, levels, spends] = await Promise.all([
+            let [counter, levels, spends] = await Promise.all([
                 prisma.$queryRaw`
                     SELECT
                         CAST((SELECT COUNT(*) FROM players) AS INTEGER) AS player_cnt,
@@ -21,10 +21,10 @@ module.exports = {
                 `
             ]);
 
-            const parsedLevels = JSON.parse(levels[0]?.value || '[]');
-            const levelCnt = parsedLevels.length;
+            let parsedLevels = JSON.parse(levels[0]?.value || '[]');
+            let levelCnt = parsedLevels.length;
 
-            const playerLevelCnt = parsedLevels.map(level => ({
+            let playerLevelCnt = parsedLevels.map(level => ({
                 level: level.level,
                 count: 0
             }));
@@ -36,11 +36,11 @@ module.exports = {
                 spendAmount += player.spend_amount || 0;
                 pointAmount += player.amount || 0;
 
-                const currentLevel = parsedLevels.reduce((acc, level) => (
+                let currentLevel = parsedLevels.reduce((acc, level) => (
                     level.minimum_score <= player.spend_amount ? level : acc
                 ), parsedLevels[0]);
 
-                const playerLevel = playerLevelCnt.find(pl => pl.level === currentLevel.level);
+                let playerLevel = playerLevelCnt.find(pl => pl.level === currentLevel.level);
                 if (playerLevel) {
                     playerLevel.count++;
                 }

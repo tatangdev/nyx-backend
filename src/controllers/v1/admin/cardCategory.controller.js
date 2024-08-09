@@ -4,7 +4,7 @@ const prisma = new PrismaClient({ log: ['query'] });
 module.exports = {
     create: async (req, res, next) => {
         try {
-            const { name, icon_url } = req.body;
+            let { name, icon_url } = req.body;
             if (!name || !icon_url) {
                 return res.status(400).json({
                     status: false,
@@ -14,7 +14,7 @@ module.exports = {
                 });
             }
 
-            const cardCategory = await prisma.cardCategory.create({
+            let cardCategory = await prisma.cardCategory.create({
                 data: {
                     name,
                     icon_url
@@ -35,8 +35,8 @@ module.exports = {
 
     index: async (req, res, next) => {
         try {
-            const filter = { where: {} };
-            const { search, is_active } = req.query;
+            let filter = { where: {} };
+            let { search, is_active } = req.query;
 
             if (search) {
                 filter.where.name = {
@@ -49,7 +49,7 @@ module.exports = {
                 filter.where.is_active = is_active === 'true';
             }
 
-            const cardCategories = await prisma.cardCategory.findMany(filter);
+            let cardCategories = await prisma.cardCategory.findMany(filter);
 
             return res.status(200).json({
                 status: true,
@@ -65,7 +65,7 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
-            const cardCategory = await prisma.cardCategory.findUnique({
+            let cardCategory = await prisma.cardCategory.findUnique({
                 where: {
                     id: parseInt(req.params.id)
                 }
@@ -94,10 +94,10 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            const { name, icon_url, is_active } = req.body;
-            const cardCategoryId = parseInt(req.params.id);
+            let { name, icon_url, is_active } = req.body;
+            let cardCategoryId = parseInt(req.params.id);
 
-            const cardCategory = await prisma.cardCategory.findUnique({
+            let cardCategory = await prisma.cardCategory.findUnique({
                 where: {
                     id: cardCategoryId
                 }
@@ -112,13 +112,13 @@ module.exports = {
                 });
             }
 
-            const data = {
+            let data = {
                 ...(name && { name }),
                 ...(icon_url && { icon_url }),
                 ...(is_active !== undefined && { is_active })
             };
 
-            const updatedCardCategory = await prisma.cardCategory.update({
+            let updatedCardCategory = await prisma.cardCategory.update({
                 where: {
                     id: cardCategoryId
                 },
