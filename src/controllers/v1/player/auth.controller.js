@@ -33,7 +33,8 @@ module.exports = {
                 });
             }
 
-            let token = jwt.sign({ ...player, role: 'player' }, process.env.JWT_SECRET, { expiresIn: '1d' });
+            let token = jwt.sign({ ...player, role: 'player' }, process.env.JWT_SECRET);
+            // let token = jwt.sign({ ...player, role: 'player' }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
             return res.status(200).json({
                 status: true,
