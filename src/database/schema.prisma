@@ -26,13 +26,14 @@ model User {
 }
 
 model Player {
-  id          Int    @id @default(autoincrement())
-  telegram_id String @unique
-  username    String
-  first_name  String
-  last_name   String
-  created_at  Int
-  referee_id  Int?
+  id            Int     @id @default(autoincrement())
+  telegram_id   String  @unique
+  username      String
+  first_name    String
+  last_name     String
+  created_at    Int
+  referee_id    Int?
+  referral_code String? @unique
   // created_at  DateTime @default(now())
   // updated_at  DateTime @updatedAt
 

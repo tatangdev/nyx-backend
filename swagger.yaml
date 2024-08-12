@@ -775,6 +775,9 @@ paths:
                 last_name:
                   type: string
                   example: Doe
+                referral_code:
+                  type: string
+                  example: "player"
       responses:
         "200":
           description: Success
@@ -818,6 +821,10 @@ paths:
                             type: string
                           last_name:
                             type: string
+                          referral_code:
+                            type: string
+                          referree_id:
+                            type: integer
       security:
         - bearerAuth: []
   /v1/media/images:

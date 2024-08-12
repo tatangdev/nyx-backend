@@ -1,23 +1,43 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const uid = require('uid');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
     login: async (req, res, next) => {
         try {
-            let { telegram_id, username, first_name, last_name } = req.body;
+            let { telegram_id, username, first_name, last_name, referral_code } = req.body;
 
-            let player = await prisma.player.upsert({
-                where: { telegram_id },
-                update: { username, first_name, last_name },
-                create: {
-                    telegram_id,
-                    username,
-                    first_name,
-                    last_name,
-                    created_at: Math.floor(Date.now() / 1000)
+            // check if user exists
+            let player = await prisma.player.findFirst({ where: { telegram_id } });
+            if (!player) {
+                let refereeId;
+                if (referral_code) {
+                    let referee = await prisma.player.findFirst({ where: { referral_code } });
+                    if (referee) {
+                        refereeId = referee.id;
+                    } else {
+                        return res.status(400).json({
+                            status: false,
+                            message: "Referral code not found",
+                            error: null,
+                            data: null
+                        });
+                    }
                 }
-            });
+
+                player = await prisma.player.create({
+                    data: {
+                        telegram_id,
+                        username,
+                        first_name,
+                        last_name,
+                        created_at: Math.floor(Date.now() / 1000),
+                        referral_code: uid(),
+                        referee_id: refereeId
+                    }
+                });
+            }
 
             let defaultAmount = parseInt(process.env.DEFAULT_POINT_AMOUNT) || 0;
             let defaultProfitPerHour = parseInt(process.env.DEFAULT_PROFIT_PER_HOUR) || 0;
