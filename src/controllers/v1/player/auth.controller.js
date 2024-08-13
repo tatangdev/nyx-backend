@@ -40,7 +40,6 @@ module.exports = {
                 });
             }
 
-            let defaultAmount = parseInt(process.env.DEFAULT_POINT_AMOUNT) || 0;
             let defaultPassivePerHour = parseInt(process.env.DEFAULT_PROFIT_PER_HOUR) || 0;
             let defaultTapMax = parseInt(process.env.DEFAULT_TAP_MAX) || 0;
             let defaultTapPoints = parseInt(process.env.DEFAULT_TAP_POINTS) || 0;
