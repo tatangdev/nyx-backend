@@ -114,3 +114,17 @@ model Config {
 
   @@map("configs")
 }
+
+model PlayerEarning {
+  id               Int @id @default(autoincrement())
+  player_id        Int
+  passive_per_hour Int
+  tap_max          Int
+  tap_points       Int
+  tap_available    Int
+  coins_total      Int
+  coins_balance    Int
+  last_updated     Int
+
+  @@map("player_earnings")
+}

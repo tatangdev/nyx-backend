@@ -8,6 +8,7 @@ function buildTree(data, refereeId = null) {
             id: user.id,
             username: user.username,
             name: `${user.first_name} ${user.last_name}`,
+            level: 1, // todo: get level:
             referral: buildTree(data, user.id)
         }));
 }
@@ -37,7 +38,15 @@ module.exports = {
                 status: true,
                 // message: "User created",
                 error: null,
-                data: buildTree(users)
+                data: [
+                    {
+                        id: 0,
+                        username: "chipmunkkombat",
+                        name: "Chipmunk Kombat",
+                        level: 0, // todo: get level
+                        referral: buildTree(users)
+                    }
+                ]
             });
         } catch (error) {
             next(error);

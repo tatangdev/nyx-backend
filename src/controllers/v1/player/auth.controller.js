@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const uid = require('uid');
 const jwt = require('jsonwebtoken');
+const { parse } = require('path');
 
 module.exports = {
     login: async (req, res, next) => {
@@ -40,15 +41,25 @@ module.exports = {
             }
 
             let defaultAmount = parseInt(process.env.DEFAULT_POINT_AMOUNT) || 0;
-            let defaultProfitPerHour = parseInt(process.env.DEFAULT_PROFIT_PER_HOUR) || 0;
+            let defaultPassivePerHour = parseInt(process.env.DEFAULT_PROFIT_PER_HOUR) || 0;
+            let defaultTapMax = parseInt(process.env.DEFAULT_TAP_MAX) || 0;
+            let defaultTapPoints = parseInt(process.env.DEFAULT_TAP_POINTS) || 0;
+            let defaultTapAvailable = parseInt(process.env.DEFAULT_TAP_MAX) || 0;
+            let defaultCoins = parseInt(process.env.DEFAULT_COINS) || 0;
 
-            let point = await prisma.point.findFirst({ where: { player_id: player.id } });
-            if (!point) {
-                await prisma.point.create({
+            let now = Math.floor(Date.now() / 1000);
+            let playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: player.id } });
+            if (!playerEarning) {
+                await prisma.playerEarning.create({
                     data: {
                         player_id: player.id,
-                        amount: defaultAmount,
-                        profit_per_hour: defaultProfitPerHour
+                        passive_per_hour: defaultPassivePerHour,
+                        tap_max: defaultTapMax,
+                        tap_points: defaultTapPoints,
+                        tap_available: defaultTapAvailable,
+                        coins_total: defaultCoins,
+                        coins_balance: defaultCoins,
+                        last_updated: now
                     }
                 });
             }
