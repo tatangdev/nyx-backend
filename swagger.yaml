@@ -992,15 +992,21 @@ paths:
                       data:
                         type: object
                         properties:
-                          point:
+                          balance:
                             type: integer
                             example: 971908
-                          profit_per_hour:
-                            type: integer
-                            example: 15607
-                          points_per_click:
-                            type: integer
-                            example: 5
+                          passive_earnings:
+                            type: object
+                            properties:
+                              per_hour:
+                                type: integer
+                                example: 15607
+                          tap_earnings:
+                            type: object
+                            properties:
+                              per_tap:
+                                type: integer
+                                example: 100
                           level:
                             type: object
                             properties:
@@ -1019,69 +1025,6 @@ paths:
                               next_level_percentage:
                                 type: integer
                                 example: 56
-  /v1/points/update/preview:
-    get:
-      summary: Preview player points update
-      tags:
-        - Player
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          point_amount:
-                            type: integer
-                          claimable_point:
-                            type: integer
-                          point_last_update:
-                            type: integer
-                          timestamp:
-                            type: integer
-  /v1/points/update:
-    post:
-      summary: Update player points
-      tags:
-        - Player
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                amount:
-                  type: integer
-                  example: 1527
-                timestamp:
-                  type: integer
-                  example: 1723075268
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          point_amount:
-                            type: integer
-                          added_point:
-                            type: integer
-                          point_last_update:
-                            type: integer
   /v1/sync:
     post:
       summary: Sync player points
@@ -1093,6 +1036,13 @@ paths:
           application/json:
             schema:
               type: object
+              properties:
+                tap_count:
+                  type: integer
+                  example: 4000
+                timestamp:
+                  type: integer
+                  example: 1723564477
       responses:
         "200":
           description: Success

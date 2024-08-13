@@ -22,8 +22,6 @@ router.post('/card-upgrade', validate, isPlayer, card.upgrade);
 router.get('/', validate, isPlayer, auth.home);
 
 // point
-router.get('/points/update/preview', validate, isPlayer, point.updatePreview);
-router.post('/points/update', validate, isPlayer, point.update);
 router.post('/sync', validate, point.sync);
 // router.post('/sync', validate, isPlayer, point.update);
 

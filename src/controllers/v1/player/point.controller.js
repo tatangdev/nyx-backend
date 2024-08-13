@@ -2,119 +2,19 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 
 module.exports = {
-    update: async (req, res, next) => {
-        try {
-            let { amount, timestamp } = req.body;
-            let playerId = req.user.id;
-
-            let playerDataResult = await prisma.$queryRawUnsafe(`
-                SELECT p.*, (
-                    SELECT COALESCE(MAX(unix_time), 0)
-                    FROM point_logs
-                    WHERE player_id = p.player_id
-                ) AS point_last_update
-                FROM players pl
-                INNER JOIN points p ON pl.id = p.player_id
-                WHERE p.id = ${playerId};`
-            );
-
-            if (playerDataResult.length === 0) {
-                return res.status(404).json({
-                    status: false,
-                    message: "Player not found",
-                    error: null,
-                    data: null
-                });
-            }
-
-            let playerData = playerDataResult[0];
-
-            if (timestamp <= playerData.point_last_update) {
-                return res.status(400).json({
-                    status: false,
-                    message: "Invalid timestamp",
-                    error: null,
-                    data: null
-                });
-            }
-
-            // Update player points
-            await prisma.point.update({
-                where: { id: playerData.id },
-                data: { amount: playerData.amount + amount }
-            });
-
-            // Add player point log
-            await prisma.pointLog.create({
-                data: {
-                    player_id: playerData.player_id,
-                    amount: amount,
-                    unix_time: timestamp,
-                    type: "profit"
-                }
-            });
-
-            return res.status(200).json({
-                status: true,
-                message: "Player point updated",
-                error: null,
-                data: {
-                    point_amount: playerData.amount,
-                    added_point: amount,
-                    point_last_update: timestamp
-                }
-            });
-        } catch (error) {
-            next(error);
-        }
-    },
-
-    updatePreview: async (req, res, next) => {
-        try {
-            let playerId = req.user.id;
-
-            let now = Math.floor(Date.now() / 1000);
-            let playerEarningResult = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
-
-            let playerEarning = playerEarningResult[0];
-            let durationInSeconds = now - playerEarning.last_updated;
-            let claimablePoints = Math.floor(playerEarning.profit_per_hour * (durationInSeconds / 3600));
-
-            return res.status(200).json({
-                status: true,
-                message: "Player point updated",
-                error: null,
-                data: {
-                    point_amount: playerEarning.amount,
-                    claimable_point: claimablePoints,
-                    point_last_update: playerEarning.point_last_update,
-                    timestamp: now
-                }
-            });
-        } catch (error) {
-            next(error);
-        }
-    },
-
     sync: async (req, res, next) => {
         try {
-            let playerId = req.user.id;
-            let { tap_count, available_taps, timestamp } = req.body;
-            let playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
+            const playerId = req.user.id;
+            const { tap_count: tapCount, timestamp } = req.body;
 
-            let now = Math.floor(Date.now() / 1000);
-            // validate tap data
-            if (tap_count > 0) {
-                if (available_taps <= 0 || timestamp <= 0) {
-                    return res.status(400).json({
-                        status: false,
-                        message: "Invalid tap data",
-                        error: null,
-                        data: null
-                    });
-                }
+            // Fetch the player's current earnings from the database
+            const playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
 
-                if (timestamp >= now) {
+            let currentTimeInSeconds = Math.floor(Date.now() / 1000);
+
+            // Validate tap data and timestamp
+            if (tapCount > 0) {
+                if (timestamp <= 0 || timestamp <= playerEarning.last_updated || timestamp >= currentTimeInSeconds) {
                     return res.status(400).json({
                         status: false,
                         message: "Invalid timestamp",
@@ -122,73 +22,71 @@ module.exports = {
                         data: null
                     });
                 }
-
-                if (tap_count > playerEarning.available_taps) {
-                    return res.status(400).json({
-                        status: false,
-                        message: "Insufficient available taps",
-                        error: null,
-                        data: null
-                    });
-                }
-
-                if (tap_count + available_taps > playerEarning.tap_max) {
-                    return res.status(400).json({
-                        status: false,
-                        message: "Exceeded maximum taps",
-                        error: null,
-                        data: null
-                    });
-                }
-
-                now = timestamp;
+                currentTimeInSeconds = timestamp;
             }
 
-            // passive earnings
-            let maxPassiveEarningsDurationMinutes = 180; // todo: get from config
-            let lastUpdatedDuration = now - playerEarning.last_updated <= maxPassiveEarningsDurationMinutes * 60 ? now - playerEarning.last_updated : maxPassiveEarningsDurationMinutes * 60;
-            let passiveEarningsPerSecond = playerEarning.passive_per_hour / 3600;
-            let passiveEarningsLastEarned = Math.floor(lastUpdatedDuration * passiveEarningsPerSecond);
+            // Calculate passive earnings
+            const maxPassiveEarningsDurationMinutes = 180; // TODO: Move this to a config file
+            const elapsedTimeSinceLastUpdate = currentTimeInSeconds - playerEarning.last_updated;
+            const passiveEarningsDuration = Math.min(elapsedTimeSinceLastUpdate, maxPassiveEarningsDurationMinutes * 60);
+            const passiveEarningsPerSecond = playerEarning.passive_per_hour / 3600;
+            const passiveEarningsSinceLastUpdate = Math.floor(passiveEarningsDuration * passiveEarningsPerSecond);
 
-            // tap earnings
-            let tapEarningsRecoveryPerSecond = 3; // todo: get from config
-            let tapEarningAvailable = playerEarning.tap_available + (now - playerEarning.last_updated) * tapEarningsRecoveryPerSecond <= playerEarning.tap_max ? playerEarning.tap_available + (now - playerEarning.last_updated) * tapEarningsRecoveryPerSecond : playerEarning.tap_max;
+            // Update total and balance coins with passive earnings
+            let totalCoins = playerEarning.coins_total + passiveEarningsSinceLastUpdate;
+            let balanceCoins = playerEarning.coins_balance + passiveEarningsSinceLastUpdate;
 
-            // earnings
-            let totalCoins = playerEarning.coins_total + passiveEarningsLastEarned;
-            let balanceCoins = playerEarning.coins_balance + passiveEarningsLastEarned;
+            // Calculate available tap earnings
+            const tapEarningsRecoveryRate = 3; // TODO: Move this to a config file
+            let availableTapEarnings = Math.min(
+                playerEarning.tap_available + elapsedTimeSinceLastUpdate * tapEarningsRecoveryRate,
+                playerEarning.tap_max
+            );
 
-            // update player earning
+            if (tapCount > 0) {
+                const validTapCount = Math.min(tapCount, availableTapEarnings);
+
+                // Deduct used taps and update total and balance coins
+                const tapEarnings = validTapCount * playerEarning.tap_points;
+                totalCoins += tapEarnings;
+                balanceCoins += tapEarnings;
+
+                // Update available taps
+                availableTapEarnings -= validTapCount;
+            }
+
+            // Update player earnings in the database
             await prisma.playerEarning.update({
                 where: { id: playerEarning.id },
                 data: {
-                    tap_available: tapEarningAvailable,
+                    tap_available: availableTapEarnings,
                     coins_total: totalCoins,
                     coins_balance: balanceCoins,
-                    last_updated: now,
+                    last_updated: currentTimeInSeconds,
                 }
             });
 
-            let response = {
+            // Construct response data
+            const response = {
                 passive_earnings: {
                     per_hour: playerEarning.passive_per_hour,
                     per_second: passiveEarningsPerSecond,
-                    last_earned: passiveEarningsLastEarned,
+                    last_earned: passiveEarningsSinceLastUpdate,
                 },
                 tap_earnings: {
                     per_tap: playerEarning.tap_points,
                     max_taps: playerEarning.tap_max,
-                    available_taps: tapEarningAvailable,
-                    recovery_per_second: tapEarningsRecoveryPerSecond,
+                    available_taps: availableTapEarnings,
+                    recovery_per_second: tapEarningsRecoveryRate,
                 },
                 total_coins: totalCoins,
                 balance: balanceCoins,
-                last_sync: now,
+                last_sync: currentTimeInSeconds,
             };
 
             return res.status(200).json({
                 status: true,
-                message: "Player point updated",
+                message: "Player earnings updated successfully",
                 error: null,
                 data: response
             });

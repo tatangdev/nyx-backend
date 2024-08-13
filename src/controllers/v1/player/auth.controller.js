@@ -82,10 +82,10 @@ module.exports = {
         try {
             let user = { ...req.user };
 
-            let point = await prisma.point.findFirst({ where: { player_id: req.user.id } });
+            let point = await prisma.playerEarning.findFirst({ where: { player_id: req.user.id } });
             if (point) {
-                user.point = point.amount;
-                user.profit_per_hour = point.profit_per_hour;
+                user.point = point.coins_balance;
+                user.profit_per_hour = point.passive_per_hour;
             }
 
             return res.status(200).json({
@@ -101,9 +101,14 @@ module.exports = {
 
     home: async (req, res, next) => {
         try {
-            let response = {
-                point: 0,
-                profit_per_hour: 0,
+            const response = {
+                balance: 0,
+                passive_earnings: {
+                    per_hour: 0
+                },
+                tap_earnings: {
+                    per_tap: 0,
+                },
                 level: {
                     current_level: 0,
                     current_level_score: 0,
@@ -113,27 +118,29 @@ module.exports = {
                 }
             };
 
-            let point = await prisma.point.findFirst({ where: { player_id: req.user.id } });
-            if (point) {
-                response.point = point.amount;
-                response.profit_per_hour = point.profit_per_hour;
-                response.level.current_level_score = point.spend_amount;
+            // Fetch player's current balance and passive earnings from the database
+            const playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: req.user.id } });
+            if (playerEarning) {
+                response.balance = playerEarning.coins_balance;
+                response.passive_earnings.per_hour = playerEarning.passive_per_hour;
+                response.level.current_level_score = playerEarning.coins_total - playerEarning.coins_balance;
+                response.tap_earnings.per_tap = playerEarning.tap_points;
             }
 
-            let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
+            // Fetch level configuration from the database
+            const levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
             if (levelConfig) {
-                let levels = JSON.parse(levelConfig.value);
+                const levels = JSON.parse(levelConfig.value);
 
-                // Find the highest level where minimum_score is less than or equal to current_level_score
-                let currentLevel = levels.reduce((acc, level) => {
+                // Determine the player's current level
+                const currentLevel = levels.reduce((acc, level) => {
                     return level.minimum_score <= response.level.current_level_score ? level : acc;
                 }, levels[0]);
 
-                // Find the next level if it exists
-                let nextLevel = levels.find(level => level.level === currentLevel.level + 1);
+                // Determine the next level if it exists
+                const nextLevel = levels.find(level => level.level === currentLevel.level + 1);
 
                 response.level.current_level = currentLevel.level;
-                response.points_per_click = currentLevel.level;
                 if (nextLevel) {
                     response.level.next_level = nextLevel.level;
                     response.level.next_level_score = nextLevel.minimum_score;
@@ -147,7 +154,7 @@ module.exports = {
 
             return res.status(200).json({
                 status: true,
-                message: "Player details",
+                message: "Player details retrieved successfully",
                 error: null,
                 data: response
             });
