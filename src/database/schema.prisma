@@ -75,16 +75,6 @@ model CardLevel {
   @@map("card_levels")
 }
 
-model Point {
-  id              Int @id @default(autoincrement())
-  player_id       Int
-  amount          Int
-  profit_per_hour Int @default(0)
-  spend_amount    Int @default(0)
-
-  @@map("points")
-}
-
 model PointLog {
   id        Int    @id @default(autoincrement())
   player_id Int
