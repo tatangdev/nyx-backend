@@ -147,28 +147,24 @@ module.exports = {
             }
 
             await prisma.$transaction(async (prisma) => {
-                let point = await prisma.point.findFirst({
+                let point = await prisma.playerEarning.findFirst({
                     where: {
                         player_id: req.user.id
                     }
                 });
 
-                if (!point) {
-                    throw new Error("Point not found");
-                }
-
-                if (point.amount < card.upgrade.upgrade_price) {
+                if (point.coins_balance < card.upgrade.upgrade_price) {
                     throw new Error("Insufficient balance");
                 }
 
-                let newBalance = point.amount - card.upgrade.upgrade_price;
-                let newProfitPerHour = point.profit_per_hour + card.upgrade.profit_per_hour;
+                let newBalance = point.coins_balance - card.upgrade.upgrade_price;
+                let newProfitPerHour = point.passive_per_hour + card.upgrade.profit_per_hour;
 
-                await prisma.point.update({
+                await prisma.playerEarning.update({
                     where: { id: point.id },
                     data: {
-                        amount: newBalance,
-                        profit_per_hour: newProfitPerHour
+                        coins_balance: newBalance,
+                        passive_per_hour: newProfitPerHour,
                     }
                 });
 
