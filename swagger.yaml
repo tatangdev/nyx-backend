@@ -974,57 +974,6 @@ paths:
                             type: integer
                           profit_per_hour:
                             type: integer
-  /v1:
-    get:
-      summary: Get Player Data
-      tags:
-        - Player
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          balance:
-                            type: integer
-                            example: 971908
-                          passive_earnings:
-                            type: object
-                            properties:
-                              per_hour:
-                                type: integer
-                                example: 15607
-                          tap_earnings:
-                            type: object
-                            properties:
-                              per_tap:
-                                type: integer
-                                example: 100
-                          level:
-                            type: object
-                            properties:
-                              current_level:
-                                type: integer
-                                example: 5
-                              current_level_score:
-                                type: integer
-                                example: 28092
-                              next_level:
-                                type: integer
-                                example: 6
-                              next_level_score:
-                                type: integer
-                                example: 50000
-                              next_level_percentage:
-                                type: integer
-                                example: 56
   /v1/sync:
     post:
       summary: Sync player points
