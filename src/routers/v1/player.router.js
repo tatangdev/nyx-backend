@@ -19,7 +19,8 @@ router.get('/cards', validate, isPlayer, card.list);
 router.post('/card-upgrade', validate, isPlayer, card.upgrade);
 
 // point
-router.post('/sync', validate, point.sync);
+router.get('/sync', validate, isPlayer, point.sync);
+router.post('/tap', validate, isPlayer, point.tapUpdate);
 // router.post('/sync', validate, isPlayer, point.update);
 
 module.exports = router;

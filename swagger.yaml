@@ -975,6 +975,23 @@ paths:
                           profit_per_hour:
                             type: integer
   /v1/sync:
+    get:
+      summary: Sync player points
+      tags:
+        - Player
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+  /v1/tap:
     post:
       summary: Sync player points
       tags:
