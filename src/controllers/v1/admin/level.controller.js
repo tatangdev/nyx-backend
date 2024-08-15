@@ -51,12 +51,15 @@ module.exports = {
                 }
             }
 
+            let now = Math.floor(Date.now() / 1000);
             let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
             if (!levelConfig) {
                 levelConfig = await prisma.config.create({
                     data: {
                         key: 'level',
-                        value: JSON.stringify(levels)
+                        value: JSON.stringify(levels),
+                        created_at_unix: now,
+                        updated_at_unix: now,
                     }
                 });
             } else {

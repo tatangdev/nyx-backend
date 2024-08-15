@@ -14,99 +14,117 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  username      String   @unique
-  password      String
-  is_active     Boolean  @default(true)
-  is_superadmin Boolean  @default(false)
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  id              Int     @id @default(autoincrement())
+  username        String  @unique
+  password        String
+  is_active       Boolean @default(true)
+  is_superadmin   Boolean @default(false)
+  created_at_unix Int?
+  updated_at_unix Int?
 
   @@map("users")
 }
 
 model Player {
-  id            Int     @id @default(autoincrement())
-  telegram_id   String  @unique
-  username      String
-  first_name    String
-  last_name     String
-  created_at    Int
-  referee_id    Int?
-  referral_code String? @unique
-  // created_at  DateTime @default(now())
-  // updated_at  DateTime @updatedAt
+  id              Int     @id @default(autoincrement())
+  telegram_id     String  @unique
+  username        String
+  first_name      String
+  last_name       String
+  created_at      Int
+  referee_id      Int?
+  referral_code   String? @unique
+  level           Int     @default(1)
+  created_at_unix Int?
+  updated_at_unix Int?
 
   @@map("players")
 }
 
 model CardCategory {
-  id         Int      @id @default(autoincrement())
-  name       String
-  icon_url   String?
-  is_active  Boolean  @default(true)
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id              Int     @id @default(autoincrement())
+  name            String
+  icon_url        String?
+  is_active       Boolean @default(true)
+  created_at_unix Int?
+  updated_at_unix Int?
 
   @@map("card_categories")
 }
 
 model Card {
-  id           Int      @id @default(autoincrement())
-  name         String
-  icon_url     String
-  category_id  Int
-  is_active    Boolean  @default(true)
-  levels       String?
-  requirements String?
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  id              Int     @id @default(autoincrement())
+  name            String
+  icon_url        String
+  category_id     Int
+  is_active       Boolean @default(true)
+  levels          String?
+  requirements    String?
+  created_at_unix Int?
+  updated_at_unix Int?
 
   @@map("cards")
 }
 
 model CardLevel {
-  id      Int    @id @default(autoincrement())
-  card_id Int
-  user_id Int
-  level   Int
-  data    String
+  id              Int    @id @default(autoincrement())
+  card_id         Int
+  user_id         Int
+  level           Int
+  data            String
+  created_at_unix Int?
+  updated_at_unix Int?
 
   @@map("card_levels")
 }
 
-model PointLog {
-  id        Int    @id @default(autoincrement())
-  player_id Int
-  amount    Int
-  type      String
-  unix_time Int
-
-  @@map("point_logs")
-}
-
 model PointHistory {
-  id        Int    @id @default(autoincrement())
-  player_id Int
-  point_id  Int
-  amount    Int
-  type      String
-  data      String
+  id              Int     @id @default(autoincrement())
+  player_id       Int
+  amount          Int
+  type            String
+  data            String?
+  created_at_unix Int?
+  updated_at_unix Int?
 
   @@map("point_histories")
 }
 
+model PassiveEarningHistory {
+  id              Int     @id @default(autoincrement())
+  player_id       Int
+  amount          Int
+  data            String?
+  created_at_unix Int?
+  updated_at_unix Int?
+
+  @@map("passive_earning_histories")
+}
+
+model LevelHistory {
+  id              Int     @id @default(autoincrement())
+  player_id       Int
+  level           Int
+  data            String?
+  created_at_unix Int?
+  updated_at_unix Int?
+
+  @@map("level_histories")
+}
+
 model Config {
-  id        Int     @id @default(autoincrement())
-  key       String
-  value     String
-  is_active Boolean @default(true)
+  id              Int     @id @default(autoincrement())
+  key             String
+  value           String
+  is_active       Boolean @default(true)
+  created_at_unix Int?
+  updated_at_unix Int?
 
   @@map("configs")
 }
 
 model PlayerEarning {
-  id               Int @id @default(autoincrement())
+  id               Int  @id @default(autoincrement())
   player_id        Int
   passive_per_hour Int
   tap_max          Int
@@ -114,7 +132,8 @@ model PlayerEarning {
   tap_available    Int
   coins_total      Int
   coins_balance    Int
-  last_updated     Int
+  created_at_unix  Int?
+  updated_at_unix  Int?
 
   @@map("player_earnings")
 }

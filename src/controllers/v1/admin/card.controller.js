@@ -71,12 +71,15 @@ module.exports = {
                 });
             }
 
+            let now = Math.floor(Date.now() / 1000);
             let card = await prisma.card.create({
                 data: {
                     name,
                     icon_url,
                     category_id,
                     levels: JSON.stringify(levels),
+                    created_at_unix: now,
+                    updated_at_unix: now,
                 },
             });
 

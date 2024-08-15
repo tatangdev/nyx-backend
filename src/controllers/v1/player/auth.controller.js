@@ -26,15 +26,17 @@ module.exports = {
                     }
                 }
 
+                let now = Math.floor(Date.now() / 1000);
                 player = await prisma.player.create({
                     data: {
                         telegram_id,
                         username,
                         first_name,
                         last_name,
-                        created_at: Math.floor(Date.now() / 1000),
                         referral_code: uid(),
-                        referee_id: refereeId
+                        referee_id: refereeId,
+                        created_at_unix: now,
+                        updated_at_unix: now,
                     }
                 });
             }
@@ -57,7 +59,8 @@ module.exports = {
                         tap_available: defaultTapAvailable,
                         coins_total: defaultCoins,
                         coins_balance: defaultCoins,
-                        last_updated: now
+                        created_at_unix: now,
+                        updated_at_unix: now,
                     }
                 });
             }

@@ -13,7 +13,7 @@ module.exports = {
 
             // Calculate passive earnings
             const MAX_PASSIVE_EARNINGS_DURATION = 180 * 60; // 180 minutes in seconds
-            const elapsedTime = currentTimeInSeconds - playerEarnings.last_updated;
+            const elapsedTime = currentTimeInSeconds - playerEarnings.updated_at_unix;
             const passiveEarningsDuration = Math.min(elapsedTime, MAX_PASSIVE_EARNINGS_DURATION);
             const passiveEarningsPerSecond = playerEarnings.passive_per_hour / 3600;
             const earnedPassiveCoins = Math.floor(passiveEarningsDuration * passiveEarningsPerSecond);
@@ -36,7 +36,7 @@ module.exports = {
                     tap_available: availableTaps,
                     coins_total: totalCoins,
                     coins_balance: balanceCoins,
-                    last_updated: currentTimeInSeconds,
+                    updated_at_unix: currentTimeInSeconds,
                 }
             });
 
@@ -111,7 +111,7 @@ module.exports = {
 
             // Validate tap data and timestamp
             if (tapCount > 0) {
-                const isInvalidTimestamp = timestamp <= 0 || timestamp <= playerEarnings.last_updated || timestamp >= currentTimeInSeconds;
+                const isInvalidTimestamp = timestamp <= 0 || timestamp <= playerEarnings.updated_at_unix || timestamp >= currentTimeInSeconds;
                 if (isInvalidTimestamp) {
                     return res.status(400).json({
                         status: false,
@@ -125,7 +125,7 @@ module.exports = {
 
             // Calculate passive earnings
             const MAX_PASSIVE_EARNINGS_DURATION = 180 * 60; // 180 minutes in seconds
-            const elapsedTime = currentTimeInSeconds - playerEarnings.last_updated;
+            const elapsedTime = currentTimeInSeconds - playerEarnings.updated_at_unix;
             const passiveEarningsDuration = Math.min(elapsedTime, MAX_PASSIVE_EARNINGS_DURATION);
             const passiveEarningsPerSecond = playerEarnings.passive_per_hour / 3600;
             const earnedPassiveCoins = Math.floor(passiveEarningsDuration * passiveEarningsPerSecond);
@@ -160,7 +160,7 @@ module.exports = {
                     tap_available: availableTaps,
                     coins_total: totalCoins,
                     coins_balance: balanceCoins,
-                    last_updated: currentTimeInSeconds,
+                    updated_at_unix: currentTimeInSeconds,
                 }
             });
 

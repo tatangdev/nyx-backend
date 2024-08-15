@@ -28,8 +28,14 @@ module.exports = {
             }
 
             let hashedPassword = bcrypt.hashSync(password, 10);
+            let now = Math.floor(Date.now() / 1000);
             let newUser = await prisma.user.create({
-                data: { username, password: hashedPassword }
+                data: {
+                    username,
+                    password: hashedPassword,
+                    created_at_unix: now,
+                    updated_at_unix: now,
+                }
             });
 
             delete newUser.password;

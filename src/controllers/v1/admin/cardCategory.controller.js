@@ -14,10 +14,13 @@ module.exports = {
                 });
             }
 
+            let now = Math.floor(Date.now() / 1000);
             let cardCategory = await prisma.cardCategory.create({
                 data: {
                     name,
-                    icon_url
+                    icon_url,
+                    created_at_unix: now,
+                    updated_at_unix: now,
                 }
             });
 

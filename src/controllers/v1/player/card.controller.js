@@ -168,6 +168,7 @@ module.exports = {
                     }
                 });
 
+                let now = Math.floor(Date.now() / 1000);
                 let pointHistory = await prisma.pointHistory.create({
                     data: {
                         player_id: req.user.id,
@@ -178,7 +179,9 @@ module.exports = {
                             ...card.upgrade,
                             note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
                             upgrade_at: new Date()
-                        })
+                        }),
+                        created_at_unix: now,
+                        updated_at_unix: now,
                     }
                 });
 
@@ -211,7 +214,9 @@ module.exports = {
                             card_id: card.id,
                             user_id: req.user.id,
                             level: card.upgrade.level,
-                            data: JSON.stringify(levelData)
+                            data: JSON.stringify(levelData),
+                            created_at_unix: now,
+                            updated_at_unix: now,
                         }
                     });
                 }
