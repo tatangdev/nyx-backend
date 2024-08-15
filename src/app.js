@@ -1,4 +1,6 @@
 require('dotenv').config();
+require("./instrument.js");
+const Sentry = require("@sentry/node");
 const express = require('express');
 const logger = require('morgan');
 const swaggerUi = require('swagger-ui-express');
@@ -27,6 +29,9 @@ app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // app.get('/', (req, res) => {
 //     res.send('Hello World!');
 // });
+
+// Sentry error handler
+Sentry.setupExpressErrorHandler(app);
 
 // 404 handler
 app.use((req, res, next) => {
