@@ -1,8 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
-const uid = require('uid');
+const { uid } = require('uid');
 const jwt = require('jsonwebtoken');
-const { parse } = require('path');
 
 module.exports = {
     login: async (req, res, next) => {
