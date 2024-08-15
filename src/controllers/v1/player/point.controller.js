@@ -36,6 +36,17 @@ module.exports = {
                     tap_available: availableTaps,
                     coins_total: totalCoins,
                     coins_balance: balanceCoins,
+                    created_at_unix: currentTimeInSeconds,
+                    updated_at_unix: currentTimeInSeconds,
+                }
+            });
+            await prisma.pointHistory.create({
+                data: {
+                    player_id: playerId,
+                    amount: earnedPassiveCoins,
+                    type: "PASSIVE_EARNINGS",
+                    data: JSON.stringify({ note: "Passive earnings" }),
+                    created_at_unix: currentTimeInSeconds,
                     updated_at_unix: currentTimeInSeconds,
                 }
             });
@@ -151,6 +162,18 @@ module.exports = {
 
                 // Update available taps
                 availableTaps -= validTapCount;
+
+
+                await prisma.pointHistory.create({
+                    data: {
+                        player_id: playerId,
+                        amount: tapEarnings,
+                        type: "TAP_EARNINGS",
+                        data: JSON.stringify({ note: "tap earnings" }),
+                        created_at_unix: currentTimeInSeconds,
+                        updated_at_unix: currentTimeInSeconds,
+                    }
+                });
             }
 
             // Update player earnings in the database
@@ -160,6 +183,17 @@ module.exports = {
                     tap_available: availableTaps,
                     coins_total: totalCoins,
                     coins_balance: balanceCoins,
+                    created_at_unix: currentTimeInSeconds,
+                    updated_at_unix: currentTimeInSeconds,
+                }
+            });
+            await prisma.pointHistory.create({
+                data: {
+                    player_id: playerId,
+                    amount: earnedPassiveCoins,
+                    type: "PASSIVE_EARNINGS",
+                    data: JSON.stringify({ note: "Passive earnings" }),
+                    created_at_unix: currentTimeInSeconds,
                     updated_at_unix: currentTimeInSeconds,
                 }
             });
