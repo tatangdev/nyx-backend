@@ -172,7 +172,6 @@ module.exports = {
                 let pointHistory = await prisma.pointHistory.create({
                     data: {
                         player_id: req.user.id,
-                        point_id: point.id,
                         amount: -card.upgrade.upgrade_price,
                         type: 'CARD_UPGRADE',
                         data: JSON.stringify({
