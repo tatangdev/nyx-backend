@@ -63,6 +63,28 @@ module.exports = {
                         updated_at_unix: now,
                     }
                 });
+
+                await prisma.pointHistory.create({
+                    data: {
+                        player_id: player.id,
+                        amount: defaultPassivePerHour,
+                        type: "INITIAL",
+                        data: JSON.stringify({ note: "Initial coins" }),
+                        created_at_unix: now,
+                        updated_at_unix: now,
+                    }
+                });
+
+                await prisma.passiveEarningHistory.create({
+                    data: {
+                        player_id: player.id,
+                        amount: defaultCoins,
+                        type: "INITIAL",
+                        data: JSON.stringify({ note: "Initial passive earning" }),
+                        created_at_unix: now,
+                        updated_at_unix: now,
+                    }
+                });
             }
 
             let token = jwt.sign({ ...player, role: 'player' }, process.env.JWT_SECRET);

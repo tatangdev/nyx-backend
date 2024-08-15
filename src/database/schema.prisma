@@ -31,7 +31,6 @@ model Player {
   username        String
   first_name      String
   last_name       String
-  created_at      Int
   referee_id      Int?
   referral_code   String? @unique
   level           Int     @default(1)
@@ -94,6 +93,7 @@ model PassiveEarningHistory {
   id              Int     @id @default(autoincrement())
   player_id       Int
   amount          Int
+  type            String
   data            String?
   created_at_unix Int?
   updated_at_unix Int?
