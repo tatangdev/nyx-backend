@@ -135,6 +135,7 @@ module.exports = {
             });
 
             card.levels = JSON.parse(card.levels);
+            card.condition = JSON.parse(card.condition);
             return res.status(201).json({
                 status: true,
                 message: "Card created",
@@ -194,6 +195,7 @@ module.exports = {
             }
 
             card.levels = JSON.parse(card.levels);
+            card.condition = JSON.parse(card.condition);
             return res.status(200).json({
                 status: true,
                 message: "Card found",
@@ -207,7 +209,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            let { name, icon_url, category_id, levels, is_active } = req.body;
+            let { name, icon_url, category_id, levels, is_active, condition } = req.body;
 
             let card = await prisma.card.findUnique({
                 where: { id: parseInt(req.params.id) },
@@ -253,12 +255,63 @@ module.exports = {
                 levels = levels.map((level, index) => ({ ...level, level: index + 1 }));
                 data.levels = JSON.stringify(levels);
             }
+            if (condition) {
+                if (typeof condition !== 'object') {
+                    return res.status(400).json({
+                        status: false,
+                        message: "Condition must be an object",
+                        error: null,
+                        data: null,
+                    });
+                }
+
+                if (!condition.card_id || !condition.level) {
+                    return res.status(400).json({
+                        status: false,
+                        message: "Condition card_id and level are required",
+                        error: null,
+                        data: null,
+                    });
+                }
+
+                let card = await prisma.card.findUnique({
+                    where: { id: condition.card_id },
+                });
+                if (!card) {
+                    return res.status(404).json({
+                        status: false,
+                        message: "Condition card not found",
+                        error: null,
+                        data: null,
+                    });
+                }
+
+                let cardLevels = JSON.parse(card.levels);
+                let levelExists = cardLevels.find((level) => level.level === condition.level);
+                if (!levelExists) {
+                    return res.status(404).json({
+                        status: false,
+                        message: "Condition level not found",
+                        error: null,
+                        data: null,
+                    });
+                }
+
+                condition = {
+                    id: card.id,
+                    name: card.name,
+                    level: condition.level,
+                };
+                data.condition = JSON.stringify(condition);
+            }
 
             let updatedCard = await prisma.card.update({
                 where: { id: parseInt(req.params.id) },
                 data,
             });
 
+            updatedCard.levels = JSON.parse(updatedCard.levels);
+            updatedCard.condition = JSON.parse(updatedCard.condition);
             return res.status(200).json({
                 status: true,
                 message: "Card updated",

@@ -411,6 +411,13 @@ paths:
                         type: integer
                       profit_per_hour:
                         type: integer
+                condition:
+                  type: object
+                  properties:
+                    card_id:
+                      type: integer
+                    level:
+                      type: integer
       responses:
         "200":
           description: Success
@@ -447,6 +454,13 @@ paths:
                                   type: integer
                                 profit_per_hour:
                                   type: integer
+                          condition:
+                            type: object
+                            properties:
+                              card_id:
+                                type: integer
+                              level:
+                                type: integer
       security:
         - bearerAuth: []
     get:
@@ -530,6 +544,26 @@ paths:
                             type: integer
                           is_active:
                             type: boolean
+                          levels:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                level:
+                                  type: integer
+                                upgrade_price:
+                                  type: integer
+                                profit_per_hour:
+                                  type: integer
+                          condition:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              level:
+                                type: integer
       security:
         - bearerAuth: []
     put:
@@ -566,6 +600,13 @@ paths:
                         type: integer
                       profit_per_hour:
                         type: integer
+                condition:
+                  type: object
+                  properties:
+                    card_id:
+                      type: integer
+                    level:
+                      type: integer
       responses:
         "200":
           description: Success
@@ -600,6 +641,15 @@ paths:
                                   type: integer
                                 profit_per_hour:
                                   type: integer
+                          condition:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              level:
+                                type: integer
       security:
         - bearerAuth: []
   /v1/admin/levels:
