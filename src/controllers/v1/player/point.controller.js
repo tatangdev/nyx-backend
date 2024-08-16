@@ -24,7 +24,7 @@ module.exports = {
 
             // Calculate available tap earnings
             const TAP_RECOVERY_RATE = 3; // Taps recovered per second
-            let availableTaps = Math.min(
+            let availableTapAmount = Math.min(
                 playerEarnings.tap_available + elapsedTime * TAP_RECOVERY_RATE,
                 playerEarnings.tap_max
             );
@@ -33,7 +33,7 @@ module.exports = {
             await prisma.playerEarning.update({
                 where: { id: playerEarnings.id },
                 data: {
-                    tap_available: availableTaps,
+                    tap_available: availableTapAmount,
                     coins_total: totalCoins,
                     coins_balance: balanceCoins,
                     updated_at_unix: currentTimeInSeconds,
@@ -97,7 +97,7 @@ module.exports = {
                 tap_earnings: {
                     per_tap: playerEarnings.tap_points,
                     max_taps: playerEarnings.tap_max,
-                    available_taps: availableTaps,
+                    available_taps: availableTapAmount,
                     recovery_per_second: TAP_RECOVERY_RATE,
                 },
                 level: levelData,
@@ -154,22 +154,19 @@ module.exports = {
 
             // Calculate available tap earnings
             const TAP_RECOVERY_RATE = 3; // Taps recovered per second
-            let availableTaps = Math.min(
+            let availableTapAmount = Math.min(
                 playerEarnings.tap_available + elapsedTime * TAP_RECOVERY_RATE,
                 playerEarnings.tap_max
             );
 
             if (tapCount > 0) {
-                const validTapCount = Math.min(tapCount, availableTaps);
-
                 // Update coins based on tap earnings
-                const tapEarnings = validTapCount * playerEarnings.tap_points;
+                const tapEarnings = Math.min(tapCount*playerEarnings.tap_points, availableTapAmount);
                 totalCoins += tapEarnings;
                 balanceCoins += tapEarnings;
 
                 // Update available taps
-                availableTaps -= validTapCount;
-
+                availableTapAmount -= tapEarnings;
 
                 await prisma.pointHistory.create({
                     data: {
@@ -187,7 +184,7 @@ module.exports = {
             await prisma.playerEarning.update({
                 where: { id: playerEarnings.id },
                 data: {
-                    tap_available: availableTaps,
+                    tap_available: availableTapAmount,
                     coins_total: totalCoins,
                     coins_balance: balanceCoins,
                     created_at_unix: currentTimeInSeconds,
@@ -252,7 +249,7 @@ module.exports = {
                 tap_earnings: {
                     per_tap: playerEarnings.tap_points,
                     max_taps: playerEarnings.tap_max,
-                    available_taps: availableTaps,
+                    available_taps: availableTapAmount,
                     recovery_per_second: TAP_RECOVERY_RATE,
                 },
                 level: levelData,
