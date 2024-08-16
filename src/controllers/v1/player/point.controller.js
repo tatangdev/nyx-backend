@@ -122,7 +122,7 @@ module.exports = {
 
             // Validate tap data and timestamp
             if (tapCount > 0) {
-                const isInvalidTimestamp = timestamp <= 0 || timestamp <= playerEarnings.updated_at_unix || timestamp >= currentTimeInSeconds;
+                const isInvalidTimestamp = timestamp <= 0 || timestamp <= playerEarnings.updated_at_unix || timestamp > currentTimeInSeconds;
                 if (isInvalidTimestamp) {
                     return res.status(400).json({
                         status: false,

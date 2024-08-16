@@ -43,7 +43,6 @@ model Player {
 model CardCategory {
   id              Int     @id @default(autoincrement())
   name            String
-  icon_url        String?
   is_active       Boolean @default(true)
   created_at_unix Int?
   updated_at_unix Int?
@@ -68,7 +67,7 @@ model Card {
 model CardLevel {
   id              Int    @id @default(autoincrement())
   card_id         Int
-  user_id         Int
+  player_id       Int
   level           Int
   data            String
   created_at_unix Int?

@@ -4,11 +4,11 @@ const prisma = new PrismaClient({ log: ['query'] });
 module.exports = {
     create: async (req, res, next) => {
         try {
-            let { name, icon_url } = req.body;
-            if (!name || !icon_url) {
+            let { name } = req.body;
+            if (!name) {
                 return res.status(400).json({
                     status: false,
-                    message: "Name and icon_url are required",
+                    message: "Name is required",
                     error: null,
                     data: null
                 });
@@ -18,7 +18,6 @@ module.exports = {
             let cardCategory = await prisma.cardCategory.create({
                 data: {
                     name,
-                    icon_url,
                     created_at_unix: now,
                     updated_at_unix: now,
                 }
@@ -97,7 +96,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            let { name, icon_url, is_active } = req.body;
+            let { name, is_active } = req.body;
             let cardCategoryId = parseInt(req.params.id);
 
             let cardCategory = await prisma.cardCategory.findUnique({
@@ -117,7 +116,6 @@ module.exports = {
 
             let data = {
                 ...(name && { name }),
-                ...(icon_url && { icon_url }),
                 ...(is_active !== undefined && { is_active })
             };
 
