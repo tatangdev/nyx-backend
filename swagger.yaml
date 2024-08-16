@@ -251,8 +251,6 @@ paths:
               properties:
                 name:
                   type: string
-                icon_url:
-                  type: string
       responses:
         "200":
           description: Success
@@ -269,8 +267,6 @@ paths:
                           id:
                             type: integer
                           name:
-                            type: string
-                          icon_url:
                             type: string
                           is_active:
                             type: boolean
@@ -310,8 +306,6 @@ paths:
                               type: integer
                             name:
                               type: string
-                            icon_url:
-                              type: string
                             is_active:
                               type: boolean
       security:
@@ -344,8 +338,6 @@ paths:
                             type: integer
                           name:
                             type: string
-                          icon_url:
-                            type: string
                           is_active:
                             type: boolean
       security:
@@ -369,8 +361,6 @@ paths:
               properties:
                 name:
                   type: string
-                icon_url:
-                  type: string
                 is_active:
                   type: boolean
       responses:
@@ -389,8 +379,6 @@ paths:
                           id:
                             type: integer
                           name:
-                            type: string
-                          icon_url:
                             type: string
                           is_active:
                             type: boolean

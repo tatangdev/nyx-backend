@@ -37,7 +37,7 @@ const validateLevels = (levels) => {
 module.exports = {
     create: async (req, res, next) => {
         try {
-            let { name, icon_url, category_id, levels } = req.body;
+            let { name, icon_url, category_id, levels, condition } = req.body;
             if (!name || !icon_url || !category_id || !levels.length) {
                 return res.status(400).json({
                     status: false,
@@ -55,6 +55,56 @@ module.exports = {
                     error: null,
                     data: null,
                 });
+            }
+
+            // validate condition
+            if (condition) {
+                if (typeof condition !== 'object') {
+                    return res.status(400).json({
+                        status: false,
+                        message: "Condition must be an object",
+                        error: null,
+                        data: null,
+                    });
+                }
+
+                if (!condition.card_id || !condition.level) {
+                    return res.status(400).json({
+                        status: false,
+                        message: "Condition card_id and level are required",
+                        error: null,
+                        data: null,
+                    });
+                }
+
+                let card = await prisma.card.findUnique({
+                    where: { id: condition.card_id },
+                });
+                if (!card) {
+                    return res.status(404).json({
+                        status: false,
+                        message: "Condition card not found",
+                        error: null,
+                        data: null,
+                    });
+                }
+
+                let cardLevels = JSON.parse(card.levels);
+                let levelExists = cardLevels.find((level) => level.level === condition.level);
+                if (!levelExists) {
+                    return res.status(404).json({
+                        status: false,
+                        message: "Condition level not found",
+                        error: null,
+                        data: null,
+                    });
+                }
+
+                condition = {
+                    id: card.id,
+                    name: card.name,
+                    level: condition.level,
+                };
             }
 
             levels = levels.map((level, index) => ({ ...level, level: index + 1 }));
@@ -78,6 +128,7 @@ module.exports = {
                     icon_url,
                     category_id,
                     levels: JSON.stringify(levels),
+                    condition: condition ? JSON.stringify(condition) : null,
                     created_at_unix: now,
                     updated_at_unix: now,
                 },
