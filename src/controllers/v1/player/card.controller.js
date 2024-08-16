@@ -102,7 +102,7 @@ module.exports = {
                     COALESCE(CAST(cl.level AS INTEGER), 0) AS level,
                     cat.id AS category_id,
                     c.levels,
-                    c.requirements
+                    c.condition
                 FROM
                     cards c
                 LEFT JOIN 
@@ -130,7 +130,7 @@ module.exports = {
                     }
                     if (nextLevel) {
                         let isAvailable = true;
-                        let condition = JSON.parse(card.requirements);
+                        let condition = JSON.parse(card.condition);
                         if (condition) {
                             isAvailable = false;
                             let requiredCard = cards.find(item => item.id === condition.id);
@@ -151,7 +151,7 @@ module.exports = {
                 }
 
                 delete card.levels;
-                delete card.requirements;
+                delete card.condition;
                 return card;
             });
 
@@ -178,7 +178,7 @@ module.exports = {
                     COALESCE(CAST(cl.level AS INTEGER), 0) AS level,
                     cat.id AS category_id,
                     c.levels,
-                    c.requirements
+                    c.condition
                 FROM
                     cards c
                 LEFT JOIN 
@@ -215,7 +215,7 @@ module.exports = {
                 }
                 if (nextLevel) {
                     let isAvailable = true;
-                    let condition = JSON.parse(card.requirements);
+                    let condition = JSON.parse(card.condition);
                     if (condition) {
                         isAvailable = false;
                         let requiredCard = cards.find(item => item.id === condition.id);
@@ -237,7 +237,7 @@ module.exports = {
 
             delete card.category_id;
             delete card.levels;
-            delete card.requirements;
+            delete card.condition;
 
             if (!card.upgrade || !card.upgrade.is_available) {
                 return res.status(400).json({

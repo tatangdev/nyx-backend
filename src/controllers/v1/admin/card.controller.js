@@ -114,7 +114,7 @@ module.exports = {
             let cards = await prisma.card.findMany(filter);
             cards = cards.map((card) => {
                 delete card.levels;
-                delete card.requirements;
+                delete card.condition;
                 return card;
             });
             return res.status(200).json({

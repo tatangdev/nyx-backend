@@ -57,7 +57,7 @@ model Card {
   category_id     Int
   is_active       Boolean @default(true)
   levels          String?
-  requirements    String?
+  condition       String?
   created_at_unix Int?
   updated_at_unix Int?
 
