@@ -39,6 +39,19 @@ module.exports = {
                         updated_at_unix: now,
                     }
                 });
+
+                await prisma.levelHistory.create({
+                    data: {
+                        player_id: player.id,
+                        level: 1,
+                        data: JSON.stringify({
+                            level: 1,
+                            note: 'Initial level',
+                        }),
+                        created_at_unix: now,
+                        updated_at_unix: now,
+                    }
+                });
             }
 
             let defaultPassivePerHour = parseInt(process.env.DEFAULT_PROFIT_PER_HOUR) || 0;

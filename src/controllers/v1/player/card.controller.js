@@ -168,6 +168,7 @@ module.exports = {
 
     upgrade: async (req, res, next) => {
         try {
+            let playerId = req.user.id;
             let cardId = parseInt(req.body.card_id);
 
             let cards = await prisma.$queryRawUnsafe(`
@@ -178,13 +179,16 @@ module.exports = {
                     COALESCE(CAST(cl.level AS INTEGER), 0) AS level,
                     cat.id AS category_id,
                     c.levels,
-                    c.condition
+                    c.condition,
+                    p.level AS player_level
                 FROM
                     cards c
                 LEFT JOIN 
-                    card_levels cl ON cl.card_id = c.id AND cl.player_id = ${req.user.id}
+                    card_levels cl ON cl.card_id = c.id AND cl.player_id = ${playerId}
                 INNER JOIN 
                     card_categories cat ON cat.id = c.category_id
+                INNER JOIN
+                    players p ON p.id = ${playerId}
                 WHERE c.is_active
                     AND cat.is_active
                 ORDER BY c.id;
@@ -199,8 +203,6 @@ module.exports = {
                     data: null
                 });
             }
-
-
             card.upgrade = null;
             card.profit_per_hour = 0;
 
@@ -235,9 +237,12 @@ module.exports = {
                 }
             }
 
-            delete card.category_id;
-            delete card.levels;
-            delete card.condition;
+            // get levels configuration
+            let playerLevels = [];
+            let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
+            if (levelConfig) {
+                playerLevels = JSON.parse(levelConfig.value);
+            }
 
             if (!card.upgrade || !card.upgrade.is_available) {
                 return res.status(400).json({
@@ -249,9 +254,10 @@ module.exports = {
             }
 
             await prisma.$transaction(async (prisma) => {
+                let now = Math.floor(Date.now() / 1000);
                 let point = await prisma.playerEarning.findFirst({
                     where: {
-                        player_id: req.user.id
+                        player_id: playerId
                     }
                 });
 
@@ -261,19 +267,47 @@ module.exports = {
 
                 let newBalance = point.coins_balance - card.upgrade.price;
                 let newProfitPerHour = point.passive_per_hour + card.upgrade.profit_per_hour_delta;
+                let newPlayerSpend = point.coins_total - newBalance;
+
+                // determine current user level
+                let currentLevel = playerLevels.reduce((acc, level) => {
+                    return level.minimum_score <= newPlayerSpend ? level : acc;
+                }, playerLevels[0]);
+                if (currentLevel.level > card.player_level) {
+                    await prisma.player.update({
+                        where: { id: playerId },
+                        data: {
+                            level: currentLevel.level,
+                            updated_at_unix: now
+                        }
+                    });
+
+                    await prisma.levelHistory.create({
+                        data: {
+                            player_id: playerId,
+                            level: currentLevel.level,
+                            data: JSON.stringify({
+                                level: currentLevel.level,
+                                note: `Upgrade player to level ${currentLevel.level}`,
+                            }),
+                            created_at_unix: now,
+                            updated_at_unix: now,
+                        }
+                    });
+                }
 
                 await prisma.playerEarning.update({
                     where: { id: point.id },
                     data: {
                         coins_balance: newBalance,
                         passive_per_hour: newProfitPerHour,
+                        updated_at_unix: now
                     }
                 });
 
-                let now = Math.floor(Date.now() / 1000);
                 let pointHistory = await prisma.pointHistory.create({
                     data: {
-                        player_id: req.user.id,
+                        player_id: playerId,
                         amount: -card.upgrade.price,
                         type: 'CARD_UPGRADE',
                         data: JSON.stringify({
@@ -288,7 +322,7 @@ module.exports = {
 
                 let passiveEarningHistory = await prisma.passiveEarningHistory.create({
                     data: {
-                        player_id: req.user.id,
+                        player_id: playerId,
                         amount: card.upgrade.profit_per_hour_delta,
                         type: 'CARD_UPGRADE',
                         data: JSON.stringify({
@@ -313,7 +347,7 @@ module.exports = {
                 let cardLevel = await prisma.cardLevel.findFirst({
                     where: {
                         card_id: card.id,
-                        player_id: req.user.id
+                        player_id: playerId
                     }
                 });
 
@@ -322,14 +356,15 @@ module.exports = {
                         where: { id: cardLevel.id },
                         data: {
                             level: card.upgrade.level,
-                            data: JSON.stringify(levelData)
+                            data: JSON.stringify(levelData),
+                            updated_at_unix: now
                         }
                     });
                 } else {
                     await prisma.cardLevel.create({
                         data: {
                             card_id: card.id,
-                            player_id: req.user.id,
+                            player_id: playerId,
                             level: card.upgrade.level,
                             data: JSON.stringify(levelData),
                             created_at_unix: now,

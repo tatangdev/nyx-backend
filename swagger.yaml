@@ -671,7 +671,11 @@ paths:
                     properties:
                       level:
                         type: integer
+                      name:
+                        type: string
                       minimum_score:
+                        type: integer
+                      level_up_reward:
                         type: integer
       responses:
         "200":
@@ -690,7 +694,11 @@ paths:
                           properties:
                             level:
                               type: integer
+                            name:
+                              type: string
                             minimum_score:
+                              type: integer
+                            level_up_reward:
                               type: integer
       security:
         - bearerAuth: []
@@ -715,7 +723,11 @@ paths:
                           properties:
                             level:
                               type: integer
+                            name:
+                              type: string
                             minimum_score:
+                              type: integer
+                            level_up_reward:
                               type: integer
       security:
         - bearerAuth: []
@@ -803,19 +815,19 @@ paths:
               properties:
                 telegram_id:
                   type: string
-                  example: 123456789
+                  example: 769049677
                 username:
                   type: string
-                  example: player
+                  example: tatangdev
                 first_name:
                   type: string
-                  example: John
+                  example: Tatang
                 last_name:
                   type: string
-                  example: Doe
+                  example: 
                 referral_code:
                   type: string
-                  example: "player"
+                  example:
       responses:
         "200":
           description: Success

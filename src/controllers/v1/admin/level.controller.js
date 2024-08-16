@@ -25,10 +25,18 @@ module.exports = {
                         data: null
                     });
                 }
-                if (level.minimum_score <= 0) {
+                if (i != 0 && level.minimum_score <= 0) {
                     return res.status(400).json({
                         status: false,
                         message: "Minimum score must be greater than 0",
+                        error: null,
+                        data: null
+                    });
+                }
+                if (level.level_up_reward <= 0) {
+                    return res.status(400).json({
+                        status: false,
+                        message: "Levelling bonus must be greater than 0",
                         error: null,
                         data: null
                     });
@@ -45,6 +53,22 @@ module.exports = {
                     return res.status(400).json({
                         status: false,
                         message: "Minimum score must be greater than the previous level",
+                        error: null,
+                        data: null
+                    });
+                }
+                if (i !== 0 && level.level_up_reward <= levels[i - 1].level_up_reward) {
+                    return res.status(400).json({
+                        status: false,
+                        message: "Levelling bonus must be greater than the previous level",
+                        error: null,
+                        data: null
+                    });
+                }
+                if (level.name === null || level.name === "") {
+                    return res.status(400).json({
+                        status: false,
+                        message: "Level name must not be empty",
                         error: null,
                         data: null
                     });
