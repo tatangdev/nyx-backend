@@ -54,8 +54,12 @@ module.exports = {
             // Fetch and determine player level
             let levelData = {
                 current_level: null,
+                current_level_name: null,
+                current_level_image_url: null,
                 current_level_score: null,
                 next_level: null,
+                next_level_name: null,
+                next_level_image_url: null,
                 next_level_score: null,
                 next_level_percentage: null
             };
@@ -72,9 +76,13 @@ module.exports = {
                 const nextLevel = levels.find(level => level.level === currentLevel.level + 1);
 
                 levelData.current_level = currentLevel.level;
+                levelData.current_level_name = currentLevel.name;
+                levelData.current_level_image_url = currentLevel.image_url;
                 levelData.current_level_score = currentLevelScore;
                 if (nextLevel) {
                     levelData.next_level = nextLevel.level;
+                    levelData.next_level_name = nextLevel.name;
+                    levelData.next_level_image_url = nextLevel.image_url;
                     levelData.next_level_score = nextLevel.minimum_score;
                     levelData.next_level_percentage = Math.floor((currentLevelScore / nextLevel.minimum_score) * 100);
                 }
@@ -201,8 +209,12 @@ module.exports = {
             // Fetch and determine player level
             let levelData = {
                 current_level: null,
+                current_level_name: null,
+                current_level_image_url: null,
                 current_level_score: null,
                 next_level: null,
+                next_level_name: null,
+                next_level_image_url: null,
                 next_level_score: null,
                 next_level_percentage: null
             };
@@ -219,9 +231,13 @@ module.exports = {
                 const nextLevel = levels.find(level => level.level === currentLevel.level + 1);
 
                 levelData.current_level = currentLevel.level;
+                levelData.current_level_name = currentLevel.name;
+                levelData.current_level_image_url = currentLevel.image_url;
                 levelData.current_level_score = currentLevelScore;
                 if (nextLevel) {
                     levelData.next_level = nextLevel.level;
+                    levelData.next_level_name = nextLevel.name;
+                    levelData.next_level_image_url = nextLevel.image_url;
                     levelData.next_level_score = nextLevel.minimum_score;
                     levelData.next_level_percentage = Math.floor((currentLevelScore / nextLevel.minimum_score) * 100);
                 }

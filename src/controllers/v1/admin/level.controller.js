@@ -73,6 +73,14 @@ module.exports = {
                         data: null
                     });
                 }
+                if (level.image_url === null || level.image_url === "") {
+                    return res.status(400).json({
+                        status: false,
+                        message: "Level image_url must not be empty",
+                        error: null,
+                        data: null
+                    });
+                }
             }
 
             let now = Math.floor(Date.now() / 1000);
