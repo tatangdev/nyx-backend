@@ -36,6 +36,7 @@ router.get('/levels', validate, isAdmin, level.get);
 // dashboard
 router.get('/dashboard', dashboard.index);
 router.get('/players/network', player.network);
+router.get('/players', player.index);
 // router.get('/dashboard', validate, isAdmin, dashboard.index);
 
 module.exports = router;
