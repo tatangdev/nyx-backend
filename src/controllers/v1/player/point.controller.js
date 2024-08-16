@@ -36,7 +36,6 @@ module.exports = {
                     tap_available: availableTaps,
                     coins_total: totalCoins,
                     coins_balance: balanceCoins,
-                    created_at_unix: currentTimeInSeconds,
                     updated_at_unix: currentTimeInSeconds,
                 }
             });

@@ -119,11 +119,15 @@ module.exports = {
                 ...(is_active !== undefined && { is_active })
             };
 
+            let now = Math.floor(Date.now() / 1000);
             let updatedCardCategory = await prisma.cardCategory.update({
                 where: {
                     id: cardCategoryId
                 },
-                data
+                data: {
+                    ...data,
+                    updated_at_unix: now
+                }
             });
 
             return res.status(200).json({

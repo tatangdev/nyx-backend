@@ -305,9 +305,13 @@ module.exports = {
                 data.condition = JSON.stringify(condition);
             }
 
+            let now = Math.floor(Date.now() / 1000);
             let updatedCard = await prisma.card.update({
                 where: { id: parseInt(req.params.id) },
-                data,
+                data: {
+                    ...data,
+                    updated_at_unix: now
+                },
             });
 
             updatedCard.levels = JSON.parse(updatedCard.levels);

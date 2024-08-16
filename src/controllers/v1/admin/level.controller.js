@@ -98,7 +98,8 @@ module.exports = {
                 levelConfig = await prisma.config.update({
                     where: { id: levelConfig.id },
                     data: {
-                        value: JSON.stringify(levels)
+                        value: JSON.stringify(levels),
+                        updated_at_unix: now
                     }
                 });
             }

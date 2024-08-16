@@ -148,9 +148,13 @@ module.exports = {
                 data.is_superadmin = is_superadmin;
             }
 
+            let now = Math.floor(Date.now() / 1000);
             let updatedUser = await prisma.user.update({
                 where: { id: userId },
-                data
+                data: {
+                    ...data,
+                    updated_at_unix: now
+                }
             });
 
             delete updatedUser.password;

@@ -5,16 +5,22 @@ const data = require('./data.json');
 
 async function generateAdmin() {
     try {
+        let now = Math.floor(Date.now() / 1000);
+
         let users = [
             {
                 username: "superadmin",
                 password: bcrypt.hashSync('password', 10),
                 is_superadmin: true,
+                created_at_unix: now,
+                updated_at_unix: now
             },
             {
                 username: "admin",
                 password: bcrypt.hashSync('password', 10),
                 is_superadmin: false,
+                created_at_unix: now,
+                updated_at_unix: now
             }
         ];
 
@@ -33,10 +39,14 @@ async function generateAdmin() {
 
 async function generateCard() {
     try {
+        let now = Math.floor(Date.now() / 1000);
+
         for (let cat of data.categories) {
             let category = await prisma.cardCategory.create({
                 data: {
-                    name: cat.name
+                    name: cat.name,
+                    created_at_unix: now,
+                    updated_at_unix: now
                 }
             });
 
@@ -55,7 +65,9 @@ async function generateCard() {
                         name: card.name,
                         icon_url: card.icon_url,
                         category_id: category.id,
-                        levels: JSON.stringify(levels)
+                        levels: JSON.stringify(levels),
+                        created_at_unix: now,
+                        updated_at_unix: now
                     }
                 });
             }
