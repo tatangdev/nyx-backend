@@ -15,9 +15,9 @@ module.exports = {
                     SELECT * FROM configs WHERE key = 'level'
                 `,
                 prisma.$queryRaw`
-                    SELECT players.id, points.spend_amount, points.amount
-                    FROM players
-                    LEFT JOIN points ON points.player_id = players.id
+                    SELECT pe.id, pe.coins_total-pe.coins_balance AS spend_amount, pe.coins_balance AS amount
+                    FROM players p
+                    LEFT JOIN player_earnings pe ON pe.player_id = p.id;
                 `
             ]);
 
