@@ -56,7 +56,6 @@ model Card {
   description     String?
   icon_url        String
   category_id     Int
-  is_active       Boolean @default(true)
   levels          String?
   condition       String?
   is_published    Boolean @default(false)

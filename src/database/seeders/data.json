@@ -4,7 +4,7 @@
             "name": "Food",
             "cards": [
                 {
-                    "name": "⁠Apple",
+                    "name": "Apple",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -13,7 +13,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Banana",
+                    "name": "Banana",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -22,7 +22,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Grape",
+                    "name": "Grape",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -31,7 +31,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Strawberry",
+                    "name": "Strawberry",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -40,7 +40,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Cherry",
+                    "name": "Cherry",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -49,7 +49,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Blueberry",
+                    "name": "Blueberry",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -58,7 +58,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Raspberry",
+                    "name": "Raspberry",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -67,7 +67,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Melon",
+                    "name": "Melon",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -76,7 +76,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Canary",
+                    "name": "Canary",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -85,7 +85,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Worms",
+                    "name": "Worms",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -94,7 +94,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Egg",
+                    "name": "Egg",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -103,7 +103,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Pellets",
+                    "name": "Pellets",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -112,7 +112,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Nuts",
+                    "name": "Nuts",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -121,7 +121,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Seeds",
+                    "name": "Seeds",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -130,7 +130,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Snails",
+                    "name": "Snails",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
@@ -139,7 +139,7 @@
                     "level_count": 0
                 },
                 {
-                    "name": "⁠⁠Bird Egg",
+                    "name": "Bird Egg",
                     "icon_url": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,

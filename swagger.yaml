@@ -409,9 +409,19 @@ paths:
                   items:
                     type: object
                     properties:
+                      level:
+                        type: integer
                       upgrade_price:
                         type: integer
+                      profit_per_hour_increase:
+                        type: integer
                       profit_per_hour:
+                        type: integer
+                      price_multiplier:
+                        type: number
+                      profit_per_hour_multiplier:
+                        type: number
+                      respawn_time:
                         type: integer
                 condition:
                   type: object
@@ -446,7 +456,7 @@ paths:
                             type: integer
                           image_url:
                             type: string
-                          is_active:
+                          is_published:
                             type: boolean
                           levels:
                             type: array
@@ -457,7 +467,15 @@ paths:
                                   type: integer
                                 upgrade_price:
                                   type: integer
+                                profit_per_hour_increase:
+                                  type: integer
                                 profit_per_hour:
+                                  type: integer
+                                price_multiplier:
+                                  type: number
+                                profit_per_hour_multiplier:
+                                  type: number
+                                respawn_time:
                                   type: integer
                           condition:
                             type: object
@@ -478,11 +496,6 @@ paths:
           required: false
           schema:
             type: string
-        - name: is_active
-          in: query
-          required: false
-          schema:
-            type: boolean
         - name: is_published
           in: query
           required: false
@@ -512,12 +525,18 @@ paths:
                               type: integer
                             name:
                               type: string
+                            description:
+                              type: string
                             icon_url:
                               type: string
                             category_id:
                               type: integer
-                            is_active:
+                            is_published:
                               type: boolean
+                            created_at_unix:
+                              type: integer
+                            updated_at_unix:
+                              type: integer
       security:
         - bearerAuth: []
   /v1/admin/cards/{id}:
@@ -554,8 +573,6 @@ paths:
                             type: string
                           category_id:
                             type: integer
-                          is_active:
-                            type: boolean
                           is_published:
                             type: boolean
                           levels:
@@ -605,8 +622,6 @@ paths:
                   type: string
                 category_id:
                   type: integer
-                is_active:
-                  type: boolean
                 is_published:
                   type: boolean
                 levels:
@@ -614,9 +629,19 @@ paths:
                   items:
                     type: object
                     properties:
+                      level:
+                        type: integer
                       upgrade_price:
                         type: integer
+                      profit_per_hour_increase:
+                        type: integer
                       profit_per_hour:
+                        type: integer
+                      price_multiplier:
+                        type: number
+                      profit_per_hour_multiplier:
+                        type: number
+                      respawn_time:
                         type: integer
                 condition:
                   type: object

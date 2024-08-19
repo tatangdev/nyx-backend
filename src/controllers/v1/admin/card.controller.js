@@ -5,19 +5,53 @@ const XLSX = require('xlsx');
 const validateLevels = (levels) => {
     for (let i = 0; i < levels.length; i++) {
         let level = levels[i];
-        if (typeof level.upgrade_price !== 'number' || typeof level.profit_per_hour !== 'number') {
+
+        // validate level keys
+        if (
+            typeof level.level !== 'number' ||
+            typeof level.upgrade_price !== 'number' ||
+            typeof level.profit_per_hour !== 'number' ||
+            typeof level.profit_per_hour_increase !== 'number' ||
+            typeof level.price_multiplier !== 'number' ||
+            typeof level.profit_per_hour_multiplier !== 'number' ||
+            typeof level.respawn_time !== 'number'
+        ) {
             return {
                 isValid: false,
                 message: "upgrade_price and profit_per_hour must be numbers",
             };
         }
-        if (level.upgrade_price <= 0 || level.profit_per_hour <= 0) {
+
+        // validate level values
+        if (
+            level.level <= 0 ||
+            level.upgrade_price <= 0 ||
+            level.profit_per_hour <= 0 ||
+            level.profit_per_hour_increase <= 0 ||
+            level.price_multiplier <= 0 ||
+            level.profit_per_hour_multiplier <= 0 ||
+            level.respawn_time < 0
+        ) {
             return {
                 isValid: false,
                 message: "upgrade_price and profit_per_hour must be greater than 0",
             };
         }
+
+        // validate level order
+        if (level.level !== i + 1) {
+            return {
+                isValid: false,
+                message: "level must be in order",
+            };
+        }
         if (i > 0) {
+            if (level.level <= levels[i - 1].level) {
+                return {
+                    isValid: false,
+                    message: "level must be greater than previous level",
+                };
+            }
             if (level.upgrade_price <= levels[i - 1].upgrade_price) {
                 return {
                     isValid: false,
@@ -38,7 +72,7 @@ const validateLevels = (levels) => {
 module.exports = {
     create: async (req, res, next) => {
         try {
-            let { name, description, icon_url, category_id, levels, condition } = req.body;
+            let { name, description, icon_url, is_published, category_id, levels, condition } = req.body;
             if (!name || !icon_url || !category_id || !levels.length) {
                 return res.status(400).json({
                     status: false,
@@ -122,16 +156,21 @@ module.exports = {
                 });
             }
 
+            let isPublished = true;
+            if (is_published !== undefined && typeof is_published === 'boolean') isPublished = is_published;
+
             let now = Math.floor(Date.now() / 1000);
             let card = await prisma.card.create({
                 data: {
                     name,
+                    description,
                     icon_url,
                     category_id,
                     levels: JSON.stringify(levels),
                     condition: condition ? JSON.stringify(condition) : null,
                     created_at_unix: now,
                     updated_at_unix: now,
+                    is_published: isPublished
                 },
             });
 
@@ -156,9 +195,6 @@ module.exports = {
                     contains: req.query.search,
                     mode: 'insensitive',
                 };
-            }
-            if (req.query.is_active !== undefined) {
-                filter.where.is_active = req.query.is_active === 'true';
             }
             if (req.query.is_published !== undefined) {
                 filter.where.is_published = req.query.is_published === 'true';
@@ -213,7 +249,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            let { name, description, icon_url, category_id, levels, is_active, is_published, condition } = req.body;
+            let { name, description, icon_url, category_id, levels, is_published, condition } = req.body;
 
             let card = await prisma.card.findUnique({
                 where: { id: parseInt(req.params.id) },
@@ -245,7 +281,6 @@ module.exports = {
                 }
                 data.category_id = category_id;
             }
-            if (is_active !== undefined) data.is_active = is_active;
             if (is_published !== undefined) data.is_published = is_published;
 
             if (levels && levels.length) {
