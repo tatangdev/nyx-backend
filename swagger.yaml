@@ -808,8 +808,124 @@ paths:
                               type: integer
                             profit_per_hour:
                               type: integer
-                            upgraded_card_cnt:
-                              type: integer
+      security:
+        - bearerAuth: []
+  /v1/admin/players/{id}:
+    get:
+      summary: Get player by id
+      tags:
+        - Admin - Players
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          telegram_id:
+                            type: string
+                          username:
+                            type: string
+                          first_name:
+                            type: string
+                          last_name:
+                            type: string
+                          referee_id:
+                            type: integer
+                            nullable: true
+                          referral_code:
+                            type: string
+                          level:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          points_balance:
+                            type: integer
+                          points_total:
+                            type: integer
+                          spending_amount:
+                            type: integer
+                          profit_per_hour:
+                            type: integer
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update player by id
+      tags:
+        - Admin - Players
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                points_balance:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          telegram_id:
+                            type: string
+                          username:
+                            type: string
+                          first_name:
+                            type: string
+                          last_name:
+                            type: string
+                          referee_id:
+                            type: integer
+                            nullable: true
+                          referral_code:
+                            type: string
+                          level:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          points_balance:
+                            type: integer
+                          points_total:
+                            type: integer
+                          spending_amount:
+                            type: integer
+                          profit_per_hour:
+                            type: integer
       security:
         - bearerAuth: []
   /v1/admin/players/network:
