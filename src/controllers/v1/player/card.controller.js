@@ -4,7 +4,7 @@ const prisma = new PrismaClient({ log: ['query'] });
 module.exports = {
     list: async (req, res, next) => {
         try {
-            let filter = '1=1';
+            let filter = 'is_published';
             if (req.query.category_id) {
                 filter += ` AND category_id = ${parseInt(req.query.category_id)}`;
             }
@@ -81,7 +81,7 @@ module.exports = {
 
     listV2: async (req, res, next) => {
         try {
-            let filter = '1=1';
+            let filter = 'is_published';
             if (req.query.category_id) {
                 filter += ` AND category_id = ${parseInt(req.query.category_id)}`;
             }

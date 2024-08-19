@@ -7,6 +7,7 @@ const card = require('../../controllers/v1/admin/card.controller');
 const dashboard = require('../../controllers/v1/admin/dashboard.controller');
 const player = require('../../controllers/v1/admin/player.controller');
 const { validate, isAdmin, isSuperadmin } = require('../../middlewares/auth.middleware');
+const { sheet } = require('../../libs/multer');
 
 // auth
 router.post('/login', admin.login);
@@ -29,6 +30,8 @@ router.post('/cards', validate, isAdmin, card.create);
 router.get('/cards', validate, isAdmin, card.index);
 router.get('/cards/:id', validate, isAdmin, card.show);
 router.put('/cards/:id', validate, isAdmin, card.update);
+router.post('/cards/sheet', sheet.single('file'), card.sheet);
+// router.post('/cards/sheet', validate, isAdmin, sheet.single('file'), card.sheet);
 
 router.post('/levels', validate, isAdmin, level.update);
 router.get('/levels', validate, isAdmin, level.get);

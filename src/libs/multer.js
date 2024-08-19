@@ -50,6 +50,16 @@ module.exports = {
         }
     }),
 
+    sheet: multer({
+        fileFilter: generateFileFilter([
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/vnd.ms-excel'
+        ]),
+        onError: (err, next) => {
+            next(err);
+        }
+    }),
+
     // videoStorage: multer({
     //     storage: generateStorage('./public/videos'),
     //     fileFilter: generateFileFilter([

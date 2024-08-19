@@ -53,11 +53,13 @@ model CardCategory {
 model Card {
   id              Int     @id @default(autoincrement())
   name            String
+  description     String?
   icon_url        String
   category_id     Int
   is_active       Boolean @default(true)
   levels          String?
   condition       String?
+  is_published    Boolean @default(false)
   created_at_unix Int?
   updated_at_unix Int?
 

@@ -1,201 +1,755 @@
 {
     "categories": [
         {
-            "name": "PR&Team",
+            "name": "Food",
             "cards": [
                 {
-                    "name": "CEO",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png"
+                    "name": "⁠Apple",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Marketing",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png"
+                    "name": "⁠⁠Banana",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "IT Team",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"
+                    "name": "⁠⁠Grape",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Support Team",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png"
+                    "name": "⁠⁠Strawberry",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "HamsterBook",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png"
+                    "name": "⁠⁠Cherry",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "HamsterTube",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/52.png"
+                    "name": "⁠⁠Blueberry",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Raspberry",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Melon",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Canary",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Worms",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Egg",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Pellets",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Nuts",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Seeds",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Snails",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "⁠⁠Bird Egg",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 }
             ]
         },
         {
-            "name": "Markets",
+            "name": "Race",
             "cards": [
                 {
-                    "name": "Fan Tokens",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png"
+                    "name": "Eutamias Sibiricus",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Staking",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png"
+                    "name": "Tamias Striatus",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "BTC Pairs",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/2010.png"
+                    "name": "Tamias Aristus ",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "ETH Pairs",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/5805.png"
+                    "name": "Neotamias Senex",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "GamiFi tokens",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1975.png"
+                    "name": "Neotamias Alpinus",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "SociaFi tokens",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1831.png"
+                    "name": "Neotamias bulleri",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Neotamias dorsalis",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Neotamias Quadrivittatus",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Durangae",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "cinereicollis",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "canipes",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "rufus",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "minimus",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "speciosus",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "quadrimaculatus",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "merriami",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 }
             ]
         },
         {
-            "name": "Legal",
+            "name": "Ecosystem",
             "cards": [
                 {
-                    "name": "KYC",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/6535.png"
+                    "name": "Liquidity Provider",
+                    "icon_url": ""
                 },
                 {
-                    "name": "KYB",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/2.png"
+                    "name": "Farming ",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Legal Opinion",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3957.png"
+                    "name": "Staking ",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "SEC Transparency",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png"
+                    "name": "Game Center",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Anti Money Laundering",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/8916.png"
+                    "name": "Item Marketplace",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Data Protection",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/7083.png"
+                    "name": "Bridges and Protocols",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Crosschain",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Exchanges",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Dapps",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Wallets",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Crypto Bots",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Infrastructure and Tools",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Live streaming",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Playground",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Play to Earn",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
+                },
+                {
+                    "name": "Communities",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 }
             ]
         },
         {
-            "name": "Web3",
+            "name": "Special",
             "cards": [
                 {
-                    "name": "Dex",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/20396.png"
+                    "name": "Chipmunk Master",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Oracle",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3773.png"
+                    "name": "Chipmunk Father",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Vesting",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1321.png"
+                    "name": "Chipmunk Whales",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Launchpad",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/512.png"
+                    "name": "Chipmunk Friends",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "NFT Marketplace",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/4847.png"
+                    "name": "Chipmunk On TON",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "NFT Farming",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/5690.png"
-                }
-            ]
-        },
-        {
-            "name": "Specials",
-            "cards": [
-                {
-                    "name": "Call for BTC to Rise",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/2280.png"
+                    "name": "Chipmunk Bank",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "CX Hub Istanbul",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/4642.png"
+                    "name": "Chipmunk Call Trump",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 },
                 {
-                    "name": "Business Jet",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/1518.png"
-                },
-                {
-                    "name": "Green Energy",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/3897.png"
-                },
-                {
-                    "name": "Premarket Launch",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/7226.png"
-                },
-                {
-                    "name": "Web3 Summit",
-                    "icon_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/20947.png"
+                    "name": "Chipmunk Buy TON",
+                    "icon_url": "",
+                    "base_price": 0,
+                    "base_price_multiplier": 0.5,
+                    "base_profit_per_hour": 0,
+                    "base_profit_per_hour_multiplier": 0.1,
+                    "level_count": 0
                 }
             ]
         }
     ],
-    "levels": [
+    "coins": [
         {
-            "level": 1,
-            "upgrade_price": 1107,
-            "profit_per_hour": 221
+            "name": "Bitcoin",
+            "symbol": "BTC",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/1.png"
         },
         {
-            "level": 2,
-            "upgrade_price": 2214,
-            "profit_per_hour": 531
+            "name": "Ethereum",
+            "symbol": "ETH",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/1027.png"
         },
         {
-            "level": 3,
-            "upgrade_price": 4428,
-            "profit_per_hour": 1275
+            "name": "Tether USDt",
+            "symbol": "USDT",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/825.png"
         },
         {
-            "level": 4,
-            "upgrade_price": 8856,
-            "profit_per_hour": 3061
+            "name": "BNB",
+            "symbol": "BNB",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/1839.png"
         },
         {
-            "level": 5,
-            "upgrade_price": 17712,
-            "profit_per_hour": 7346
+            "name": "Solana",
+            "symbol": "SOL",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/5426.png"
         },
         {
-            "level": 6,
-            "upgrade_price": 35424,
-            "profit_per_hour": 17629
+            "name": "USDC",
+            "symbol": "USDC",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/3408.png"
         },
         {
-            "level": 7,
-            "upgrade_price": 70848,
-            "profit_per_hour": 42310
+            "name": "XRP",
+            "symbol": "XRP",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/52.png"
         },
         {
-            "level": 8,
-            "upgrade_price": 141696,
-            "profit_per_hour": 101544
+            "name": "Toncoin",
+            "symbol": "TON",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/11419.png"
         },
         {
-            "level": 9,
-            "upgrade_price": 283392,
-            "profit_per_hour": 243707
+            "name": "Dogecoin",
+            "symbol": "DOGE",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/74.png"
         },
         {
-            "level": 10,
-            "upgrade_price": 566784,
-            "profit_per_hour": 584896
+            "name": "Cardano",
+            "symbol": "ADA",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/2010.png"
+        },
+        {
+            "name": "TRON",
+            "symbol": "TRX",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/1958.png"
+        },
+        {
+            "name": "Avalanche",
+            "symbol": "AVAX",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/5805.png"
+        },
+        {
+            "name": "Shiba Inu",
+            "symbol": "SHIB",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/5994.png"
+        },
+        {
+            "name": "Bitcoin Cash",
+            "symbol": "BCH",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/1831.png"
+        },
+        {
+            "name": "Polkadot",
+            "symbol": "DOT",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/6636.png"
+        },
+        {
+            "name": "Chainlink",
+            "symbol": "LINK",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/1975.png"
+        },
+        {
+            "name": "Dai",
+            "symbol": "DAI",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/4943.png"
+        },
+        {
+            "name": "UNUS SED LEO",
+            "symbol": "LEO",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/3957.png"
+        },
+        {
+            "name": "Litecoin",
+            "symbol": "LTC",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/2.png"
+        },
+        {
+            "name": "NEAR Protocol",
+            "symbol": "NEAR",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/6535.png"
+        },
+        {
+            "name": "Polygon",
+            "symbol": "MATIC",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/3890.png"
+        },
+        {
+            "name": "Kaspa",
+            "symbol": "KAS",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/20396.png"
+        },
+        {
+            "name": "Uniswap",
+            "symbol": "UNI",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/7083.png"
+        },
+        {
+            "name": "Internet Computer",
+            "symbol": "ICP",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/8916.png"
+        },
+        {
+            "name": "Pepe",
+            "symbol": "PEPE",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/24478.png"
+        },
+        {
+            "name": "Aptos",
+            "symbol": "APT",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/21794.png"
+        },
+        {
+            "name": "Ethereum Classic",
+            "symbol": "ETC",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/1321.png"
+        },
+        {
+            "name": "Stellar",
+            "symbol": "XLM",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/512.png"
+        },
+        {
+            "name": "Monero",
+            "symbol": "XMR",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/328.png"
+        },
+        {
+            "name": "Cronos",
+            "symbol": "CRO",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/3635.png"
+        },
+        {
+            "name": "First Digital USD",
+            "symbol": "FDUSD",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/26081.png"
+        },
+        {
+            "name": "OKB",
+            "symbol": "OKB",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/3897.png"
+        },
+        {
+            "name": "Stacks",
+            "symbol": "STX",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/4847.png"
+        },
+        {
+            "name": "Sui",
+            "symbol": "SUI",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/20947.png"
+        },
+        {
+            "name": "Artificial Superintelligence Alliance",
+            "symbol": "FET",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/3773.png"
+        },
+        {
+            "name": "Bittensor",
+            "symbol": "TAO",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/22974.png"
+        },
+        {
+            "name": "Filecoin",
+            "symbol": "FIL",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/2280.png"
+        },
+        {
+            "name": "Mantle",
+            "symbol": "MNT",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/27075.png"
+        },
+        {
+            "name": "Hedera",
+            "symbol": "HBAR",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/4642.png"
+        },
+        {
+            "name": "Maker",
+            "symbol": "MKR",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/1518.png"
+        },
+        {
+            "name": "Arbitrum",
+            "symbol": "ARB",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/11841.png"
+        },
+        {
+            "name": "VeChain",
+            "symbol": "VET",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/3077.png"
+        },
+        {
+            "name": "Cosmos",
+            "symbol": "ATOM",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/3794.png"
+        },
+        {
+            "name": "Immutable",
+            "symbol": "IMX",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/6447.png"
+        },
+        {
+            "name": "Optimism",
+            "symbol": "OP",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/7898.png"
+        },
+        {
+            "name": "Curve DAO",
+            "symbol": "CRV",
+            "image_url": "https://s2.coinmarketcap.com/static/img/coins/128x128/2751.png"
         }
     ]
 }

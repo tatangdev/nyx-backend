@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const XLSX = require('xlsx');
 
 const validateLevels = (levels) => {
     for (let i = 0; i < levels.length; i++) {
@@ -37,7 +38,7 @@ const validateLevels = (levels) => {
 module.exports = {
     create: async (req, res, next) => {
         try {
-            let { name, icon_url, category_id, levels, condition } = req.body;
+            let { name, description, icon_url, category_id, levels, condition } = req.body;
             if (!name || !icon_url || !category_id || !levels.length) {
                 return res.status(400).json({
                     status: false,
@@ -149,7 +150,7 @@ module.exports = {
 
     index: async (req, res, next) => {
         try {
-            let filter = { where: {} };
+            let filter = { where: {}, orderBy: { id: 'asc' } };
             if (req.query.search) {
                 filter.where.name = {
                     contains: req.query.search,
@@ -158,6 +159,9 @@ module.exports = {
             }
             if (req.query.is_active !== undefined) {
                 filter.where.is_active = req.query.is_active === 'true';
+            }
+            if (req.query.is_published !== undefined) {
+                filter.where.is_published = req.query.is_published === 'true';
             }
             if (req.query.category_id) {
                 filter.where.category_id = parseInt(req.query.category_id);
@@ -209,7 +213,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            let { name, icon_url, category_id, levels, is_active, condition } = req.body;
+            let { name, description, icon_url, category_id, levels, is_active, is_published, condition } = req.body;
 
             let card = await prisma.card.findUnique({
                 where: { id: parseInt(req.params.id) },
@@ -225,6 +229,7 @@ module.exports = {
 
             let data = {};
             if (name) data.name = name;
+            if (description) data.description = description;
             if (icon_url) data.icon_url = icon_url;
             if (category_id) {
                 let cardCategory = await prisma.cardCategory.findUnique({
@@ -241,6 +246,7 @@ module.exports = {
                 data.category_id = category_id;
             }
             if (is_active !== undefined) data.is_active = is_active;
+            if (is_published !== undefined) data.is_published = is_published;
 
             if (levels && levels.length) {
                 let validation = validateLevels(levels);
@@ -326,4 +332,27 @@ module.exports = {
             next(error);
         }
     },
+
+    sheet: (req, res, next) => {
+        try {
+            // Read the Excel data from buffer
+            const workbook = XLSX.read(req.file.buffer);
+
+            // Assuming you want to read the first sheet
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+
+            // Convert the sheet to JSON
+            const data = XLSX.utils.sheet_to_json(worksheet);
+
+            return res.status(200).json({
+                status: true,
+                message: "Card sheet",
+                data: data,
+                error: null,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
 };
