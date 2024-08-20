@@ -137,3 +137,13 @@ model PlayerEarning {
 
   @@map("player_earnings")
 }
+
+model Attendance {
+  id              Int  @id @default(autoincrement())
+  player_id       Int
+  day_count       Int  @default(1)
+  created_at_unix Int?
+  updated_at_unix Int?
+
+  @@map("attendances")
+}

@@ -5,6 +5,7 @@ const { image } = require('../../libs/multer');
 const media = require('../../controllers/v1/media.controller');
 const card = require('../../controllers/v1/player/card.controller');
 const point = require('../../controllers/v1/player/point.controller');
+const task = require('../../controllers/v1/player/task.controller');
 
 // auth
 router.post('/auth/login', auth.login);
@@ -22,6 +23,11 @@ router.post('/card-upgrade', validate, isPlayer, card.upgrade);
 // point
 router.get('/sync', validate, isPlayer, point.sync);
 router.post('/tap', validate, isPlayer, point.tapUpdate);
+
+// task
+router.get('/tasks', validate, isPlayer, task.index);
+router.post('/check-task', validate, isPlayer, task.check);
+
 // router.post('/sync', validate, isPlayer, point.update);
 
 module.exports = router;
