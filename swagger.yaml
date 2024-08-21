@@ -1330,7 +1330,7 @@ paths:
                         items:
                           type: object
                           properties:
-                            daily_streak_reward:
+                            daily_streak:
                               type: integer
   /v1/check-task:
     post:
@@ -1359,7 +1359,7 @@ paths:
                       data:
                         type: object
                         properties:
-                          day_count: 
+                          day_count:
                             type: integer
 components:
   schemas:

@@ -2,20 +2,70 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const moment = require('moment-timezone');
 
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
+
 module.exports = {
     index: async (req, res, next) => {
         try {
-            // streak days
-            let dailyStreakReward = await prisma.config.findFirst({ where: { key: 'daily_streak_reward' } });
-            let dailyStreakRewardValue = JSON.parse(dailyStreakReward.value);
+            const playerId = req.user.id;
+            const tasksResult = await prisma.task.findMany({ where: { id: 'daily_streak' } });
+            const today = moment().tz(TIMEZONE);
+
+            const tasks = await Promise.all(tasksResult.map(async (task) => {
+                switch (task.id) {
+                    case 'daily_streak': {
+                        const remainSeconds = moment(today).endOf('day').diff(today, 'seconds');
+                        const dailyStreakRewardValue = JSON.parse(task.data);
+                        const totalRewards = dailyStreakRewardValue.reduce((sum, item) => sum + item.reward_amount, 0);
+
+                        let dayCount = 1;
+                        let isCompleted = false;
+
+                        const attendance = await prisma.attendance.findFirst({ where: { player_id: playerId } });
+
+                        if (attendance) {
+                            const lastAttendDate = moment.unix(attendance.updated_at_unix).tz(TIMEZONE);
+                            const daysDiff = moment(today).startOf('day').diff(moment(lastAttendDate).startOf('day'), 'days');
+
+                            if (daysDiff < 1) {
+                                isCompleted = true;
+                                dayCount = attendance.day_count;
+                            } else if (daysDiff > 1) {
+                                dayCount = 1;
+                            } else {
+                                dayCount = attendance.day_count + 1;
+                            }
+
+                            const maxReward = Math.max(...dailyStreakRewardValue.map(item => item.day_count));
+                            if (dayCount > maxReward) {
+                                dayCount = attendance.day_count;
+                                isCompleted = true;
+                            }
+                        }
+
+                        const todayReward = dailyStreakRewardValue.find(item => item.day_count === dayCount) || { reward_amount: 0 };
+
+                        return {
+                            id: task.id,
+                            name: task.name,
+                            description: task.description,
+                            total_rewards: totalRewards,
+                            rewards_by_day: dailyStreakRewardValue,
+                            reward_coins: todayReward.reward_amount,
+                            remain_seconds: remainSeconds,
+                            days: dayCount,
+                            is_completed: isCompleted,
+                        };
+                    }
+                    // Future task cases can be added here
+                }
+            }));
 
             return res.status(200).json({
                 status: true,
-                message: "Task data",
+                message: "Task data retrieved successfully.",
                 error: null,
-                data: {
-                    daily_streak_reward: dailyStreakRewardValue
-                }
+                data: tasks.filter(task => task !== undefined)
             });
         } catch (error) {
             next(error);
@@ -26,20 +76,19 @@ module.exports = {
         try {
             const playerId = req.user.id;
             const { task_id: taskId } = req.body;
-            const timezone = process.env.TIMEZONE || 'Asia/Jakarta';
-            const todayDate = moment().tz(timezone);
+            const todayDate = moment().tz(TIMEZONE);
 
             switch (taskId) {
                 case 'daily_streak': {
                     const attendance = await prisma.attendance.findFirst({ where: { player_id: playerId } });
-                    const attendanceConfig = await prisma.config.findFirst({ where: { key: 'daily_streak_reward' } });
-                    const attendanceConfigValue = JSON.parse(attendanceConfig.value);
+                    const attendanceConfig = await prisma.task.findFirst({ where: { id: 'daily_streak' } });
+                    const attendanceConfigValue = JSON.parse(attendanceConfig.data);
 
                     let dayCount = 1;
                     let daysDiff = 1;
 
                     if (attendance) {
-                        const lastAttendDate = moment.unix(attendance.updated_at_unix).tz(timezone);
+                        const lastAttendDate = moment.unix(attendance.updated_at_unix).tz(TIMEZONE);
                         daysDiff = moment(todayDate).startOf('day').diff(moment(lastAttendDate).startOf('day'), 'days');
 
                         if (daysDiff < 1) {
@@ -69,8 +118,8 @@ module.exports = {
                             where: { id: attendance.id },
                             data: {
                                 day_count: dayCount,
-                                updated_at_unix: todayDate.unix(),
-                                // updated_at_unix: 1724086799
+                                // updated_at_unix: todayDate.unix(),
+                                updated_at_unix: 1724173199
                             }
                         });
                     } else {
@@ -134,5 +183,4 @@ module.exports = {
             next(error);
         }
     }
-
 };

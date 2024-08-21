@@ -147,3 +147,18 @@ model Attendance {
 
   @@map("attendances")
 }
+
+model Task {
+  id              String  @id @unique
+  name            String
+  description     String?
+  icon_url        String?
+  type            String?
+  point           Int?
+  data            String?
+  is_active       Boolean @default(true)
+  created_at_unix Int?
+  updated_at_unix Int?
+
+  @@map("tasks")
+}
