@@ -54,7 +54,7 @@ model Card {
   id              Int     @id @default(autoincrement())
   name            String
   description     String?
-  icon_url        String
+  image           String?
   category_id     Int
   levels          String?
   condition       String?
@@ -141,9 +141,8 @@ model PlayerEarning {
 model Attendance {
   id              Int  @id @default(autoincrement())
   player_id       Int
-  day_count       Int  @default(1)
-  created_at_unix Int?
-  updated_at_unix Int?
+  days            Int? @default(1)
+  last_attendance Int?
 
   @@map("attendances")
 }
@@ -151,14 +150,23 @@ model Attendance {
 model Task {
   id              String  @id @unique
   name            String
-  description     String?
-  icon_url        String?
-  type            String?
-  point           Int?
-  data            String?
-  is_active       Boolean @default(true)
+  image           String?
+  type            String? @default("Default")
+  reward_coins    Int?
+  periodicity     String  @default("Once")
+  config          String?
+  is_published    Boolean @default(false)
   created_at_unix Int?
   updated_at_unix Int?
 
   @@map("tasks")
+}
+
+model TaskCompletion {
+  id                Int    @id @default(autoincrement())
+  player_id         Int
+  task_id           String
+  completed_at_unix Int
+
+  @@map("task_completions")
 }
