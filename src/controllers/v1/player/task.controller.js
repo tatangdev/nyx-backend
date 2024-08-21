@@ -11,12 +11,14 @@ module.exports = {
             const tasksResult = await prisma.task.findMany({ where: { is_published: true } });
             // const tasksResult = await prisma.task.findMany({ where: { id: 'daily_streak' } });
             const today = moment().tz(TIMEZONE);
+            let taskCompletions = await prisma.taskCompletion.findMany({
+                where: { player_id: playerId }
+            });
 
             const tasks = await Promise.all(tasksResult.map(async (task) => {
                 switch (task.id) {
                     case 'daily_streak': {
                         const remainSeconds = moment(today).endOf('day').diff(today, 'seconds');
-                        console.log("task", task);
                         const dailyStreakRewardValue = JSON.parse(task.config);
                         const totalRewards = dailyStreakRewardValue.reduce((sum, item) => sum + item.reward_coins, 0);
 
@@ -24,7 +26,6 @@ module.exports = {
                         let isCompleted = false;
 
                         const attendance = await prisma.attendance.findFirst({ where: { player_id: playerId } });
-                        console.log("attendance", attendance);
 
                         if (attendance) {
                             const lastAttendDate = moment.unix(attendance.last_attendance).tz(TIMEZONE);
@@ -47,8 +48,6 @@ module.exports = {
                         }
 
                         const todayReward = dailyStreakRewardValue.find(item => item.days === dayCount) || { reward_coins: 0 };
-                        console.log("dayCount", dayCount);
-                        console.log("todayReward", todayReward);
 
                         return {
                             id: task.id,
@@ -56,27 +55,42 @@ module.exports = {
                             image: task.image,
                             type: task.type,
                             periodicity: task.periodicity,
+                            reward_coins: todayReward.reward_coins,
+
                             total_reward_coins: totalRewards,
                             rewards_by_day: dailyStreakRewardValue,
-                            reward_coins: todayReward.reward_coins,
                             remain_seconds: remainSeconds,
                             days: dayCount,
                             is_completed: isCompleted,
+                            // completed_at: isCompleted ? moment().tz(TIMEZONE).format() : null
+                            completed_at: isCompleted ? moment.unix(attendance.last_attendance).tz(TIMEZONE).format() : null
                         };
                     }
                     default:
-                        return {
-                            "id": "select_exchange",
-                            "type": "Default",
-                            "condition": "Custom",
-                            "rewardCoins": 5000,
-                            "periodicity": "Once",
-                            "name": "",
-                            "modalLinkButton": "",
-                            "image": "",
-                            "isCompleted": true,
-                            "completedAt": 0
+                        let response = {
+                            id: task.id,
+                            name: task.name,
+                            image: task.image,
+                            type: task.type,
+                            reward_coins: task.reward_coins,
+                            periodicity: task.periodicity,
+                            is_completed: false,
+                            completed_at: null
                         };
+
+                        let config = JSON.parse(task.config);
+                        if (config.link) response.link = config.link;
+                        if (config.modal_description) response.modal_description = config.modal_description;
+                        if (config.modal_link_button) response.modal_link_button = config.modal_link_button;
+                        if (config.reward_delay_seconds) response.reward_delay_seconds = config.reward_delay_seconds;
+
+                        let taskCompletion = taskCompletions.find(item => item.task_id === task.id);
+                        if (taskCompletion) {
+                            response.is_completed = true;
+                            response.completed_at = moment.unix(taskCompletion.completed_at_unix).tz(TIMEZONE).format();
+                        }
+
+                        return response;
                     // Future task cases can be added here
                 }
             }));
@@ -138,8 +152,8 @@ module.exports = {
                             where: { id: attendance.id },
                             data: {
                                 days: dayCount,
-                                // last_attendance: todayDate.unix(),
-                                last_attendance: 1724173199
+                                last_attendance: todayDate.unix(),
+                                // last_attendance: 1724173199
                             }
                         });
                     } else {
@@ -191,10 +205,65 @@ module.exports = {
                 }
                 // Future task cases can be added here
                 default:
-                    return res.status(400).json({
-                        status: false,
-                        message: `Task with ID '${taskId}' not recognized. Please check the task ID and try again.`,
-                        error: "Invalid task ID",
+                    let tasks = await prisma.task.findMany({ where: { is_published: true } });
+                    let task = tasks.find(task => task.id === taskId);
+                    if (!task) {
+                        return res.status(400).json({
+                            status: false,
+                            message: `Task with ID '${taskId}' not recognized. Please check the task ID and try again.`,
+                            error: "Invalid task ID",
+                            data: null
+                        });
+                    }
+
+                    let taskCompleted = await prisma.taskCompletion.findFirst({
+                        where: {
+                            player_id: playerId,
+                            task_id: taskId
+                        }
+                    });
+                    if (taskCompleted) {
+                        return res.status(400).json({
+                            status: false,
+                            message: `You have already completed the task '${task.name}'.`,
+                            error: "Task already completed",
+                            data: null
+                        });
+                    }
+
+                    // Process the reward
+                    const point = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
+                    await prisma.playerEarning.update({
+                        where: { id: point.id },
+                        data: {
+                            coins_balance: point.coins_balance + task.reward_coins,
+                            coins_total: point.coins_total + task.reward_coins,
+                            updated_at_unix: todayDate.unix()
+                        }
+                    });
+
+                    await prisma.pointHistory.create({
+                        data: {
+                            player_id: playerId,
+                            amount: task.reward_coins,
+                            type: 'TASK',
+                            data: JSON.stringify(task),
+                            created_at_unix: todayDate.unix()
+                        }
+                    });
+
+                    await prisma.taskCompletion.create({
+                        data: {
+                            player_id: playerId,
+                            task_id: taskId,
+                            completed_at_unix: todayDate.unix()
+                        }
+                    });
+
+                    return res.status(200).json({
+                        status: true,
+                        message: `Congratulations! You have completed the task '${task.name}'.`,
+                        error: null,
                         data: null
                     });
             }
