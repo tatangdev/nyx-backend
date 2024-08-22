@@ -134,6 +134,63 @@ async function generateCard() {
     }
 }
 
+async function generateCardCombo() {
+    try {
+        let now = Math.floor(Date.now() / 1000);
+
+        let combos = await prisma.card.findMany({
+            where: {
+                is_published: true
+            }
+        });
+
+        // generate date from today to +30 days with format 2024-12-31 in a array
+        let dates = [];
+        for (let i = 0; i < 30; i++) {
+            let date = new Date();
+            date.setDate(date.getDate() + i);
+            dates.push(date.toISOString().split('T')[0]);
+        }
+
+        // let firstCard = combos[Math.floor(Math.random() * combos.length)];
+        // let secondCard = combos[Math.floor(Math.random() * combos.length)];
+        // let thirdCard = combos[Math.floor(Math.random() * combos.length)];
+
+        // // validate if the cards are not the same
+        // if (firstCard.id === secondCard.id || firstCard.id === thirdCard.id || secondCard.id === thirdCard.id) {
+        //     return generateCardCombo();
+        // }
+
+        // let users = [
+        //     {
+        //         username: "superadmin",
+        //         password: bcrypt.hashSync('password', 10),
+        //         is_superadmin: true,
+        //         created_at_unix: now,
+        //         updated_at_unix: now
+        //     },
+        //     {
+        //         username: "admin",
+        //         password: bcrypt.hashSync('password', 10),
+        //         is_superadmin: false,
+        //         created_at_unix: now,
+        //         updated_at_unix: now
+        //     }
+        // ];
+
+        // await prisma.user.createMany({
+        //     data: users
+        // });
+
+        console.log("Data seeding completed successfully.");
+    } catch (error) {
+        console.error("Error seeding data:", error);
+        throw error;
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
 // generateAdmin()
 //     .catch((e) => {
 //         console.error("generateAdmin function error:", e);

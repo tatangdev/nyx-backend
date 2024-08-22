@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const moment = require('moment-timezone');
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 module.exports = {
     list: async (req, res, next) => {
@@ -380,6 +382,156 @@ module.exports = {
                 error: null,
                 data: null
             });
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    combo: async (req, res, next) => {
+        try {
+            const today = moment().tz(TIMEZONE);
+            const remainSeconds = moment(today).endOf('day').diff(today, 'seconds');
+            let playerId = req.user.id;
+
+            let combo = await prisma.cardCombo.findFirst({
+                where: {
+                    date: today.format('YYYY-MM-DD')
+                }
+            });
+
+            let isSubmitted = false;
+            let submittedAt = null;
+            let comboSubmission = await prisma.comboSubmission.findFirst({
+                where: {
+                    player_id: playerId,
+                    date: today.format('YYYY-MM-DD')
+                }
+            });
+            if (comboSubmission) {
+                isSubmitted = true;
+                submittedAt = moment.unix(comboSubmission.created_at_unix).tz(TIMEZONE).format();
+            }
+
+
+            return res.status(200).json({
+                status: true,
+                message: "Combo found",
+                error: null,
+                data: {
+                    // "upgradeIds": [],
+                    bonus_coins: combo ? combo.three_combo_reward : 0,
+                    is_submitted: isSubmitted,
+                    remain_seconds: remainSeconds,
+                    submitted_at: submittedAt
+                }
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    submitCombo: async (req, res, next) => {
+        try {
+            const today = moment().tz(TIMEZONE);
+            const remainSeconds = moment(today).endOf('day').diff(today, 'seconds');
+            const playerId = req.user.id;
+            const { combo } = req.body;
+
+            if (!Array.isArray(combo) || combo.length !== 3) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Please provide all required fields",
+                    error: null,
+                    data: null
+                });
+            }
+
+            const [firstCardId, secondCardId, thirdCardId] = combo;
+
+            const comboData = await prisma.cardCombo.findFirst({
+                where: { date: today.format('YYYY-MM-DD') }
+            });
+            if (!comboData) {
+                return res.status(404).json({
+                    status: false,
+                    message: "Combo not found",
+                    error: null,
+                    data: null
+                });
+            }
+
+            const existingSubmission = await prisma.comboSubmission.findFirst({
+                where: { player_id: playerId, date: today.format('YYYY-MM-DD') }
+            });
+            if (existingSubmission) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Combo already submitted",
+                    error: null,
+                    data: null
+                });
+            }
+
+            const correctCombo = [comboData.first_card_id, comboData.second_card_id, comboData.third_card_id]
+                .filter((id, index) => id === combo[index])
+                .length;
+
+            const rewardCoins = [0, comboData.one_combo_reward, comboData.two_combo_reward, comboData.three_combo_reward][correctCombo];
+
+            const newSubmission = await prisma.comboSubmission.create({
+                data: {
+                    player_id: playerId,
+                    date: today.format('YYYY-MM-DD'),
+                    first_card_id: firstCardId,
+                    second_card_id: secondCardId,
+                    third_card_id: thirdCardId,
+                    correct_combo: correctCombo
+                }
+            });
+
+            if (correctCombo > 0) {
+                const playerEarning = await prisma.playerEarning.findFirst({
+                    where: { player_id: playerId }
+                });
+
+                await prisma.playerEarning.update({
+                    where: { id: playerEarning.id },
+                    data: {
+                        coins_balance: playerEarning.coins_balance + rewardCoins,
+                        coins_total: playerEarning.coins_total + rewardCoins,
+                        updated_at_unix: today.unix(),
+                    }
+                });
+
+                await prisma.pointHistory.create({
+                    data: {
+                        player_id: playerId,
+                        amount: rewardCoins,
+                        type: 'COMBO_REWARD',
+                        data: JSON.stringify({
+                            reward_coins: rewardCoins,
+                            note: "Combo reward",
+                            combo_submission_id: newSubmission.id
+                        }),
+                        created_at_unix: today.unix(),
+                        updated_at_unix: today.unix(),
+                    }
+                });
+            }
+
+            return res.status(200).json({
+                status: true,
+                message: "Combo submitted",
+                error: null,
+                data: {
+                    correct_combo: correctCombo,
+                    bonus_coins: rewardCoins,
+                    is_submitted: true,
+                    remain_seconds: remainSeconds
+                }
+            });
+
         } catch (error) {
             next(error);
         }

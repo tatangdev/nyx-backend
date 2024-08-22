@@ -1452,6 +1452,72 @@ paths:
                                   type: integer
                                 name:
                                   type: string
+  /v1/cards/combo:
+    get:
+      summary: Get card combo
+      tags:
+        - Cards
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            bonus_coins:
+                              type: integer
+                            is_claimed:
+                              type: boolean
+                            remain_seconds:
+                              type: integer
+      security:
+        - bearerAuth: []
+    post:
+      summary: Claim card combo
+      tags:
+        - Cards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                combo:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          correct_combo:
+                            type: integer
+                          bonus_coins:
+                            type: integer
+                          is_submitted:
+                            type: boolean
+                          remain_seconds:
+                            type: integer
+      security:
+        - bearerAuth: []
   /v1/cards-v2:
     get:
       summary: Get all cards

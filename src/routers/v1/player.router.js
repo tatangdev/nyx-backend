@@ -17,6 +17,8 @@ router.get('/media/images', validate, isAdmin, media.imageKitList);
 
 // cards
 router.get('/cards', validate, isPlayer, card.list);
+router.get('/cards/combo', validate, isPlayer, card.combo);
+router.post('/cards/combo', validate, isPlayer, card.submitCombo);
 router.get('/cards-v2', validate, isPlayer, card.listV2);
 router.post('/card-upgrade', validate, isPlayer, card.upgrade);
 
