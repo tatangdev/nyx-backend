@@ -699,6 +699,247 @@ paths:
                                 type: integer
       security:
         - bearerAuth: []
+  /v1/admin/tasks:
+    post:
+      summary: Create task
+      tags:
+        - Admin - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                image:
+                  type: string
+                type:
+                  type: string
+                reward_coins:
+                  type: integer
+                periodicity:
+                  type: string
+                is_published:
+                  type: boolean
+                config:
+                  type: object
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          image:
+                            type: string
+                          type:
+                            type: string
+                          reward_coins:
+                            type: integer
+                          periodicity:
+                            type: string
+                          is_published:
+                            type: boolean
+                          config:
+                            type: object
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all tasks
+      tags:
+        - Admin - Tasks
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: is_published
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            image:
+                              type: string
+                            type:
+                              type: string
+                            reward_coins:
+                              type: integer
+                            periodicity:
+                              type: string
+                            is_published:
+                              type: boolean
+                            created_at_unix:
+                              type: integer
+                            updated_at_unix:
+                              type: integer
+      security:
+        - bearerAuth: []
+  /v1/admin/tasks/{id}:
+    get:
+      summary: Get task by id
+      tags:
+        - Admin - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          image:
+                            type: string
+                          type:
+                            type: string
+                          reward_coins:
+                            type: integer
+                          periodicity:
+                            type: string
+                          is_published:
+                            type: boolean
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update task by id
+      tags:
+        - Admin - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                image:
+                  type: string
+                type:
+                  type: string
+                reward_coins:
+                  type: integer
+                periodicity:
+                  type: string
+                is_published:
+                  type: boolean
+                config:
+                  type: object
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          image:
+                            type: string
+                          type:
+                            type: string
+                          reward_coins:
+                            type: integer
+                          periodicity:
+                            type: string
+                          is_published:
+                            type: boolean
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Delete task by id
+      tags:
+        - Admin - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
   /v1/admin/levels:
     post:
       summary: Create level

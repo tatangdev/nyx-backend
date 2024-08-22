@@ -6,6 +6,7 @@ const level = require('../../controllers/v1/admin/level.controller');
 const card = require('../../controllers/v1/admin/card.controller');
 const dashboard = require('../../controllers/v1/admin/dashboard.controller');
 const player = require('../../controllers/v1/admin/player.controller');
+const task = require('../../controllers/v1/admin/task.controller');
 const { validate, isAdmin, isSuperadmin } = require('../../middlewares/auth.middleware');
 const { sheet } = require('../../libs/multer');
 
@@ -32,6 +33,13 @@ router.get('/cards/:id', validate, isAdmin, card.show);
 router.put('/cards/:id', validate, isAdmin, card.update);
 router.post('/cards/sheet', sheet.single('file'), card.sheet);
 // router.post('/cards/sheet', validate, isAdmin, sheet.single('file'), card.sheet);
+
+// tasks
+router.post('/tasks', validate, isAdmin, task.create);
+router.get('/tasks', validate, isAdmin, task.index);
+router.get('/tasks/:id', validate, isAdmin, task.show);
+router.put('/tasks/:id', validate, isAdmin, task.update);
+router.delete('/tasks/:id', validate, isAdmin, task.destroy);
 
 router.post('/levels', validate, isAdmin, level.update);
 router.get('/levels', validate, isAdmin, level.get);
