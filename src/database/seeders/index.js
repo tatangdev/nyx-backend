@@ -74,9 +74,9 @@ async function generateCard() {
                 if (!card.level_count) {
                     card.level_count = 25;
                 }
-                if (!card.icon_url) {
+                if (!card.image) {
                     let randomIndex = Math.floor(Math.random() * data.coins.length);
-                    card.icon_url = data.coins[randomIndex].image_url;
+                    card.image = data.coins[randomIndex].image_url;
                 }
 
 
@@ -117,7 +117,7 @@ async function generateCard() {
                 await prisma.card.create({
                     data: {
                         name: card.name,
-                        icon_url: card.icon_url,
+                        image: card.image,
                         category_id: category.id,
                         levels: JSON.stringify(levels),
                         created_at_unix: now,

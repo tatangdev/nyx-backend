@@ -5,7 +5,7 @@
             "cards": [
                 {
                     "name": "Apple",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -14,7 +14,7 @@
                 },
                 {
                     "name": "Banana",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -23,7 +23,7 @@
                 },
                 {
                     "name": "Grape",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -32,7 +32,7 @@
                 },
                 {
                     "name": "Strawberry",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -41,7 +41,7 @@
                 },
                 {
                     "name": "Cherry",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -50,7 +50,7 @@
                 },
                 {
                     "name": "Blueberry",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -59,7 +59,7 @@
                 },
                 {
                     "name": "Raspberry",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -68,7 +68,7 @@
                 },
                 {
                     "name": "Melon",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -77,7 +77,7 @@
                 },
                 {
                     "name": "Canary",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -86,7 +86,7 @@
                 },
                 {
                     "name": "Worms",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -95,7 +95,7 @@
                 },
                 {
                     "name": "Egg",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -104,7 +104,7 @@
                 },
                 {
                     "name": "Pellets",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -113,7 +113,7 @@
                 },
                 {
                     "name": "Nuts",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -122,7 +122,7 @@
                 },
                 {
                     "name": "Seeds",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -131,7 +131,7 @@
                 },
                 {
                     "name": "Snails",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -140,7 +140,7 @@
                 },
                 {
                     "name": "Bird Egg",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -154,7 +154,7 @@
             "cards": [
                 {
                     "name": "Eutamias Sibiricus",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -163,7 +163,7 @@
                 },
                 {
                     "name": "Tamias Striatus",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -172,7 +172,7 @@
                 },
                 {
                     "name": "Tamias Aristus ",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -181,7 +181,7 @@
                 },
                 {
                     "name": "Neotamias Senex",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -190,7 +190,7 @@
                 },
                 {
                     "name": "Neotamias Alpinus",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -199,7 +199,7 @@
                 },
                 {
                     "name": "Neotamias bulleri",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -208,7 +208,7 @@
                 },
                 {
                     "name": "Neotamias dorsalis",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -217,7 +217,7 @@
                 },
                 {
                     "name": "Neotamias Quadrivittatus",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -226,7 +226,7 @@
                 },
                 {
                     "name": "Durangae",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -235,7 +235,7 @@
                 },
                 {
                     "name": "cinereicollis",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -244,7 +244,7 @@
                 },
                 {
                     "name": "canipes",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -253,7 +253,7 @@
                 },
                 {
                     "name": "rufus",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -262,7 +262,7 @@
                 },
                 {
                     "name": "minimus",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -271,7 +271,7 @@
                 },
                 {
                     "name": "speciosus",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -280,7 +280,7 @@
                 },
                 {
                     "name": "quadrimaculatus",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -289,7 +289,7 @@
                 },
                 {
                     "name": "merriami",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -303,11 +303,11 @@
             "cards": [
                 {
                     "name": "Liquidity Provider",
-                    "icon_url": ""
+                    "image": ""
                 },
                 {
                     "name": "Farming ",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -316,7 +316,7 @@
                 },
                 {
                     "name": "Staking ",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -325,7 +325,7 @@
                 },
                 {
                     "name": "Game Center",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -334,7 +334,7 @@
                 },
                 {
                     "name": "Item Marketplace",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -343,7 +343,7 @@
                 },
                 {
                     "name": "Bridges and Protocols",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -352,7 +352,7 @@
                 },
                 {
                     "name": "Crosschain",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -361,7 +361,7 @@
                 },
                 {
                     "name": "Exchanges",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -370,7 +370,7 @@
                 },
                 {
                     "name": "Dapps",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -379,7 +379,7 @@
                 },
                 {
                     "name": "Wallets",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -388,7 +388,7 @@
                 },
                 {
                     "name": "Crypto Bots",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -397,7 +397,7 @@
                 },
                 {
                     "name": "Infrastructure and Tools",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -406,7 +406,7 @@
                 },
                 {
                     "name": "Live streaming",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -415,7 +415,7 @@
                 },
                 {
                     "name": "Playground",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -424,7 +424,7 @@
                 },
                 {
                     "name": "Play to Earn",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -433,7 +433,7 @@
                 },
                 {
                     "name": "Communities",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -447,7 +447,7 @@
             "cards": [
                 {
                     "name": "Chipmunk Master",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -456,7 +456,7 @@
                 },
                 {
                     "name": "Chipmunk Father",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -465,7 +465,7 @@
                 },
                 {
                     "name": "Chipmunk Whales",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -474,7 +474,7 @@
                 },
                 {
                     "name": "Chipmunk Friends",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -483,7 +483,7 @@
                 },
                 {
                     "name": "Chipmunk On TON",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -492,7 +492,7 @@
                 },
                 {
                     "name": "Chipmunk Bank",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -501,7 +501,7 @@
                 },
                 {
                     "name": "Chipmunk Call Trump",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,
@@ -510,7 +510,7 @@
                 },
                 {
                     "name": "Chipmunk Buy TON",
-                    "icon_url": "",
+                    "image": "",
                     "base_price": 0,
                     "base_price_multiplier": 0.5,
                     "base_profit_per_hour": 0,

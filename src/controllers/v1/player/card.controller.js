@@ -13,7 +13,7 @@ module.exports = {
                 SELECT 
                     c.id, 
                     c.name, 
-                    c.icon_url, 
+                    c.image, 
                     COALESCE(CAST(cl.level AS INTEGER), 0) AS level,
                     cat.id AS category_id,
                     cat.name AS category_name,
@@ -98,7 +98,7 @@ module.exports = {
                 SELECT 
                     c.id, 
                     c.name, 
-                    c.icon_url, 
+                    c.image, 
                     COALESCE(CAST(cl.level AS INTEGER), 0) AS level,
                     cat.id AS category_id,
                     c.levels,
@@ -175,7 +175,7 @@ module.exports = {
                 SELECT 
                     c.id, 
                     c.name, 
-                    c.icon_url, 
+                    c.image, 
                     COALESCE(CAST(cl.level AS INTEGER), 0) AS level,
                     cat.id AS category_id,
                     c.levels,

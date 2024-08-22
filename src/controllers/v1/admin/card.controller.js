@@ -72,11 +72,11 @@ const validateLevels = (levels) => {
 module.exports = {
     create: async (req, res, next) => {
         try {
-            let { name, description, icon_url, is_published, category_id, levels, condition } = req.body;
-            if (!name || !icon_url || !category_id || !levels.length) {
+            let { name, description, image, is_published, category_id, levels, condition } = req.body;
+            if (!name || !image || !category_id || !levels.length) {
                 return res.status(400).json({
                     status: false,
-                    message: "Name, icon_url, category_id and levels are required",
+                    message: "Name, image, category_id and levels are required",
                     error: null,
                     data: null,
                 });
@@ -164,7 +164,7 @@ module.exports = {
                 data: {
                     name,
                     description,
-                    icon_url,
+                    image,
                     category_id,
                     levels: JSON.stringify(levels),
                     condition: condition ? JSON.stringify(condition) : null,
@@ -249,7 +249,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            let { name, description, icon_url, category_id, levels, is_published, condition } = req.body;
+            let { name, description, image, category_id, levels, is_published, condition } = req.body;
 
             let card = await prisma.card.findUnique({
                 where: { id: parseInt(req.params.id) },
@@ -266,7 +266,7 @@ module.exports = {
             let data = {};
             if (name) data.name = name;
             if (description) data.description = description;
-            if (icon_url) data.icon_url = icon_url;
+            if (image) data.image = image;
             if (category_id) {
                 let cardCategory = await prisma.cardCategory.findUnique({
                     where: { id: category_id },

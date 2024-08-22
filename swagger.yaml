@@ -400,7 +400,7 @@ paths:
                   type: string
                 description:
                   type: string
-                icon_url:
+                image:
                   type: string
                 category_id:
                   type: integer
@@ -527,7 +527,7 @@ paths:
                               type: string
                             description:
                               type: string
-                            icon_url:
+                            image:
                               type: string
                             category_id:
                               type: integer
@@ -569,7 +569,7 @@ paths:
                             type: string
                           description:
                             type: string
-                          icon_url:
+                          image:
                             type: string
                           category_id:
                             type: integer
@@ -618,7 +618,7 @@ paths:
                   type: string
                 description:
                   type: string
-                icon_url:
+                image:
                   type: string
                 category_id:
                   type: integer
@@ -669,7 +669,7 @@ paths:
                             type: string
                           description:
                             type: string
-                          icon_url:
+                          image:
                             type: string
                           category_id:
                             type: integer
@@ -1184,7 +1184,7 @@ paths:
                               type: integer
                             name:
                               type: string
-                            icon_url:
+                            image:
                               type: string
                             level:
                               type: integer
