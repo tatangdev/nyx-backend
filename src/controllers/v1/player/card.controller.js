@@ -4,83 +4,6 @@ const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 module.exports = {
-    list: async (req, res, next) => {
-        try {
-            let filter = 'is_published';
-            if (req.query.category_id) {
-                filter += ` AND category_id = ${parseInt(req.query.category_id)}`;
-            }
-
-            let cards = await prisma.$queryRawUnsafe(`
-                SELECT 
-                    c.id, 
-                    c.name, 
-                    c.image, 
-                    COALESCE(CAST(cl.level AS INTEGER), 0) AS level,
-                    cat.id AS category_id,
-                    cat.name AS category_name,
-                    c.levels
-                FROM
-                    cards c
-                LEFT JOIN 
-                    card_levels cl ON cl.card_id = c.id AND cl.player_id = ${req.user.id}
-                INNER JOIN 
-                    card_categories cat ON cat.id = c.category_id
-                WHERE ${filter}
-                    AND c.is_published
-                    AND cat.is_active
-                ORDER BY c.id;
-            `);
-
-            cards = cards.map(card => {
-                card.upgrade = null;
-                card.current = {
-                    level: card.level,
-                    profit_per_hour: 0
-                };
-                card.category = {
-                    id: card.category_id,
-                    name: card.category_name
-                };
-
-                if (card.levels) {
-                    let levels = JSON.parse(card.levels);
-                    let currentLevel = levels.find(item => item.level === card.level);
-                    let nextLevel = levels.find(item => item.level === card.level + 1);
-
-                    if (currentLevel) {
-                        card.current = {
-                            level: currentLevel.level,
-                            profit_per_hour: currentLevel.profit_per_hour
-                        };
-                    }
-                    if (nextLevel) {
-                        card.upgrade = {
-                            level: nextLevel.level,
-                            upgrade_price: nextLevel.upgrade_price,
-                            profit_per_hour: nextLevel.profit_per_hour
-                        };
-                    }
-                }
-
-                delete card.level;
-                delete card.category_id;
-                delete card.category_name;
-                delete card.levels;
-                return card;
-            });
-
-            return res.status(200).json({
-                status: true,
-                message: "Cards found",
-                error: null,
-                data: cards
-            });
-        } catch (error) {
-            next(error);
-        }
-    },
-
     listV2: async (req, res, next) => {
         try {
             let filter = 'is_published';
@@ -290,7 +213,8 @@ module.exports = {
                             player_id: playerId,
                             level: currentLevel.level,
                             data: JSON.stringify({
-                                level: currentLevel.level,
+                                previous_level: player.level,
+                                new_level: currentLevel.level,
                                 note: `Upgrade player to level ${currentLevel.level}`,
                                 spend: newPlayerSpend
                             }),
@@ -313,14 +237,22 @@ module.exports = {
                             }
                         });
 
+                        let refereePoint = await prisma.playerEarning.findFirst({
+                            where: { player_id: player.referee_id }
+                        });
+
                         await prisma.pointHistory.create({
                             data: {
                                 player_id: player.referee_id,
                                 amount: currentLevel.level_up_reward,
                                 type: 'REFERRAL_BONUS',
                                 data: JSON.stringify({
-                                    referral_bonus: currentLevel.level_up_reward,
-                                    note: 'Referral bonus',
+                                    nominal: currentLevel.level_up_reward,
+                                    previous_balance: refereePoint.coins_balance,
+                                    previous_total: refereePoint.coins_total,
+                                    new_balance: refereePoint.coins_balance + currentLevel.level_up_reward,
+                                    new_total: refereePoint.coins_total + currentLevel.level_up_reward,
+                                    note: `Referral bonus for player level up to level ${currentLevel.level}`,
                                 }),
                                 created_at_unix: now,
                                 updated_at_unix: now,
@@ -344,9 +276,12 @@ module.exports = {
                         amount: -card.upgrade.price,
                         type: 'CARD_UPGRADE',
                         data: JSON.stringify({
-                            ...card.upgrade,
+                            nominal: -card.upgrade.price,
+                            previous_balance: point.coins_balance,
+                            previous_total: point.coins_total,
+                            new_balance: newBalance,
+                            new_total: point.coins_total,
                             note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
-                            upgrade_at: new Date()
                         }),
                         created_at_unix: now,
                         updated_at_unix: now,
@@ -359,9 +294,10 @@ module.exports = {
                         amount: card.upgrade.profit_per_hour_delta,
                         type: 'CARD_UPGRADE',
                         data: JSON.stringify({
-                            ...card.upgrade,
+                            nominal: card.upgrade.profit_per_hour_delta,
+                            previous_value: point.passive_per_hour,
+                            new_value: newProfitPerHour,
                             note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
-                            upgrade_at: new Date()
                         }),
                         created_at_unix: now,
                         updated_at_unix: now,
@@ -541,7 +477,11 @@ module.exports = {
                         amount: rewardCoins,
                         type: 'COMBO_REWARD',
                         data: JSON.stringify({
-                            reward_coins: rewardCoins,
+                            nominal: rewardCoins,
+                            previous_balance: playerEarning.coins_balance,
+                            previous_total: playerEarning.coins_total,
+                            new_balance: playerEarning.coins_balance + rewardCoins,
+                            new_total: playerEarning.coins_total + rewardCoins,
                             note: "Combo reward",
                             combo_submission_id: newSubmission.id
                         }),

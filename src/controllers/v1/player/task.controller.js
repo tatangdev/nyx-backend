@@ -184,7 +184,14 @@ module.exports = {
                                 player_id: playerId,
                                 amount: reward.reward_coins,
                                 type: 'DAILY_STREAK',
-                                data: JSON.stringify(reward),
+                                data: JSON.stringify({
+                                    nominal: reward.reward_coins,
+                                    previous_balance: point.coins_balance,
+                                    previous_total: point.coins_total,
+                                    new_balance: point.coins_balance + reward.reward_coins,
+                                    new_total: point.coins_total + reward.reward_coins,
+                                    note: `Daily streak reward for ${dayCount} days`
+                                }),
                                 created_at_unix: todayDate.unix()
                             }
                         });
@@ -247,7 +254,14 @@ module.exports = {
                             player_id: playerId,
                             amount: task.reward_coins,
                             type: 'TASK',
-                            data: JSON.stringify(task),
+                            data: JSON.stringify({
+                                nominal: task.reward_coins,
+                                previous_balance: point.coins_balance,
+                                previous_total: point.coins_total,
+                                new_balance: point.coins_balance + task.reward_coins,
+                                new_total: point.coins_total + task.reward_coins,
+                                note: `Task reward for completing '${task.name}'`
+                            }),
                             created_at_unix: todayDate.unix()
                         }
                     });

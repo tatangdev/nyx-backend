@@ -170,10 +170,11 @@ module.exports = {
                             data: JSON.stringify({
                                 nominal: pointNominalUpdate,
                                 previous_balance: response.points_balance,
-                                new_balance: newPointsBalance,
                                 previous_total: response.points_total,
-                                new_total: response.points_total + pointNominalUpdate
-                            })
+                                new_balance: newPointsBalance,
+                                new_total: response.points_total + pointNominalUpdate,
+                            }),
+                            created_at_unix: today.unix(),
                         }
                     });
                 });
