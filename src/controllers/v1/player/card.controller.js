@@ -292,6 +292,7 @@ module.exports = {
                             data: JSON.stringify({
                                 level: currentLevel.level,
                                 note: `Upgrade player to level ${currentLevel.level}`,
+                                spend: newPlayerSpend
                             }),
                             created_at_unix: now,
                             updated_at_unix: now,

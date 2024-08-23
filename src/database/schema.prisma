@@ -154,7 +154,7 @@ model Config {
 
 model PlayerEarning {
   id               Int  @id @default(autoincrement())
-  player_id        Int
+  player_id        Int  @unique
   passive_per_hour Int
   tap_max          Int
   tap_points       Int
