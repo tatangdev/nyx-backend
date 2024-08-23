@@ -79,7 +79,7 @@ module.exports = {
                 await prisma.pointHistory.create({
                     data: {
                         player_id: player.id,
-                        amount: defaultValues.passive_per_hour,
+                        amount: defaultValues.coins_total,
                         type: "INITIAL",
                         data: JSON.stringify({ note: "Initial coins" }),
                         created_at_unix: currentTime,
