@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const moment = require('moment-timezone');
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 function buildTree(data, refereeId = null) {
     return data
@@ -112,6 +114,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            const today = moment().tz(TIMEZONE);
             let playerId = parseInt(req.params.id);
             let { points_balance: pointsBalance } = req.body;
 
@@ -149,15 +152,13 @@ module.exports = {
             let pointNominalUpdate = newPointsBalance - response.points_balance;
 
             if (pointNominalUpdate > 0) {
-                response.points_balance = newPointsBalance;
-                response.points_total += pointNominalUpdate;
-
                 await prisma.$transaction(async (prisma) => {
                     await prisma.playerEarning.update({
                         where: { id: playerEarning.id },
                         data: {
                             coins_balance: newPointsBalance,
-                            coins_total: response.points_total + pointNominalUpdate
+                            coins_total: response.points_total + pointNominalUpdate,
+                            updated_at_unix: today.unix()
                         }
                     });
 
