@@ -171,6 +171,7 @@ module.exports = {
     upgrade: async (req, res, next) => {
         try {
             let playerId = req.user.id;
+            let player = req.user;
             let cardId = parseInt(req.body.card_id);
 
             let cards = await prisma.$queryRawUnsafe(`
@@ -296,6 +297,35 @@ module.exports = {
                             updated_at_unix: now,
                         }
                     });
+
+                    if (player.referee_id) {
+                        await prisma.playerEarning.update({
+                            where: { player_id: player.referee_id },
+                            data: {
+                                coins_balance: {
+                                    increment: currentLevel.level_up_reward
+                                },
+                                coins_total: {
+                                    increment: currentLevel.level_up_reward
+                                },
+                                updated_at_unix: now
+                            }
+                        });
+
+                        await prisma.pointHistory.create({
+                            data: {
+                                player_id: player.referee_id,
+                                amount: currentLevel.level_up_reward,
+                                type: 'REFERRAL_BONUS',
+                                data: JSON.stringify({
+                                    referral_bonus: currentLevel.level_up_reward,
+                                    note: 'Referral bonus',
+                                }),
+                                created_at_unix: now,
+                                updated_at_unix: now,
+                            }
+                        });
+                    }
                 }
 
                 await prisma.playerEarning.update({

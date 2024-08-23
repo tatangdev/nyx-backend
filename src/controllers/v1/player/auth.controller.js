@@ -5,28 +5,28 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
     login: async (req, res, next) => {
-        try {
-            let { telegram_id, username, first_name, last_name, referral_code } = req.body;
+        const { telegram_id, username, first_name, last_name, referral_code } = req.body;
 
-            // check if user exists
+        // Start a transaction
+        const transaction = await prisma.$transaction(async (prisma) => {
+            // Check if the user exists
             let player = await prisma.player.findFirst({ where: { telegram_id } });
-            if (!player) {
-                let refereeId;
+            let referee = null;
+            let isNewUser = !player;
+            let currentTime = Math.floor(Date.now() / 1000);
+
+            if (isNewUser) {
                 if (referral_code) {
-                    let referee = await prisma.player.findFirst({ where: { referral_code } });
-                    if (referee) {
-                        refereeId = referee.id;
-                    } else {
-                        return res.status(400).json({
-                            status: false,
+                    referee = await prisma.player.findFirst({ where: { referral_code } });
+                    if (!referee) {
+                        throw {
+                            status: 400,
                             message: "Referral code not found",
-                            error: null,
-                            data: null
-                        });
+                        };
                     }
                 }
 
-                let now = Math.floor(Date.now() / 1000);
+                // Create new player
                 player = await prisma.player.create({
                     data: {
                         telegram_id,
@@ -34,9 +34,9 @@ module.exports = {
                         first_name,
                         last_name,
                         referral_code: uid(),
-                        referee_id: refereeId,
-                        created_at_unix: now,
-                        updated_at_unix: now,
+                        referee_id: referee ? referee.id : null,
+                        created_at_unix: currentTime,
+                        updated_at_unix: currentTime,
                     }
                 });
 
@@ -48,60 +48,102 @@ module.exports = {
                             level: 1,
                             note: 'Initial level',
                         }),
-                        created_at_unix: now,
-                        updated_at_unix: now,
+                        created_at_unix: currentTime,
+                        updated_at_unix: currentTime,
                     }
                 });
             }
 
-            let defaultPassivePerHour = parseInt(process.env.DEFAULT_PROFIT_PER_HOUR) || 0;
-            let defaultTapMax = parseInt(process.env.DEFAULT_TAP_MAX) || 0;
-            let defaultTapPoints = parseInt(process.env.DEFAULT_TAP_POINTS) || 0;
-            let defaultTapAvailable = parseInt(process.env.DEFAULT_TAP_MAX) || 0;
-            let defaultCoins = parseInt(process.env.DEFAULT_COINS) || 0;
+            // Default values
+            const defaultValues = {
+                passive_per_hour: parseInt(process.env.DEFAULT_PROFIT_PER_HOUR, 10) || 0,
+                tap_max: parseInt(process.env.DEFAULT_TAP_MAX, 10) || 0,
+                tap_points: parseInt(process.env.DEFAULT_TAP_POINTS, 10) || 0,
+                tap_available: parseInt(process.env.DEFAULT_TAP_MAX, 10) || 0,
+                coins_total: parseInt(process.env.DEFAULT_COINS, 10) || 0
+            };
 
-            let now = Math.floor(Date.now() / 1000);
-            let playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: player.id } });
+            // Check if playerEarning exists, if not create it
+            const playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: player.id } });
             if (!playerEarning) {
                 await prisma.playerEarning.create({
                     data: {
                         player_id: player.id,
-                        passive_per_hour: defaultPassivePerHour,
-                        tap_max: defaultTapMax,
-                        tap_points: defaultTapPoints,
-                        tap_available: defaultTapAvailable,
-                        coins_total: defaultCoins,
-                        coins_balance: defaultCoins,
-                        created_at_unix: now,
-                        updated_at_unix: now,
+                        ...defaultValues,
+                        coins_balance: defaultValues.coins_total,
+                        created_at_unix: currentTime,
+                        updated_at_unix: currentTime,
                     }
                 });
 
                 await prisma.pointHistory.create({
                     data: {
                         player_id: player.id,
-                        amount: defaultPassivePerHour,
+                        amount: defaultValues.passive_per_hour,
                         type: "INITIAL",
                         data: JSON.stringify({ note: "Initial coins" }),
-                        created_at_unix: now,
-                        updated_at_unix: now,
+                        created_at_unix: currentTime,
+                        updated_at_unix: currentTime,
                     }
                 });
 
                 await prisma.passiveEarningHistory.create({
                     data: {
                         player_id: player.id,
-                        amount: defaultCoins,
+                        amount: defaultValues.coins_total,
                         type: "INITIAL",
                         data: JSON.stringify({ note: "Initial passive earning" }),
-                        created_at_unix: now,
-                        updated_at_unix: now,
+                        created_at_unix: currentTime,
+                        updated_at_unix: currentTime,
                     }
                 });
             }
 
-            let token = jwt.sign({ ...player, role: 'player' }, process.env.JWT_SECRET);
-            // let token = jwt.sign({ ...player, role: 'player' }, process.env.JWT_SECRET, { expiresIn: '1d' });
+            // Handle referral bonuses
+            if (isNewUser && referee) {
+                const levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
+                const levelData = JSON.parse(levelConfig.value);
+                const referralCoins = levelData[0].level_up_reward;
+
+                await prisma.playerEarning.updateMany({
+                    where: { player_id: { in: [player.id, referee.id] } },
+                    data: {
+                        coins_total: { increment: referralCoins },
+                        coins_balance: { increment: referralCoins },
+                    }
+                });
+
+                await prisma.pointHistory.createMany({
+                    data: [
+                        {
+                            player_id: player.id,
+                            amount: referralCoins,
+                            type: "REFERRAL",
+                            data: JSON.stringify({ ...levelData[0], referee_id: referee.id }),
+                            created_at_unix: currentTime,
+                            updated_at_unix: currentTime
+                        },
+                        {
+                            player_id: referee.id,
+                            amount: referralCoins,
+                            type: "REFERRAL",
+                            data: JSON.stringify({ ...levelData[0], referrer_id: player.id }),
+                            created_at_unix: currentTime,
+                            updated_at_unix: currentTime
+                        }
+                    ]
+                });
+            }
+
+            return player;
+        });
+
+        try {
+            // The transaction block code
+            const player = await transaction;
+
+            // Generate JWT token
+            const token = jwt.sign({ ...player, role: 'player' }, process.env.JWT_SECRET);
 
             return res.status(200).json({
                 status: true,
@@ -110,18 +152,29 @@ module.exports = {
                 data: { token }
             });
         } catch (error) {
+            // Check if error contains custom error object and use its status and message
+            if (error.status && error.message) {
+                return res.status(error.status).json({
+                    status: false,
+                    message: error.message,
+                    error: null,
+                    data: null
+                });
+            }
+
+            // Fallback for unknown errors
             next(error);
         }
     },
 
     whoami: async (req, res, next) => {
         try {
-            let user = { ...req.user };
+            const user = { ...req.user };
+            const playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: req.user.id } });
 
-            let point = await prisma.playerEarning.findFirst({ where: { player_id: req.user.id } });
-            if (point) {
-                user.point = point.coins_balance;
-                user.profit_per_hour = point.passive_per_hour;
+            if (playerEarning) {
+                user.point = playerEarning.coins_balance;
+                user.profit_per_hour = playerEarning.passive_per_hour;
             }
 
             return res.status(200).json({
