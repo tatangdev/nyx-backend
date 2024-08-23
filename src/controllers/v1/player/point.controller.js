@@ -30,32 +30,34 @@ module.exports = {
             );
 
             // Update player earnings in the database
-            await prisma.playerEarning.update({
-                where: { id: playerEarning.id },
-                data: {
-                    tap_available: availableTapAmount,
-                    coins_total: totalCoins,
-                    coins_balance: balanceCoins,
-                    updated_at_unix: currentTimeInSeconds,
-                }
-            });
-            await prisma.pointHistory.create({
-                data: {
-                    player_id: playerId,
-                    amount: earnedPassiveCoins,
-                    type: "PASSIVE_EARNINGS",
-                    data: JSON.stringify({
-                        nominal: earnedPassiveCoins,
-                        previous_balance: playerEarning.coins_balance,
-                        previous_total: playerEarning.coins_total,
-                        new_balance: balanceCoins,
-                        new_total: totalCoins,
-                        note: "Passive earnings"
-                    }),
-                    created_at_unix: currentTimeInSeconds,
-                    updated_at_unix: currentTimeInSeconds,
-                }
-            });
+            if (earnedPassiveCoins != 0) {
+                await prisma.playerEarning.update({
+                    where: { id: playerEarning.id },
+                    data: {
+                        tap_available: availableTapAmount,
+                        coins_total: totalCoins,
+                        coins_balance: balanceCoins,
+                        updated_at_unix: currentTimeInSeconds,
+                    }
+                });
+                await prisma.pointHistory.create({
+                    data: {
+                        player_id: playerId,
+                        amount: earnedPassiveCoins,
+                        type: "PASSIVE_EARNINGS",
+                        data: JSON.stringify({
+                            nominal: earnedPassiveCoins,
+                            previous_balance: playerEarning.coins_balance,
+                            previous_total: playerEarning.coins_total,
+                            new_balance: balanceCoins,
+                            new_total: totalCoins,
+                            note: "Passive earnings"
+                        }),
+                        created_at_unix: currentTimeInSeconds,
+                        updated_at_unix: currentTimeInSeconds,
+                    }
+                });
+            }
 
             // Fetch and determine player level
             let levelData = {
@@ -90,7 +92,7 @@ module.exports = {
                     levelData.next_level_name = nextLevel.name;
                     levelData.next_level_image_url = nextLevel.image_url;
                     levelData.next_level_score = nextLevel.minimum_score;
-                    levelData.next_level_percentage = Math.floor((currentLevelScore / nextLevel.minimum_score) * 100);
+                    levelData.next_level_percentage = Math.floor(((currentLevelScore - currentLevel.minimum_score) / (nextLevel.minimum_score - currentLevel.minimum_score)) * 100);
                 }
             }
 
@@ -195,33 +197,35 @@ module.exports = {
             }
 
             // Update player earnings in the database
-            await prisma.playerEarning.update({
-                where: { id: playerEarning.id },
-                data: {
-                    tap_available: availableTapAmount,
-                    coins_total: totalCoins,
-                    coins_balance: balanceCoins,
-                    created_at_unix: currentTimeInSeconds,
-                    updated_at_unix: currentTimeInSeconds,
-                }
-            });
-            await prisma.pointHistory.create({
-                data: {
-                    player_id: playerId,
-                    amount: earnedPassiveCoins,
-                    type: "PASSIVE_EARNINGS",
-                    data: JSON.stringify({
-                        nominal: earnedPassiveCoins,
-                        previous_balance: playerEarning.coins_balance,
-                        previous_total: playerEarning.coins_total,
-                        new_balance: playerEarning.coins_balance + earnedPassiveCoins,
-                        new_total: playerEarning.coins_total + earnedPassiveCoins,
-                        note: "Tap earnings"
-                    }),
-                    created_at_unix: currentTimeInSeconds,
-                    updated_at_unix: currentTimeInSeconds,
-                }
-            });
+            if (earnedPassiveCoins != 0) {
+                await prisma.playerEarning.update({
+                    where: { id: playerEarning.id },
+                    data: {
+                        tap_available: availableTapAmount,
+                        coins_total: totalCoins,
+                        coins_balance: balanceCoins,
+                        created_at_unix: currentTimeInSeconds,
+                        updated_at_unix: currentTimeInSeconds,
+                    }
+                });
+                await prisma.pointHistory.create({
+                    data: {
+                        player_id: playerId,
+                        amount: earnedPassiveCoins,
+                        type: "PASSIVE_EARNINGS",
+                        data: JSON.stringify({
+                            nominal: earnedPassiveCoins,
+                            previous_balance: playerEarning.coins_balance,
+                            previous_total: playerEarning.coins_total,
+                            new_balance: playerEarning.coins_balance + earnedPassiveCoins,
+                            new_total: playerEarning.coins_total + earnedPassiveCoins,
+                            note: "Tap earnings"
+                        }),
+                        created_at_unix: currentTimeInSeconds,
+                        updated_at_unix: currentTimeInSeconds,
+                    }
+                });
+            }
 
             // Fetch and determine player level
             let levelData = {
@@ -256,7 +260,7 @@ module.exports = {
                     levelData.next_level_name = nextLevel.name;
                     levelData.next_level_image_url = nextLevel.image_url;
                     levelData.next_level_score = nextLevel.minimum_score;
-                    levelData.next_level_percentage = Math.floor((currentLevelScore / nextLevel.minimum_score) * 100);
+                    levelData.next_level_percentage = Math.floor(((currentLevelScore - currentLevel.minimum_score) / (nextLevel.minimum_score - currentLevel.minimum_score)) * 100);
                 }
             }
 
