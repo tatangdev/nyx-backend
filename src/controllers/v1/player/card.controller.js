@@ -58,7 +58,6 @@ module.exports = {
                     }
                     if (nextLevel) {
                         let isAvailable = true;
-                        let availableAt = null;
                         let condition = JSON.parse(card.condition);
                         if (condition) {
                             isAvailable = false;
@@ -68,6 +67,7 @@ module.exports = {
                             }
                         }
 
+                        let availableAt = null;
                         if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
                             availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
 
@@ -122,7 +122,8 @@ module.exports = {
                     cat.id AS category_id,
                     c.levels,
                     c.condition,
-                    p.level AS player_level
+                    p.level AS player_level,
+                    cl.updated_at_unix AS last_upgrade_at
                 FROM
                     cards c
                 LEFT JOIN 
@@ -136,6 +137,7 @@ module.exports = {
                 ORDER BY c.id;
             `);
 
+            let now = Math.floor(Date.now() / 1000);
             let card = cards.find(item => item.id === cardId);
             if (!card) {
                 return res.status(404).json({
@@ -165,6 +167,17 @@ module.exports = {
                         let requiredCard = cards.find(item => item.id === condition.id);
                         if (requiredCard && requiredCard.level >= condition.level) {
                             isAvailable = true;
+                        }
+                    }
+
+                    let availableAt = null;
+                    if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
+                        availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
+
+                        if (now < availableAt) {
+                            isAvailable = false;
+                        } else {
+                            availableAt = null;
                         }
                     }
 
