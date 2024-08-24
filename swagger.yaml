@@ -1611,6 +1611,44 @@ paths:
                         properties:
                           day_count:
                             type: integer
+  /v1/referral-stats:
+    get:
+      summary: Get referral stats
+      tags:
+        - Referral
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          stats:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                first_name:
+                                  type: string
+                                last_name:
+                                  type: string
+                                level:
+                                  type: integer
+                                balance_coins:
+                                  type: number
+                                  format: double
+                                earn_passive_per_hour:
+                                  type: integer
+                                referral_bonus_coins:
+                                  type: integer
+                          count:
+                            type: integer
 components:
   schemas:
     AnyValue:

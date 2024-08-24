@@ -29,6 +29,9 @@ router.post('/tap', validate, isPlayer, point.tapUpdate);
 router.get('/tasks', validate, isPlayer, task.index);
 router.post('/check-task', validate, isPlayer, task.check);
 
+// referral
+router.get('/referral-stats', validate, isPlayer, point.referralStats);
+
 // router.post('/sync', validate, isPlayer, point.update);
 
 module.exports = router;

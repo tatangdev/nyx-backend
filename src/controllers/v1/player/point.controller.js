@@ -292,5 +292,50 @@ module.exports = {
         } catch (error) {
             next(error);
         }
+    },
+
+    referralStats: async (req, res, next) => {
+        try {
+            const playerId = req.user.id;
+            const referralStats = await prisma.$queryRawUnsafe(`
+            SELECT
+                p.first_name,
+                p.last_name,
+                p.level,
+                pe.coins_balance AS balance_coins,
+                pe.passive_per_hour AS earn_passive_per_hour
+            FROM
+                players p
+            INNER JOIN
+                player_earnings pe ON pe.player_id = p.id
+            WHERE
+                p.referee_id = ${playerId};`);
+
+            let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
+            let levels = JSON.parse(levelConfig.value);
+
+            referralStats.forEach(referral => {
+                let referralBonus = 0;
+                levels.forEach(level => {
+                    if (level.level <= referral.level) {
+                        referralBonus += level.level_up_reward;
+                    }
+                });
+
+                referral.referral_bonus_coins = referralBonus;
+            });
+
+            return res.status(200).json({
+                status: true,
+                message: "Referral stats found",
+                error: null,
+                data: {
+                    count: referralStats.length,
+                    stats: referralStats
+                }
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 };
