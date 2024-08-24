@@ -23,11 +23,13 @@ module.exports = {
                 SELECT 
                     c.id, 
                     c.name, 
+                    c.description,
                     c.image, 
                     COALESCE(CAST(cl.level AS INTEGER), 0) AS level,
                     cat.id AS category_id,
                     c.levels,
-                    c.condition
+                    c.condition,
+                    cl.updated_at_unix AS last_upgrade_at
                 FROM
                     cards c
                 LEFT JOIN 
@@ -40,6 +42,7 @@ module.exports = {
                 ORDER BY c.id;
             `);
 
+            let now = Math.floor(Date.now() / 1000);
             cards = cards.map(card => {
                 card.upgrade = null;
                 card.profit_per_hour = 0;
@@ -55,6 +58,7 @@ module.exports = {
                     }
                     if (nextLevel) {
                         let isAvailable = true;
+                        let availableAt = null;
                         let condition = JSON.parse(card.condition);
                         if (condition) {
                             isAvailable = false;
@@ -64,12 +68,23 @@ module.exports = {
                             }
                         }
 
+                        if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
+                            availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
+
+                            if (now < availableAt) {
+                                isAvailable = false;
+                            } else {
+                                availableAt = null;
+                            }
+                        }
+
                         card.upgrade = {
                             level: nextLevel.level,
                             price: nextLevel.upgrade_price,
                             profit_per_hour: nextLevel.profit_per_hour,
                             profit_per_hour_delta: nextLevel.profit_per_hour - card.profit_per_hour,
                             is_available: isAvailable,
+                            available_at: availableAt,
                             condition
                         };
                     }
@@ -77,6 +92,7 @@ module.exports = {
 
                 delete card.levels;
                 delete card.condition;
+                delete card.last_upgrade_at;
                 return card;
             });
 
