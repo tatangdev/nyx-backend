@@ -1,16 +1,18 @@
-require('dotenv').config();
-require("./instrument.js");
-const Sentry = require("@sentry/node");
-const express = require('express');
-const logger = require('morgan');
-const swaggerUi = require('swagger-ui-express');
-const fs = require('fs');
-const YAML = require('yaml');
-const cors = require('cors');
+import dotenv from 'dotenv';
+dotenv.config();
+
+import './instrument';
+import * as Sentry from '@sentry/node';
+import express, { Request, Response, NextFunction } from 'express';
+import logger from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs';
+import YAML from 'yaml';
+import cors from 'cors';
+import v1 from './routers/v1';
+
 const app = express();
 const port = process.env.PORT || 3000;
-
-const v1 = require('./routers/v1');
 
 const file = fs.readFileSync('./swagger.yaml', 'utf8');
 const swaggerDocument = YAML.parse(file);
@@ -26,7 +28,7 @@ app.use('/videos', express.static('./src/public/videos'));
 app.use('/api/v1', v1);
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// app.get('/', (req, res) => {
+// app.get('/', (req: Request, res: Response) => {
 //     res.send('Hello World!');
 // });
 
@@ -34,7 +36,7 @@ app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 Sentry.setupExpressErrorHandler(app);
 
 // 404 handler
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).json({
         status: false,
         message: `Sorry, can't find the route ${req.originalUrl}`,
@@ -44,8 +46,8 @@ app.use((req, res, next) => {
 });
 
 // 500 handler
-app.use((err, req, res, next) => {
-    console.log(err);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err);
     res.status(500).json({
         status: false,
         message: 'Something broke!',
