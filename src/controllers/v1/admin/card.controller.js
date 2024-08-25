@@ -20,28 +20,26 @@ const validateLevels = (levels) => {
         ) {
             return {
                 isValid: false,
-                message: "upgrade_price and profit_per_hour must be numbers",
+                message: "level, upgrade_price, profit_per_hour, profit_per_hour_increase, price_multiplier, profit_per_hour_multiplier and respawn_time must be a number",
             };
         }
 
         // validate level values
-        if (
-            level.level <= 0 ||
-            level.upgrade_price <= 0 ||
-            level.profit_per_hour <= 0 ||
-            level.profit_per_hour_increase <= 0 ||
-            level.price_multiplier <= 0 ||
-            level.profit_per_hour_multiplier <= 0 ||
-            level.respawn_time < 0
-        ) {
+        if (level.level < 0 || level.price_multiplier < 0 || level.profit_per_hour_multiplier < 0 || level.respawn_time < 0) {
             return {
                 isValid: false,
-                message: "upgrade_price and profit_per_hour must be greater than 0",
+                message: "level, price_multiplier, profit_per_hour_multiplier and respawn_time must be greater or equal to 0",
+            };
+        }
+        if (level.upgrade_price <= 0 || level.profit_per_hour <= 0 || level.profit_per_hour_increase <= 0) {
+            return {
+                isValid: false,
+                message: "upgrade_price, profit_per_hour and profit_per_hour_increase must be greater than 0",
             };
         }
 
         // validate level order
-        if (level.level !== i + 1) {
+        if (level.level !== i) {
             return {
                 isValid: false,
                 message: "level must be in order",
@@ -54,7 +52,7 @@ const validateLevels = (levels) => {
                     message: "level must be greater than previous level",
                 };
             }
-            if (level.upgrade_price <= levels[i - 1].upgrade_price) {
+            if (i != 1 && (level.upgrade_price <= levels[i - 1].upgrade_price)) {
                 return {
                     isValid: false,
                     message: "upgrade_price must be greater than previous upgrade_price",
@@ -96,7 +94,7 @@ module.exports = {
             }
 
             // validate condition
-            if (condition) {
+            if (condition && condition.card_id && condition.level) {
                 if (typeof condition !== 'object') {
                     return res.status(400).json({
                         status: false,
@@ -145,7 +143,7 @@ module.exports = {
                 };
             }
 
-            levels = levels.map((level, index) => ({ ...level, level: index + 1 }));
+            levels = levels.map((level, index) => ({ ...level, level: index }));
 
             let cardCategory = await prisma.cardCategory.findUnique({
                 where: { id: category_id },
@@ -304,7 +302,7 @@ module.exports = {
                         data: null,
                     });
                 }
-                levels = levels.map((level, index) => ({ ...level, level: index + 1 }));
+                levels = levels.map((level, index) => ({ ...level, level: index }));
                 data.levels = JSON.stringify(levels);
             }
             if (condition) {
