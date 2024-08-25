@@ -55,56 +55,59 @@ module.exports = {
                     let currentLevel = levels.find(item => item.level === card.level);
                     let nextLevel = levels.find(item => item.level === card.level + 1);
 
+
+
                     if (currentLevel) {
                         card.level = currentLevel.level;
-                        card.profit_per_hour = currentLevel.profit_per_hour;
-                    }
-                    if (nextLevel) {
-                        let isAvailable = true;
-                        let condition = JSON.parse(card.condition);
-                        if (condition) {
-                            isAvailable = false;
-                            let requiredCard = cards.find(item => item.id === condition.id);
-                            if (requiredCard && requiredCard.level >= condition.level) {
-                                isAvailable = true;
-                            }
-                        }
+                        card.profit_per_hour = currentLevel.profit_per_hour - currentLevel.profit_per_hour_increase;
 
-                        let availableAt = null;
-                        if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
-                            availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
-
-                            if (now < availableAt) {
+                        if (nextLevel) {
+                            let isAvailable = true;
+                            let condition = JSON.parse(card.condition);
+                            if (condition) {
                                 isAvailable = false;
-                            } else {
-                                availableAt = null;
+                                let requiredCard = cards.find(item => item.id === condition.id);
+                                if (requiredCard && requiredCard.level >= condition.level) {
+                                    isAvailable = true;
+                                }
                             }
-                        }
 
-                        // limited available time
-                        let isLimited = false;
-                        let availableUntil = null;
-                        if (!currentLevel && card.available_duration && card.published_at_unix) {
-                            let availableAtUnix = card.published_at_unix + card.available_duration * 60 * 60;
-                            if (now > availableAtUnix) {
-                                isAvailable = false;
-                                availableAt = null;
+                            let availableAt = null;
+                            if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
+                                availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
+
+                                if (now < availableAt) {
+                                    isAvailable = false;
+                                } else {
+                                    availableAt = null;
+                                }
                             }
-                            availableUntil = availableAtUnix;
-                            isLimited = true;
-                        }
 
-                        card.upgrade = {
-                            level: nextLevel.level,
-                            price: nextLevel.upgrade_price,
-                            profit_per_hour: nextLevel.profit_per_hour,
-                            profit_per_hour_delta: nextLevel.profit_per_hour - card.profit_per_hour,
-                            is_available: isAvailable,
-                            available_at: availableAt,
-                            is_limited: isLimited,
-                            available_until: availableUntil,
-                            condition
-                        };
+                            // limited available time
+                            let isLimited = false;
+                            let availableUntil = null;
+                            if (!currentLevel.level && card.available_duration && card.published_at_unix) {
+                                let availableAtUnix = card.published_at_unix + card.available_duration * 60 * 60;
+                                if (now > availableAtUnix) {
+                                    isAvailable = false;
+                                    availableAt = null;
+                                }
+                                availableUntil = availableAtUnix;
+                                isLimited = true;
+                            }
+
+                            card.upgrade = {
+                                level: nextLevel.level,
+                                price: currentLevel.upgrade_price,
+                                profit_per_hour: currentLevel.profit_per_hour,
+                                profit_per_hour_delta: currentLevel.profit_per_hour_increase,
+                                is_available: isAvailable,
+                                available_at: availableAt,
+                                is_limited: isLimited,
+                                available_until: availableUntil,
+                                condition
+                            };
+                        }
                     }
                 }
 
