@@ -31,7 +31,7 @@ module.exports = {
                     c.condition,
                     cl.updated_at_unix AS last_upgrade_at,
                     c.is_published,
-                    c.available_days,
+                    c.available_duration,
                     c.published_at_unix
                 FROM
                     cards c
@@ -84,8 +84,8 @@ module.exports = {
                         // limited available time
                         let isLimited = false;
                         let availableUntil = null;
-                        if (!currentLevel && card.available_days && card.published_at_unix) {
-                            let availableAtUnix = card.published_at_unix + card.available_days * 60 * 60 * 24;
+                        if (!currentLevel && card.available_duration && card.published_at_unix) {
+                            let availableAtUnix = card.published_at_unix + card.available_duration * 60 * 60;
                             if (now > availableAtUnix) {
                                 isAvailable = false;
                                 availableAt = null;
@@ -143,7 +143,7 @@ module.exports = {
                     p.level AS player_level,
                     cl.updated_at_unix AS last_upgrade_at,
                     c.is_published,
-                    c.available_days,
+                    c.available_duration,
                     c.published_at_unix
                 FROM
                     cards c
@@ -205,8 +205,8 @@ module.exports = {
                     // limited available time
                     let isLimited = false;
                     let availableUntil = null;
-                    if (!currentLevel && card.available_days && card.published_at_unix) {
-                        let availableAtUnix = card.published_at_unix + card.available_days * 60 * 60 * 24;
+                    if (!currentLevel && card.available_duration && card.published_at_unix) {
+                        let availableAtUnix = card.published_at_unix + card.available_duration * 60 * 60;
                         if (now > availableAtUnix) {
                             isAvailable = false;
                             availableAt = null;

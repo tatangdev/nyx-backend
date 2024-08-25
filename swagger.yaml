@@ -433,7 +433,7 @@ paths:
                 is_published:
                   type: boolean
                   example: true
-                available_days:
+                available_duration:
                   type: integer
       responses:
         "200":
@@ -539,7 +539,7 @@ paths:
                               type: integer
                             updated_at_unix:
                               type: integer
-                            available_days:
+                            available_duration:
                               type: number
                             published_at_unix:
                               type: integer
@@ -605,7 +605,7 @@ paths:
                             type: integer
                           updated_at_unix:
                             type: integer
-                          available_days:
+                          available_duration:
                             type: integer
                           available_at_unix:
                             type: integer
@@ -664,7 +664,7 @@ paths:
                       type: integer
                     level:
                       type: integer
-                available_days:
+                available_duration:
                   type: integer
       responses:
         "200":
@@ -717,7 +717,7 @@ paths:
                             type: integer
                           updated_at_unix:
                             type: integer
-                          available_days:
+                          available_duration:
                             type: integer
                           available_at_unix:
                             type: integer

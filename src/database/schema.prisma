@@ -51,44 +51,37 @@ model CardCategory {
 }
 
 model Card {
-  id                Int     @id @default(autoincrement())
-  name              String
-  description       String?
-  image             String?
-  category_id       Int
-  levels            String?
-  condition         String?
-  is_published      Boolean @default(false)
-  created_at_unix   Int?
-  updated_at_unix   Int?
-  available_days    Int?
-  published_at_unix Int?
+  id                 Int     @id @default(autoincrement())
+  name               String
+  description        String?
+  image              String?
+  category_id        Int
+  levels             String?
+  condition          String?
+  is_published       Boolean @default(false)
+  created_at_unix    Int?
+  updated_at_unix    Int?
+  available_duration Int?
+  published_at_unix  Int?
 
   @@map("cards")
 }
 
 model CardCombo {
-  id                 Int    @id @default(autoincrement())
-  date               String @unique
-  first_card_id      Int
-  second_card_id     Int
-  third_card_id      Int
-  one_combo_reward   Int
-  two_combo_reward   Int
-  three_combo_reward Int
-  created_at_unix    Int?
-  updated_at_unix    Int?
+  id              Int     @id @default(autoincrement())
+  date            String  @unique
+  combination     String?
+  created_at_unix Int?
+  updated_at_unix Int?
 
   @@map("card_combos")
 }
 
 model ComboSubmission {
-  id              Int    @id @default(autoincrement())
+  id              Int     @id @default(autoincrement())
   date            String
   player_id       Int
-  first_card_id   Int
-  second_card_id  Int
-  third_card_id   Int
+  combination     String?
   correct_combo   Int
   created_at_unix Int?
   updated_at_unix Int?

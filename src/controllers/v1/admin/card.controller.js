@@ -75,7 +75,7 @@ module.exports = {
     create: async (req, res, next) => {
         try {
             const today = moment().tz(TIMEZONE);
-            let { name, description, image, is_published, category_id, levels, condition, available_days } = req.body;
+            let { name, description, image, is_published, category_id, levels, condition, available_duration } = req.body;
             if (!name || !image || !category_id || !levels.length) {
                 return res.status(400).json({
                     status: false,
@@ -181,7 +181,7 @@ module.exports = {
                     updated_at_unix: now,
                     is_published: isPublished,
                     published_at_unix: publishedAtUnix,
-                    available_days
+                    available_duration
                 },
             });
 
