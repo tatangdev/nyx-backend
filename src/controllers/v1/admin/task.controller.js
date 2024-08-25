@@ -101,23 +101,27 @@ module.exports = {
 
     index: async (req, res, next) => {
         try {
+            const searchConditions = req.query.search
+                ? [
+                    {
+                        id: {
+                            contains: req.query.search,
+                            mode: 'insensitive',
+                        }
+                    },
+                    {
+                        name: {
+                            contains: req.query.search,
+                            mode: 'insensitive',
+                        }
+                    }
+                ]
+                : undefined;
+
             let tasks = await prisma.task.findMany({
                 where: {
-                    OR: [
-                        {
-                            id: {
-                                contains: req.query.search,
-                                mode: 'insensitive',
-                            }
-                        },
-                        {
-                            name: {
-                                contains: req.query.search,
-                                mode: 'insensitive',
-                            }
-                        }
-                    ],
-                    is_published: req.query.is_published != null ? req.query.is_published == "true" : undefined
+                    OR: searchConditions,
+                    is_published: req.query.is_published ? req.query.is_published === "true" : undefined
                 },
                 orderBy: {
                     created_at_unix: 'desc'
