@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const XLSX = require('xlsx');
+const moment = require('moment-timezone');
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 const validateLevels = (levels) => {
     for (let i = 0; i < levels.length; i++) {
@@ -72,7 +74,8 @@ const validateLevels = (levels) => {
 module.exports = {
     create: async (req, res, next) => {
         try {
-            let { name, description, image, is_published, category_id, levels, condition } = req.body;
+            const today = moment().tz(TIMEZONE);
+            let { name, description, image, is_published, category_id, levels, condition, available_days } = req.body;
             if (!name || !image || !category_id || !levels.length) {
                 return res.status(400).json({
                     status: false,
@@ -157,7 +160,13 @@ module.exports = {
             }
 
             let isPublished = true;
-            if (is_published !== undefined && typeof is_published === 'boolean') isPublished = is_published;
+            if (is_published !== undefined && typeof is_published === 'boolean') {
+                isPublished = is_published;
+            };
+            let publishedAtUnix = null;
+            if (isPublished) {
+                publishedAtUnix = today.unix();
+            }
 
             let now = Math.floor(Date.now() / 1000);
             let card = await prisma.card.create({
@@ -170,7 +179,9 @@ module.exports = {
                     condition: condition ? JSON.stringify(condition) : null,
                     created_at_unix: now,
                     updated_at_unix: now,
-                    is_published: isPublished
+                    is_published: isPublished,
+                    published_at_unix: publishedAtUnix,
+                    available_days
                 },
             });
 

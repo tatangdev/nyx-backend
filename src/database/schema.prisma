@@ -51,16 +51,18 @@ model CardCategory {
 }
 
 model Card {
-  id              Int     @id @default(autoincrement())
-  name            String
-  description     String?
-  image           String?
-  category_id     Int
-  levels          String?
-  condition       String?
-  is_published    Boolean @default(false)
-  created_at_unix Int?
-  updated_at_unix Int?
+  id                Int     @id @default(autoincrement())
+  name              String
+  description       String?
+  image             String?
+  category_id       Int
+  levels            String?
+  condition         String?
+  is_published      Boolean @default(false)
+  created_at_unix   Int?
+  updated_at_unix   Int?
+  available_days    Int?
+  published_at_unix Int?
 
   @@map("cards")
 }

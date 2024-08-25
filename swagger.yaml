@@ -433,6 +433,8 @@ paths:
                 is_published:
                   type: boolean
                   example: true
+                available_days:
+                  type: integer
       responses:
         "200":
           description: Success
@@ -537,6 +539,10 @@ paths:
                               type: integer
                             updated_at_unix:
                               type: integer
+                            available_days:
+                              type: number
+                            published_at_unix:
+                              type: integer
       security:
         - bearerAuth: []
   /v1/admin/cards/{id}:
@@ -595,6 +601,14 @@ paths:
                                 type: string
                               level:
                                 type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          available_days:
+                            type: integer
+                          available_at_unix:
+                            type: integer
       security:
         - bearerAuth: []
     put:
@@ -650,6 +664,8 @@ paths:
                       type: integer
                     level:
                       type: integer
+                available_days:
+                  type: integer
       responses:
         "200":
           description: Success
@@ -697,6 +713,14 @@ paths:
                                 type: string
                               level:
                                 type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          available_days:
+                            type: integer
+                          available_at_unix:
+                            type: integer
       security:
         - bearerAuth: []
   /v1/admin/tasks:

@@ -29,7 +29,10 @@ module.exports = {
                     cat.id AS category_id,
                     c.levels,
                     c.condition,
-                    cl.updated_at_unix AS last_upgrade_at
+                    cl.updated_at_unix AS last_upgrade_at,
+                    c.is_published,
+                    c.available_days,
+                    c.published_at_unix
                 FROM
                     cards c
                 LEFT JOIN 
@@ -78,6 +81,19 @@ module.exports = {
                             }
                         }
 
+                        // limited available time
+                        let isLimited = false;
+                        let availableUntil = null;
+                        if (!currentLevel && card.available_days && card.published_at_unix) {
+                            let availableAtUnix = card.published_at_unix + card.available_days * 60 * 60 * 24;
+                            if (now > availableAtUnix) {
+                                isAvailable = false;
+                                availableAt = null;
+                            }
+                            availableUntil = availableAtUnix;
+                            isLimited = true;
+                        }
+
                         card.upgrade = {
                             level: nextLevel.level,
                             price: nextLevel.upgrade_price,
@@ -85,6 +101,8 @@ module.exports = {
                             profit_per_hour_delta: nextLevel.profit_per_hour - card.profit_per_hour,
                             is_available: isAvailable,
                             available_at: availableAt,
+                            is_limited: isLimited,
+                            available_until: availableUntil,
                             condition
                         };
                     }
@@ -123,7 +141,10 @@ module.exports = {
                     c.levels,
                     c.condition,
                     p.level AS player_level,
-                    cl.updated_at_unix AS last_upgrade_at
+                    cl.updated_at_unix AS last_upgrade_at,
+                    c.is_published,
+                    c.available_days,
+                    c.published_at_unix
                 FROM
                     cards c
                 LEFT JOIN 
@@ -181,13 +202,29 @@ module.exports = {
                         }
                     }
 
+                    // limited available time
+                    let isLimited = false;
+                    let availableUntil = null;
+                    if (!currentLevel && card.available_days && card.published_at_unix) {
+                        let availableAtUnix = card.published_at_unix + card.available_days * 60 * 60 * 24;
+                        if (now > availableAtUnix) {
+                            isAvailable = false;
+                            availableAt = null;
+                        }
+                        availableUntil = availableAtUnix;
+                        isLimited = true;
+                    }
+
                     card.upgrade = {
                         level: nextLevel.level,
                         price: nextLevel.upgrade_price,
                         profit_per_hour: nextLevel.profit_per_hour,
                         profit_per_hour_delta: nextLevel.profit_per_hour - card.profit_per_hour,
                         is_available: isAvailable,
-                        condition
+                        condition,
+                        available_at: availableAt,
+                        is_limited: isLimited,
+                        available_until: availableUntil,
                     };
                 }
             }
@@ -200,9 +237,11 @@ module.exports = {
             }
 
             if (!card.upgrade || !card.upgrade.is_available) {
+                let message = "Card can't be upgraded";
+                if (card.upgrade && card.upgrade.is_limited) message = "Card is not available anymore";
                 return res.status(400).json({
                     status: false,
-                    message: "Card can't be upgraded",
+                    message: message,
                     error: null,
                     data: null
                 });
