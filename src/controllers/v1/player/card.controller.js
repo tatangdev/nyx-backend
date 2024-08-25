@@ -453,8 +453,7 @@ module.exports = {
                 message: "Combo found",
                 error: null,
                 data: {
-                    // "upgradeIds": [],
-                    bonus_coins: combo ? combo.three_combo_reward : 0,
+                    bonus_coins: combo ? combo.reward_coins : 0,
                     is_submitted: isSubmitted,
                     remain_seconds: remainSeconds,
                     submitted_at: submittedAt
@@ -473,7 +472,7 @@ module.exports = {
             const playerId = req.user.id;
             const { combo } = req.body;
 
-            if (!Array.isArray(combo) || combo.length !== 3) {
+            if (!Array.isArray(combo) || combo.length !== 4) {
                 return res.status(400).json({
                     status: false,
                     message: "Please provide all required fields",
@@ -481,8 +480,6 @@ module.exports = {
                     data: null
                 });
             }
-
-            const [firstCardId, secondCardId, thirdCardId] = combo;
 
             const comboData = await prisma.cardCombo.findFirst({
                 where: { date: today.format('YYYY-MM-DD') }
@@ -508,20 +505,23 @@ module.exports = {
                 });
             }
 
-            const correctCombo = [comboData.first_card_id, comboData.second_card_id, comboData.third_card_id]
-                .filter((id, index) => id === combo[index])
-                .length;
+            let comboConfig = JSON.parse(comboData.combination);
+            let correctCombo = 0;
+            for (let i = 0; i < combo.length; i++) {
+                if (combo[i] === comboConfig[i]) {
+                    correctCombo++;
+                }
+            }
 
-            const rewardCoins = [0, comboData.one_combo_reward, comboData.two_combo_reward, comboData.three_combo_reward][correctCombo];
+            let rewardCoins = Math.floor((correctCombo / 4) * comboData.reward_coins);
 
             const newSubmission = await prisma.comboSubmission.create({
                 data: {
                     player_id: playerId,
                     date: today.format('YYYY-MM-DD'),
-                    first_card_id: firstCardId,
-                    second_card_id: secondCardId,
-                    third_card_id: thirdCardId,
-                    correct_combo: correctCombo
+                    combination: JSON.stringify(combo),
+                    correct_combo: correctCombo,
+                    created_at_unix: today.unix(),
                 }
             });
 

@@ -71,6 +71,7 @@ model CardCombo {
   id              Int     @id @default(autoincrement())
   date            String  @unique
   combination     String?
+  reward_coins    Int
   created_at_unix Int?
   updated_at_unix Int?
 
@@ -84,7 +85,6 @@ model ComboSubmission {
   combination     String?
   correct_combo   Int
   created_at_unix Int?
-  updated_at_unix Int?
 
   @@map("combo_submissions")
 }
