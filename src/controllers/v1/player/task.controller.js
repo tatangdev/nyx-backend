@@ -79,10 +79,10 @@ module.exports = {
                         };
 
                         let config = JSON.parse(task.config);
-                        if (config.link) response.link = config.link;
-                        if (config.modal_description) response.modal_description = config.modal_description;
-                        if (config.modal_link_button) response.modal_link_button = config.modal_link_button;
-                        if (config.reward_delay_seconds) response.reward_delay_seconds = config.reward_delay_seconds;
+                        if (config && config.link) response.link = config.link;
+                        if (config && config.modal_description) response.modal_description = config.modal_description;
+                        if (config && config.modal_link_button) response.modal_link_button = config.modal_link_button;
+                        if (config && config.reward_delay_seconds) response.reward_delay_seconds = config.reward_delay_seconds;
 
                         let taskCompletion = taskCompletions.find(item => item.task_id === task.id);
                         if (taskCompletion) {
