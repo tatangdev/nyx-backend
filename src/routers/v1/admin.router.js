@@ -6,6 +6,7 @@ const level = require('../../controllers/v1/admin/level.controller');
 const card = require('../../controllers/v1/admin/card.controller');
 const dashboard = require('../../controllers/v1/admin/dashboard.controller');
 const player = require('../../controllers/v1/admin/player.controller');
+const history = require('../../controllers/v1/admin/history.controller');
 const task = require('../../controllers/v1/admin/task.controller');
 const { validate, isAdmin, isSuperadmin } = require('../../middlewares/auth.middleware');
 const { sheet } = require('../../libs/multer');
@@ -51,5 +52,10 @@ router.get('/players', player.index);
 router.get('/players/:id', player.show);
 router.put('/players/:id', player.update);
 // router.get('/dashboard', validate, isAdmin, dashboard.index);
+
+// logs
+router.get('/logs/point', validate, isAdmin, history.points);
+router.get('/logs/profit', validate, isAdmin, history.profit);
+router.get('/logs/level', validate, isAdmin, history.level);
 
 module.exports = router;

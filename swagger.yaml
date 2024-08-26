@@ -1288,6 +1288,188 @@ paths:
                             example: 5971908
       security:
         - bearerAuth: []
+  /v1/admin/logs/point:
+    get:
+      summary: Get points logs
+      tags:
+        - Admin - Logs
+      parameters:
+        - name: player_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 6
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                player_id:
+                                  type: integer
+                                player_name:
+                                  type: string
+                                amount:
+                                  type: integer
+                                type:
+                                  type: string
+                                data:
+                                  type: string
+                                created_at_unix:
+                                  type: integer
+      security:
+        - bearerAuth: []
+  /v1/admin/logs/profit:
+    get:
+      summary: Get profits logs
+      tags:
+        - Admin - Logs
+      parameters:
+        - name: player_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 6
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                player_id:
+                                  type: integer
+                                player_name:
+                                  type: string
+                                amount:
+                                  type: integer
+                                type:
+                                  type: string
+                                data:
+                                  type: string
+                                created_at_unix:
+                                  type: integer
+      security:
+        - bearerAuth: []
+  /v1/admin/logs/level:
+    get:
+      summary: Get profits logs
+      tags:
+        - Admin - Logs
+      parameters:
+        - name: player_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 6
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                player_id:
+                                  type: integer
+                                player_name:
+                                  type: string
+                                level:
+                                  type: integer
+                                data:
+                                  type: string
+                                created_at_unix:
+                                  type: integer
+      security:
+        - bearerAuth: []
   /v1/auth/login:
     post:
       summary: Player login
