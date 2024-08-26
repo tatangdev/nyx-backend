@@ -723,6 +723,250 @@ paths:
                             type: integer
       security:
         - bearerAuth: []
+  /v1/admin/combos:
+    post:
+      summary: Create combo
+      tags:
+        - Admin - Combos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date
+                combination:
+                  type: array
+                  items:
+                    type: integer
+                reward_coins:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          date:
+                            type: string
+                          combination:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                image:
+                                  type: string
+                          reward_coins:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all combos
+      tags:
+        - Admin - Combos
+      parameters:
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            date:
+                              type: string
+                            combination:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  name:
+                                    type: string
+                                  description:
+                                    type: string
+                                  image:
+                                    type: string
+                            reward_coins:
+                              type: integer
+                            created_at_unix:
+                              type: integer
+                            updated_at_unix:
+                              type: integer
+      security:
+        - bearerAuth: []
+  /v1/admin/combos/{id}:
+    get:
+      summary: Get combo by id
+      tags:
+        - Admin - Combos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          date:
+                            type: string
+                          combination:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                image:
+                                  type: string
+                          reward_coins:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update combo by id
+      tags:
+        - Admin - Combos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date
+                combination:
+                  type: array
+                  items:
+                    type: integer
+                reward_coins:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          date:
+                            type: string
+                          combination:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                image:
+                                  type: string
+                          reward_coins:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Delete combo by id
+      tags:
+        - Admin - Combos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
   /v1/admin/tasks:
     post:
       summary: Create task

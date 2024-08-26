@@ -8,6 +8,7 @@ const dashboard = require('../../controllers/v1/admin/dashboard.controller');
 const player = require('../../controllers/v1/admin/player.controller');
 const history = require('../../controllers/v1/admin/history.controller');
 const task = require('../../controllers/v1/admin/task.controller');
+const combo = require('../../controllers/v1/admin/combo.controller');
 const { validate, isAdmin, isSuperadmin } = require('../../middlewares/auth.middleware');
 const { sheet } = require('../../libs/multer');
 
@@ -57,5 +58,12 @@ router.put('/players/:id', player.update);
 router.get('/logs/point', validate, isAdmin, history.points);
 router.get('/logs/profit', validate, isAdmin, history.profit);
 router.get('/logs/level', validate, isAdmin, history.level);
+
+// combo
+router.post('/combos', validate, isAdmin, combo.create);
+router.get('/combos', validate, isAdmin, combo.index);
+router.get('/combos/:id', validate, isAdmin, combo.show);
+router.put('/combos/:id', validate, isAdmin, combo.update);
+router.delete('/combos/:id', validate, isAdmin, combo.destroy);
 
 module.exports = router;
