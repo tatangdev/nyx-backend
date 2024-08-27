@@ -437,9 +437,11 @@ module.exports = {
                     date: today.format('YYYY-MM-DD')
                 }
             });
+            let cards = await prisma.card.findMany();
 
             let isSubmitted = false;
             let submittedAt = null;
+            let combination = null;
             let comboSubmission = await prisma.comboSubmission.findFirst({
                 where: {
                     player_id: playerId,
@@ -447,6 +449,17 @@ module.exports = {
                 }
             });
             if (comboSubmission) {
+                combination = JSON.parse(comboSubmission.combination);
+                combination = combination.map(cardId => {
+                    let card = cards.find(card => card.id === cardId);
+                    return {
+                        id: card.id,
+                        name: card.name,
+                        description: card.description,
+                        image: card.image
+                    };
+                });
+
                 isSubmitted = true;
                 submittedAt = moment.unix(comboSubmission.created_at_unix).tz(TIMEZONE).format();
             }
@@ -460,7 +473,8 @@ module.exports = {
                     bonus_coins: combo ? combo.reward_coins : 0,
                     is_submitted: isSubmitted,
                     remain_seconds: remainSeconds,
-                    submitted_at: submittedAt
+                    submitted_at: submittedAt,
+                    combination
                 }
             });
 

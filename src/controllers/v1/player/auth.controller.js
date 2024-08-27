@@ -66,9 +66,9 @@ module.exports = {
                 };
 
                 // Check if playerEarning exists, if not create it
-                const playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: player.id } });
+                let playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: player.id } });
                 if (!playerEarning) {
-                    await prisma.playerEarning.create({
+                    playerEarning = await prisma.playerEarning.create({
                         data: {
                             player_id: player.id,
                             ...defaultValues,
