@@ -172,25 +172,28 @@ model Attendance {
 }
 
 model Task {
-  id              String  @id @unique
-  name            String
-  image           String?
-  type            String? @default("Default")
-  reward_coins    Int?
-  periodicity     String  @default("Once")
-  config          String?
-  is_published    Boolean @default(false)
-  created_at_unix Int?
-  updated_at_unix Int?
+  id                      Int     @id @default(autoincrement())
+  name                    String
+  image                   String?
+  type                    String?
+  reward_coins            Int?
+  config                  String?
+  is_published            Boolean @default(false)
+  requires_admin_approval Boolean @default(false)
+  created_at_unix         Int?
+  updated_at_unix         Int?
 
   @@map("tasks")
 }
 
 model TaskCompletion {
-  id                Int    @id @default(autoincrement())
+  id                Int     @id @default(autoincrement())
   player_id         Int
   task_id           String
+  image             String?
   completed_at_unix Int
+  is_completed      Boolean @default(true)
+  is_approved       Boolean @default(false)
 
   @@map("task_completions")
 }

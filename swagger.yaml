@@ -987,12 +987,30 @@ paths:
                   type: string
                 reward_coins:
                   type: integer
-                periodicity:
-                  type: string
                 is_published:
+                  type: boolean
+                requires_admin_approval:
                   type: boolean
                 config:
                   type: object
+                  properties:
+                    modal_title:
+                      type: string
+                    modal_description:
+                      type: string
+                    modal_link_button:
+                      type: string
+                    modal_link_url:
+                      type: string
+                    check_in_data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          day:
+                            type: integer
+                          reward_coins:
+                            type: integer
       responses:
         "200":
           description: Success

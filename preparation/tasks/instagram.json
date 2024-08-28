@@ -1,0 +1,13 @@
+{
+    "name": "Follow us on Instagram",
+    "image": "https://cdn.hamsterkombat.io/earn/facebook.png",
+    "type": "with_link",
+    "reward_coins": 100000,
+    "is_published": true,
+    "requires_admin_approval": true,
+    "config": {
+        "modal_title": "Follow us on Instagram",
+        "modal_link_button": "Join",
+        "modal_link_url": "https://www.instagram.com/hamsterkombat.io?igsh=eDZkcXV6aG9sMzg4"
+    }
+}
