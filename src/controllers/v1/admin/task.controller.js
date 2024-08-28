@@ -253,7 +253,7 @@ module.exports = {
 
             // parse config
             tasks = tasks.map(task => {
-                task.config = JSON.parse(task.config);
+                task.config = yaml.load(task.config);
                 return task;
             });
 
@@ -273,7 +273,7 @@ module.exports = {
         try {
             let task = await prisma.task.findUnique({
                 where: {
-                    id: req.params.id
+                    id: Number(req.params.id)
                 }
             });
 
@@ -286,7 +286,7 @@ module.exports = {
                 });
             }
 
-            task.config = JSON.parse(task.config);
+            task.config = yaml.load(task.config);
 
             res.status(200).json({
                 success: true,
@@ -302,38 +302,201 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            let { name, image, type, reward_coins, periodicity, config, is_published } = req.body;
-            if (!name || !image || !type || !reward_coins || !periodicity) {
+            let errorCnt = 0;
+            const now = moment().tz(TIMEZONE);
+            const { id } = req.params; // Assume the task ID is passed as a URL parameter
+            const { name, image, reward_coins, type, config, is_published, requires_admin_approval } = req.body;
+
+            // Validate required fields
+            if (!id || !name || !image || !reward_coins) {
+                console.log(`error ke ${errorCnt++}`);
                 return res.status(400).json({
                     success: false,
                     message: "Please provide all required fields.",
                     error: null,
-                    data: null
+                    data: null,
                 });
             }
 
-            let task = await prisma.task.update({
-                where: {
-                    id: req.params.id
-                },
-                data: {
-                    name,
-                    image,
-                    type,
-                    reward_coins,
-                    periodicity,
-                    config: JSON.stringify(config),
-                    is_published,
-                    updated_at_unix: Math.floor(Date.now() / 1000)
-                }
-            });
-            task.config = JSON.parse(task.config);
+            // Validate reward_coins type
+            if (isNaN(reward_coins)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Reward coins must be a number.",
+                    error: null,
+                    data: null,
+                });
+            }
 
-            res.status(200).json({
+            // Find existing task
+            let task = await prisma.task.findUnique({ where: { id: parseInt(id) } });
+
+            if (!task) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Task not found.",
+                    error: null,
+                    data: null,
+                });
+            }
+
+            // Update based on task type
+            switch (type) {
+                case "invite_friends":
+                    if (!config || !config.modal_title || !config.referee_count) {
+                        console.log(`error ke ${errorCnt++}`);
+                        return res.status(400).json({
+                            success: false,
+                            message: "Please provide all required fields.",
+                            error: null,
+                            data: null,
+                        });
+                    }
+
+                    task = await prisma.task.update({
+                        where: { id: task.id },
+                        data: {
+                            name,
+                            image,
+                            reward_coins,
+                            type,
+                            config: yaml.dump({
+                                modal_title: config.modal_title,
+                                modal_description: config.modal_description || "",
+                                referee_count: config.referee_count || 3,
+                                reward_delay_seconds: config.reward_delay_seconds || 0,
+                            }),
+                            is_published: is_published ?? task.is_published,
+                            requires_admin_approval: requires_admin_approval ?? task.requires_admin_approval,
+                            updated_at_unix: now.unix(),
+                        },
+                    });
+                    break;
+
+                case "with_link":
+                    if (!config || !config.modal_title || !config.modal_link_url) {
+                        console.log(`error ke ${errorCnt++}`);
+                        return res.status(400).json({
+                            success: false,
+                            message: "Please provide all required fields.",
+                            error: null,
+                            data: null,
+                        });
+                    }
+
+                    task = await prisma.task.update({
+                        where: { id: task.id },
+                        data: {
+                            name,
+                            image,
+                            reward_coins,
+                            type,
+                            config: yaml.dump({
+                                modal_title: config.modal_title,
+                                modal_description: config.modal_description || "",
+                                modal_link_button: config.modal_link_button || "",
+                                modal_link_url: config.modal_link_url,
+                                reward_delay_seconds: config.reward_delay_seconds || 0,
+                            }),
+                            is_published: is_published ?? task.is_published,
+                            requires_admin_approval: requires_admin_approval ?? task.requires_admin_approval,
+                            updated_at_unix: now.unix(),
+                        },
+                    });
+                    break;
+
+                case "daily_check_in":
+                    if (!Array.isArray(config.check_in_data) || !config.check_in_data) {
+                        return res.status(400).json({
+                            success: false,
+                            message: "Please provide all required fields.",
+                            error: null,
+                            data: null,
+                        });
+                    }
+
+                    let latestDay = null;
+                    for (let i = 0; i < config.check_in_data.length; i++) {
+                        const item = config.check_in_data[i];
+
+                        if (typeof item.days !== "number" || item.days <= 0) {
+                            return res.status(400).json({
+                                success: false,
+                                message: "Day must be a positive number.",
+                                error: null,
+                                data: null,
+                            });
+                        }
+                        if (typeof item.reward_coins !== "number" || item.reward_coins <= 0) {
+                            return res.status(400).json({
+                                success: false,
+                                message: "Reward coins must be a positive number.",
+                                error: null,
+                                data: null,
+                            });
+                        }
+                        if (i === 0 && item.days !== 1) {
+                            return res.status(400).json({
+                                success: false,
+                                message: "First day must be 1.",
+                                error: null,
+                                data: null,
+                            });
+                        }
+                        if (latestDay && item.days !== latestDay.days + 1) {
+                            return res.status(400).json({
+                                success: false,
+                                message: "Days must be a sequence.",
+                                error: null,
+                                data: null,
+                            });
+                        }
+                        if (latestDay && item.reward_coins <= latestDay.reward_coins) {
+                            return res.status(400).json({
+                                success: false,
+                                message: "Reward coins must be increasing.",
+                                error: null,
+                                data: null,
+                            });
+                        }
+                        latestDay = { days: item.days, reward_coins: item.reward_coins };
+                    }
+
+                    task = await prisma.task.update({
+                        where: { id: task.id },
+                        data: {
+                            name,
+                            image,
+                            reward_coins,
+                            type,
+                            config: yaml.dump(config.check_in_data.map((item) => ({
+                                day: item.days,
+                                reward_coins: item.reward_coins,
+                            }))),
+                            is_published: is_published ?? task.is_published,
+                            requires_admin_approval: requires_admin_approval ?? task.requires_admin_approval,
+                            updated_at_unix: now.unix(),
+                        },
+                    });
+                    break;
+
+                default:
+                    return res.status(400).json({
+                        success: false,
+                        message: "Invalid task type.",
+                        error: null,
+                        data: null,
+                    });
+            }
+
+            // Load task config
+            task.config = yaml.load(task.config);
+
+            // Return success response
+            return res.status(200).json({
                 success: true,
                 message: "Task updated successfully.",
-                error: null,
-                data: task
+                data: task,
             });
 
         } catch (error) {
@@ -345,7 +508,7 @@ module.exports = {
         try {
             let task = await prisma.task.delete({
                 where: {
-                    id: req.params.id
+                    id: Number(req.params.id)
                 }
             });
 
