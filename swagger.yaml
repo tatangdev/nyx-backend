@@ -2063,6 +2063,8 @@ paths:
               type: object
               properties:
                 task_id:
+                  type: integer
+                image:
                   type: string
       responses:
         "200":

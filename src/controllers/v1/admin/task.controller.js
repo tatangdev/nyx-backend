@@ -126,7 +126,7 @@ module.exports = {
                     for (let i = 0; i < config.check_in_data.length; i++) {
                         const item = config.check_in_data[i];
 
-                        if (typeof item.days !== "number" || item.days <= 0) {
+                        if (typeof item.day !== "number" || item.day <= 0) {
                             return res.status(400).json({
                                 success: false,
                                 message: "Day must be a positive number.",
@@ -142,7 +142,7 @@ module.exports = {
                                 data: null,
                             });
                         }
-                        if (i === 0 && item.days !== 1) {
+                        if (i === 0 && item.day !== 1) {
                             return res.status(400).json({
                                 success: false,
                                 message: "First day must be 1.",
@@ -150,7 +150,7 @@ module.exports = {
                                 data: null,
                             });
                         }
-                        if (latestDay && item.days !== latestDay.days + 1) {
+                        if (latestDay && item.day !== latestDay.days + 1) {
                             return res.status(400).json({
                                 success: false,
                                 message: "Days must be a sequence.",
@@ -166,7 +166,7 @@ module.exports = {
                                 data: null,
                             });
                         }
-                        latestDay = { days: item.days, reward_coins: item.reward_coins };
+                        latestDay = { days: item.day, reward_coins: item.reward_coins };
                     }
 
                     task = await prisma.task.findFirst({ where: { type: "daily_check_in" } });
@@ -187,7 +187,7 @@ module.exports = {
                             reward_coins,
                             type,
                             config: yaml.dump(config.check_in_data.map((item) => ({
-                                day: item.days,
+                                day: item.day,
                                 reward_coins: item.reward_coins,
                             }))),
                             is_published: is_published ?? true,
@@ -419,7 +419,7 @@ module.exports = {
                     for (let i = 0; i < config.check_in_data.length; i++) {
                         const item = config.check_in_data[i];
 
-                        if (typeof item.days !== "number" || item.days <= 0) {
+                        if (typeof item.day !== "number" || item.day <= 0) {
                             return res.status(400).json({
                                 success: false,
                                 message: "Day must be a positive number.",
@@ -435,7 +435,7 @@ module.exports = {
                                 data: null,
                             });
                         }
-                        if (i === 0 && item.days !== 1) {
+                        if (i === 0 && item.day !== 1) {
                             return res.status(400).json({
                                 success: false,
                                 message: "First day must be 1.",
@@ -443,7 +443,7 @@ module.exports = {
                                 data: null,
                             });
                         }
-                        if (latestDay && item.days !== latestDay.days + 1) {
+                        if (latestDay && item.day !== latestDay.days + 1) {
                             return res.status(400).json({
                                 success: false,
                                 message: "Days must be a sequence.",
@@ -459,7 +459,7 @@ module.exports = {
                                 data: null,
                             });
                         }
-                        latestDay = { days: item.days, reward_coins: item.reward_coins };
+                        latestDay = { days: item.day, reward_coins: item.reward_coins };
                     }
 
                     task = await prisma.task.update({
@@ -470,7 +470,7 @@ module.exports = {
                             reward_coins,
                             type,
                             config: yaml.dump(config.check_in_data.map((item) => ({
-                                day: item.days,
+                                day: item.day,
                                 reward_coins: item.reward_coins,
                             }))),
                             is_published: is_published ?? task.is_published,

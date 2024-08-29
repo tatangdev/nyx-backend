@@ -8,43 +8,43 @@
     "config": {
         "check_in_data": [
             {
-                "days": 1,
+                "day": 1,
                 "reward_coins": 500
             },
             {
-                "days": 2,
+                "day": 2,
                 "reward_coins": 1000
             },
             {
-                "days": 3,
+                "day": 3,
                 "reward_coins": 2500
             },
             {
-                "days": 4,
+                "day": 4,
                 "reward_coins": 5000
             },
             {
-                "days": 5,
+                "day": 5,
                 "reward_coins": 15000
             },
             {
-                "days": 6,
+                "day": 6,
                 "reward_coins": 25000
             },
             {
-                "days": 7,
+                "day": 7,
                 "reward_coins": 100000
             },
             {
-                "days": 8,
+                "day": 8,
                 "reward_coins": 500000
             },
             {
-                "days": 9,
+                "day": 9,
                 "reward_coins": 1000000
             },
             {
-                "days": 10,
+                "day": 10,
                 "reward_coins": 5000000
             }
         ]
