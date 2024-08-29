@@ -1226,6 +1226,110 @@ paths:
                     properties:
                       data:
                         type: object
+  /v1/admin/task-submissions:
+    get:
+      summary: Get all task submissions
+      tags:
+        - Admin - Task Submissions
+      parameters:
+        - name: task_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: player_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: is_approved
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            player_id:
+                              type: integer
+                            player_name:
+                              type: string
+                            submitted_at_unix:
+                              type: integer
+                            is_approved:
+                              type: boolean
+                              nullable: true
+                            approved_by_admin_id:
+                              type: integer
+                              nullable: true
+                            approved_by_admin_username:
+                              type: string
+                              nullable: true
+                            task_id:
+                              type: integer
+                            task_name:
+                              type: string
+                            image:
+                              type: string
+                              format: uri
+      security:
+        - bearerAuth: []
+  /v1/admin/task-submissions/{id}:
+    put:
+      summary: Update task submission by id
+      tags:
+        - Admin - Task Submissions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_approved:
+                  type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object  
   /v1/admin/levels:
     post:
       summary: Create level

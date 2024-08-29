@@ -42,7 +42,7 @@ module.exports = {
                 WHERE ${filter}
                     AND c.is_published
                     AND cat.is_active
-                ORDER BY c.id;
+                ORDER BY published_at_unix ASC, c.id DESC;
             `);
 
             let now = Math.floor(Date.now() / 1000);

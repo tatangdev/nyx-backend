@@ -513,5 +513,142 @@ module.exports = {
         } catch (error) {
             next(error);
         }
-    }
+    },
+
+    submissions: async (req, res, next) => {
+        try {
+            let query = `SELECT
+                ts.id,
+                ts.player_id,
+                CONCAT(p.first_name, p.last_name) AS player_name,
+                ts.submitted_at_unix,
+                ts.is_approved,
+                u.id AS approved_by_admin_id,
+                u.username AS approved_by_admin_username,
+                t.id AS task_id,
+                t.name AS task_name,
+                ts.image
+            FROM
+                task_submissions ts
+                INNER JOIN tasks t ON t.id = ts.task_id
+                INNER JOIN players p ON p.id = ts.player_id
+                LEFT JOIN users u ON u.id = ts.approval_by
+            WHERE t.requires_admin_approval`;
+
+            if (req.query.task_id) query += ` AND t.id = ${req.query.task_id}`;
+            if (req.query.player_id) query += ` AND ts.player_id = ${req.query.player_id}`;
+            if (req.query.is_approved) query += ` AND ts.is_approved = ${req.query.is_approved === "true"}`;
+            if (req.query.start_date) {
+                let startUnix = moment.tz(req.query.start_date, TIMEZONE).startOf('day').unix();
+                query += ` AND ts.submitted_at_unix >= ${startUnix}`;
+            }
+            if (req.query.end_date) {
+                let endUnix = moment.tz(req.query.end_date, TIMEZONE).endOf('day').unix();
+                query += ` AND ts.submitted_at_unix <= ${endUnix}`;
+            }
+
+            let submissions = await prisma.$queryRawUnsafe(query);
+
+            return res.status(200).json({
+                success: true,
+                message: "OK",
+                error: null,
+                data: submissions
+            });
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    approval: async (req, res, next) => {
+        try {
+            let todayDate = moment().tz(TIMEZONE);
+            let submission = await prisma.taskSubmission.findFirst({
+                where: {
+                    id: Number(req.params.id)
+                }
+            });
+            if (!submission) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Submission not found.",
+                    error: null,
+                    data: null
+                });
+            }
+            if (submission.is_approved !== null) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Submission already approved/rejected.",
+                    error: null,
+                    data: null
+                });
+            }
+
+            let task = await prisma.task.findFirst({
+                where: {
+                    id: submission.task_id
+                }
+            });
+
+            // check if req.body.is_approved is boolean
+            if (req.body.is_approved === undefined || typeof req.body.is_approved !== "boolean") {
+                return res.status(400).json({
+                    success: false,
+                    message: "Please provide a valid is_approved value.",
+                    error: null,
+                    data: null
+                });
+            }
+
+            await prisma.$transaction(async (prisma) => {
+
+                if (req.body.is_approved) {
+                    const point = await prisma.playerEarning.findFirst({ where: { player_id: submission.player_id } });
+                    await prisma.playerEarning.update({
+                        where: { id: point.id },
+                        data: {
+                            coins_balance: point.coins_balance + task.reward_coins,
+                            coins_total: point.coins_total + task.reward_coins,
+                            updated_at_unix: todayDate.unix()
+                        }
+                    });
+
+                    await prisma.pointHistory.create({
+                        data: {
+                            player_id: submission.player_id,
+                            amount: task.reward_coins,
+                            type: 'TASK',
+                            data: yaml.dump({
+                                nominal: task.reward_coins,
+                                previous_balance: point.coins_balance,
+                                previous_total: point.coins_total,
+                                new_balance: point.coins_balance + task.reward_coins,
+                                new_total: point.coins_total + task.reward_coins,
+                                note: `Task reward for completing '${task.name}'`
+                            }),
+                            created_at_unix: todayDate.unix()
+                        }
+                    });
+                }
+
+                submission = await prisma.taskSubmission.update({
+                    where: { id: submission.id },
+                    data: {
+                        is_approved: req.body.is_approved,
+                        approval_by: req.user.id,
+                        completed_at_unix: todayDate.unix()
+                    }
+                });
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "Submission approved/rejected successfully.",
+                data: submission
+            });
+        } catch (error) {
+            next(error);
+        }
+    },
 };
