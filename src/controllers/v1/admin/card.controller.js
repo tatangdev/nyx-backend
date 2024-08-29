@@ -10,13 +10,13 @@ const validateLevels = (levels) => {
 
         // validate level keys
         if (
-            typeof level.level !== 'number' ||
-            typeof level.upgrade_price !== 'number' ||
-            typeof level.profit_per_hour !== 'number' ||
-            typeof level.profit_per_hour_increase !== 'number' ||
-            typeof level.price_multiplier !== 'number' ||
-            typeof level.profit_per_hour_multiplier !== 'number' ||
-            typeof level.respawn_time !== 'number'
+            (level.level !== null && typeof level.level !== 'number') ||
+            (level.upgrade_price !== null && typeof level.upgrade_price !== 'number') ||
+            (level.profit_per_hour !== null && typeof level.profit_per_hour !== 'number') ||
+            (level.profit_per_hour_increase !== null && typeof level.profit_per_hour_increase !== 'number') ||
+            (level.price_multiplier !== null && typeof level.price_multiplier !== 'number') ||
+            (level.profit_per_hour_multiplier !== null && typeof level.profit_per_hour_multiplier !== 'number') ||
+            (level.respawn_time !== null && typeof level.respawn_time !== 'number')
         ) {
             return {
                 isValid: false,
