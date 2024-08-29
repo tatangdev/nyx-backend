@@ -135,10 +135,85 @@ module.exports = {
                 });
             }
 
+            let taskSubmitted = await prisma.taskSubmission.findFirst({
+                where: {
+                    player_id: playerId,
+                    task_id: taskId
+                }
+            });
+
 
             switch (task.type) {
+                case 'invite_friends':
+                    if (taskSubmitted) {
+                        return res.status(400).json({
+                            status: false,
+                            message: "You have already submitted this task.",
+                            error: null,
+                            data: null
+                        });
+                    }
+
+                    const referral = yaml.load(task.config);
+                    let inviteCount = await prisma.player.findMany({
+                        where: {
+                            referee_id: playerId
+                        }
+                    });
+                    if (inviteCount.length < referral.referee_count) {
+                        return res.status(400).json({
+                            status: false,
+                            message: `You need to invite ${referral.referee_count} friends to complete this task.`,
+                            error: "Invite friends required",
+                            data: null
+                        });
+                    }
+
+                    // Process the reward
+                    const point = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
+                    await prisma.playerEarning.update({
+                        where: { id: point.id },
+                        data: {
+                            coins_balance: point.coins_balance + task.reward_coins,
+                            coins_total: point.coins_total + task.reward_coins,
+                            updated_at_unix: todayDate.unix()
+                        }
+                    });
+
+                    await prisma.pointHistory.create({
+                        data: {
+                            player_id: playerId,
+                            amount: task.reward_coins,
+                            type: 'TASK',
+                            data: yaml.dump({
+                                nominal: task.reward_coins,
+                                previous_balance: point.coins_balance,
+                                previous_total: point.coins_total,
+                                new_balance: point.coins_balance + task.reward_coins,
+                                new_total: point.coins_total + task.reward_coins,
+                                note: `Task reward for completing '${task.name}'`
+                            }),
+                            created_at_unix: todayDate.unix()
+                        }
+                    });
+
+                    await prisma.taskSubmission.create({
+                        data: {
+                            player_id: playerId,
+                            task_id: taskId,
+                            submitted_at_unix: todayDate.unix(),
+                            completed_at_unix: task.requires_admin_approval ? null : todayDate.unix(),
+                            image: task.requires_admin_approval ? image : null,
+                        }
+                    });
+
+                    return res.status(200).json({
+                        status: true,
+                        message: `Congratulations! You have completed the task '${task.name}'.`,
+                        error: null,
+                        data: null
+                    });
                 case 'daily_check_in': {
-                    console.log("daily check in");
                     const attendance = await prisma.attendance.findFirst({ where: { player_id: playerId } });
                     const attendanceConfigValue = yaml.load(task.config);
 
@@ -146,7 +221,6 @@ module.exports = {
                     let daysDiff = 1;
 
                     if (attendance) {
-                        console.log("updatte attendance");
                         const lastAttendDate = moment.unix(attendance.last_attendance).tz(TIMEZONE);
                         daysDiff = moment(todayDate).startOf('day').diff(moment(lastAttendDate).startOf('day'), 'days');
 
@@ -182,7 +256,6 @@ module.exports = {
                             }
                         });
                     } else {
-                        console.log("create attendance");
                         await prisma.attendance.create({
                             data: {
                                 player_id: playerId,
@@ -238,21 +311,6 @@ module.exports = {
                 }
                 // Future task cases can be added here
                 default:
-                    if (!task) {
-                        return res.status(400).json({
-                            status: false,
-                            message: `Task with ID '${taskId}' not recognized. Please check the task ID and try again.`,
-                            error: "Invalid task ID",
-                            data: null
-                        });
-                    }
-
-                    let taskSubmitted = await prisma.taskSubmission.findFirst({
-                        where: {
-                            player_id: playerId,
-                            task_id: taskId
-                        }
-                    });
                     if (taskSubmitted) {
                         let message = "You have already submitted this task.";
                         if (task.requires_admin_approval && !taskSubmitted.is_approved) {

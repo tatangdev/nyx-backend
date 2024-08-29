@@ -13,7 +13,6 @@ module.exports = {
 
             // Validate required fields
             if (!name || !image || !reward_coins) {
-                console.log(`error ke ${errorCnt++}`);
                 return res.status(400).json({
                     success: false,
                     message: "Please provide all required fields.",
@@ -37,7 +36,6 @@ module.exports = {
             switch (type) {
                 case "invite_friends":
                     if (!config || !config.modal_title || !config.referee_count) {
-                        console.log(`error ke ${errorCnt++}`);
                         return res.status(400).json({
                             success: false,
                             message: "Please provide all required fields.",
@@ -79,7 +77,6 @@ module.exports = {
 
                 case "with_link":
                     if (!config || !config.modal_title || !config.modal_link_url) {
-                        console.log(`error ke ${errorCnt++}`);
                         return res.status(400).json({
                             success: false,
                             message: "Please provide all required fields.",
@@ -111,9 +108,6 @@ module.exports = {
 
                 case "daily_check_in":
                     if (!Array.isArray(config.check_in_data) || !config.check_in_data) {
-                        console.log(Array.isArray(config));
-                        console.log(!Array.isArray(config));
-                        console.log(!config.check_in_data);
                         return res.status(400).json({
                             success: false,
                             message: "Please provide all required fields.",
@@ -309,7 +303,6 @@ module.exports = {
 
             // Validate required fields
             if (!id || !name || !image || !reward_coins) {
-                console.log(`error ke ${errorCnt++}`);
                 return res.status(400).json({
                     success: false,
                     message: "Please provide all required fields.",
@@ -344,7 +337,6 @@ module.exports = {
             switch (type) {
                 case "invite_friends":
                     if (!config || !config.modal_title || !config.referee_count) {
-                        console.log(`error ke ${errorCnt++}`);
                         return res.status(400).json({
                             success: false,
                             message: "Please provide all required fields.",
@@ -375,7 +367,6 @@ module.exports = {
 
                 case "with_link":
                     if (!config || !config.modal_title || !config.modal_link_url) {
-                        console.log(`error ke ${errorCnt++}`);
                         return res.status(400).json({
                             success: false,
                             message: "Please provide all required fields.",
