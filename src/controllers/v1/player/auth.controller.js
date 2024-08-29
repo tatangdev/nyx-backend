@@ -51,7 +51,6 @@ module.exports = {
                                 note: 'Initial level',
                             }),
                             created_at_unix: currentTime,
-                            updated_at_unix: currentTime,
                         }
                     });
                 }
@@ -91,7 +90,6 @@ module.exports = {
                                 new_total: defaultValues.coins_total,
                             }),
                             created_at_unix: currentTime,
-                            updated_at_unix: currentTime,
                         }
                     });
 
@@ -106,7 +104,6 @@ module.exports = {
                                 new_value: defaultValues.coins_total,
                             }),
                             created_at_unix: currentTime,
-                            updated_at_unix: currentTime,
                         }
                     });
                 }
@@ -142,7 +139,6 @@ module.exports = {
                                     referee_id: referee.id
                                 }),
                                 created_at_unix: currentTime,
-                                updated_at_unix: currentTime
                             },
                             {
                                 player_id: referee.id,
@@ -157,7 +153,6 @@ module.exports = {
                                     referrer_id: player.id
                                 }),
                                 created_at_unix: currentTime,
-                                updated_at_unix: currentTime
                             }
                         ]
                     });

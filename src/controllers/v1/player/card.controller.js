@@ -291,7 +291,6 @@ module.exports = {
                                 spend: newPlayerSpend
                             }),
                             created_at_unix: now,
-                            updated_at_unix: now,
                         }
                     });
 
@@ -327,7 +326,6 @@ module.exports = {
                                     note: `Referral bonus for player level up to level ${currentLevel.level}`,
                                 }),
                                 created_at_unix: now,
-                                updated_at_unix: now,
                             }
                         });
                     }
@@ -356,7 +354,6 @@ module.exports = {
                             note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
                         }),
                         created_at_unix: now,
-                        updated_at_unix: now,
                     }
                 });
 
@@ -372,7 +369,6 @@ module.exports = {
                             note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
                         }),
                         created_at_unix: now,
-                        updated_at_unix: now,
                     }
                 });
 
@@ -572,7 +568,6 @@ module.exports = {
                             combo_submission_id: newSubmission.id
                         }),
                         created_at_unix: today.unix(),
-                        updated_at_unix: today.unix(),
                     }
                 });
             }

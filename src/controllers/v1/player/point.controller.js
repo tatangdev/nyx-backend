@@ -54,7 +54,6 @@ module.exports = {
                             note: "Passive earnings"
                         }),
                         created_at_unix: currentTimeInSeconds,
-                        updated_at_unix: currentTimeInSeconds,
                     }
                 });
             }
@@ -191,7 +190,6 @@ module.exports = {
                             note: "Tap earnings"
                         }),
                         created_at_unix: currentTimeInSeconds,
-                        updated_at_unix: currentTimeInSeconds,
                     }
                 });
             }
@@ -222,7 +220,6 @@ module.exports = {
                             note: "Tap earnings"
                         }),
                         created_at_unix: currentTimeInSeconds,
-                        updated_at_unix: currentTimeInSeconds,
                     }
                 });
             }
