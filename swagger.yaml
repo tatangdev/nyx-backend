@@ -2223,6 +2223,29 @@ paths:
                                   type: integer
                           count:
                             type: integer
+  /v1/rank:
+    get:
+      summary: Get player rank
+      tags:
+        - Player
+      parameters:
+        - name: level
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
 components:
   schemas:
     AnyValue:

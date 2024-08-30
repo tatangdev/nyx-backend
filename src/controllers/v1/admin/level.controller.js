@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const yaml = require('js-yaml');
 
 module.exports = {
     update: async (req, res, next) => {
@@ -89,7 +90,7 @@ module.exports = {
                 levelConfig = await prisma.config.create({
                     data: {
                         key: 'level',
-                        value: JSON.stringify(levels),
+                        value: yaml.dump(levels),
                         created_at_unix: now,
                         updated_at_unix: now,
                     }
@@ -98,7 +99,7 @@ module.exports = {
                 levelConfig = await prisma.config.update({
                     where: { id: levelConfig.id },
                     data: {
-                        value: JSON.stringify(levels),
+                        value: yaml.dump(levels),
                         updated_at_unix: now
                     }
                 });
@@ -131,7 +132,7 @@ module.exports = {
                 status: true,
                 message: "Levels found",
                 error: null,
-                data: JSON.parse(levelConfig.value)
+                data: yaml.load(levelConfig.value)
             });
         } catch (error) {
             next(error);

@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const { uid } = require('uid');
 const jwt = require('jsonwebtoken');
+const yaml = require('js-yaml');
 
 module.exports = {
     login: async (req, res, next) => {
@@ -111,7 +112,7 @@ module.exports = {
                 // Handle referral bonuses
                 if (isNewUser && referee) {
                     const levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
-                    const levelData = JSON.parse(levelConfig.value);
+                    const levelData = yaml.load(levelConfig.value);
                     const referralCoins = levelData[0].level_up_reward;
 
                     await prisma.playerEarning.updateMany({

@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
+const yaml = require('js-yaml');
 
 module.exports = {
     listV2: async (req, res, next) => {
@@ -237,7 +238,7 @@ module.exports = {
             let playerLevels = [];
             let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
             if (levelConfig) {
-                playerLevels = JSON.parse(levelConfig.value);
+                playerLevels = yaml.load(levelConfig.value);
             }
 
             if (!card.upgrade || !card.upgrade.is_available) {
@@ -372,7 +373,7 @@ module.exports = {
                     }
                 });
 
-                let levelData = card.level_data ? JSON.parse(card.level_data) : [];
+                let levelData = card.level_data ? yaml.load(card.level_data) : [];
                 levelData.push({
                     ...card.upgrade,
                     point_history_id: pointHistory.id,

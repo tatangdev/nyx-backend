@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const yaml = require('js-yaml');
 
 module.exports = {
     sync: async (req, res, next) => {
@@ -73,7 +74,7 @@ module.exports = {
             const levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
 
             if (levelConfig) {
-                const levels = JSON.parse(levelConfig.value);
+                const levels = yaml.load(levelConfig.value);
                 const currentLevelScore = totalCoins - balanceCoins;
 
                 const currentLevel = levels.reduce((acc, level) => {
@@ -239,7 +240,7 @@ module.exports = {
             const levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
 
             if (levelConfig) {
-                const levels = JSON.parse(levelConfig.value);
+                const levels = yaml.load(levelConfig.value);
                 const currentLevelScore = totalCoins - balanceCoins;
 
                 const currentLevel = levels.reduce((acc, level) => {
@@ -309,7 +310,7 @@ module.exports = {
                 p.referee_id = ${playerId};`);
 
             let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
-            let levels = JSON.parse(levelConfig.value);
+            let levels = yaml.load(levelConfig.value);
 
             referralStats.forEach(referral => {
                 let referralBonus = 0;
