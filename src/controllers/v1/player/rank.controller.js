@@ -12,6 +12,7 @@ module.exports = {
             let levelConfig = await prisma.config.findFirst({ where: { key: `level` } });
             let levelConfigValue = yaml.load(levelConfig.value);
             let currentLevel = levelConfigValue.find(l => l.level === level);
+            let nextLevel = levelConfigValue.find(l => l.level === level + 1);
 
             const results = await prisma.$queryRaw`
                 WITH RankedPlayers AS (
@@ -23,7 +24,7 @@ module.exports = {
                         CAST(DENSE_RANK() OVER (
                             ORDER BY pe.coins_total - pe.coins_balance DESC, p.id ASC
                         ) AS INTEGER) AS rank,
-                        CAST(pe.coins_total - pe.coins_balance AS INTEGER) AS earnings_diff,
+                        CAST(pe.coins_total - pe.coins_balance AS INTEGER) AS spending_amount,
                         pe.passive_per_hour
                     FROM players p
                     INNER JOIN player_earnings pe ON pe.player_id = p.id
@@ -53,6 +54,7 @@ module.exports = {
                     level_name: currentLevel.name,
                     level_image: currentLevel.image_url,
                     level_minimum_score: currentLevel.minimum_score,
+                    next_level_percentage: nextLevel ? Math.floor(((myRank.spending_amount - currentLevel.minimum_score) / (nextLevel.minimum_score - currentLevel.minimum_score)) * 100) : null,
                     my_rank: myRank ? myRank.rank : null,
                     top_users: topUsers
                 }
