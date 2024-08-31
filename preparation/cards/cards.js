@@ -65,7 +65,7 @@ async function main() {
                 description: card.description,
                 image: card.image,
                 category_id: newCategory.id,
-                levels: JSON.stringify(card.levels),
+                levels: yaml.dump(card.levels),
                 condition: null,
                 is_published: false,
                 created_at_unix: now.unix(),
@@ -85,7 +85,7 @@ async function main() {
     // });
 
     // console.log("results:", results);
-    fs.writeFileSync('./example/cards-haha.json', JSON.stringify(results, null, 4));
+    fs.writeFileSync('./example/cards-haha.json', yaml.dump(results, null, 4));
 }
 
 main().catch((error) => {

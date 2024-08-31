@@ -1,9 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const yaml = require('js-yaml');
 
 const moment = require('moment-timezone');
-const { update } = require('./player.controller');
-const { destroy } = require('./task.controller');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 module.exports = {
@@ -87,14 +86,14 @@ module.exports = {
             const combo = await prisma.cardCombo.create({
                 data: {
                     date: date,
-                    combination: JSON.stringify(combination),
+                    combination: yaml.dump(combination),
                     reward_coins: reward_coins,
                     created_at_unix: now.unix(),
                     updated_at_unix: now.unix()
                 }
             });
 
-            combo.combination = JSON.parse(combo.combination);
+            combo.combination = yaml.load(combo.combination);
             combo.combination = combo.combination.map(cardId => {
                 let card = cards.find(card => card.id === cardId);
                 return {
@@ -135,7 +134,7 @@ module.exports = {
             const count = await prisma.cardCombo.count();
 
             combos.forEach(combo => {
-                combo.combination = JSON.parse(combo.combination);
+                combo.combination = yaml.load(combo.combination);
                 combo.combination = combo.combination.map(cardId => {
                     let card = cards.find(card => card.id === cardId);
                     return {
@@ -181,7 +180,7 @@ module.exports = {
                 });
             }
 
-            combo.combination = JSON.parse(combo.combination);
+            combo.combination = yaml.load(combo.combination);
             combo.combination = combo.combination.map(cardId => {
                 let card = cards.find(card => card.id === cardId);
                 return {
@@ -256,7 +255,7 @@ module.exports = {
                 },
                 data: {
                     date: date,
-                    combination: JSON.stringify(combination),
+                    combination: yaml.dump(combination),
                     reward_coins: reward_coins,
                     updated_at_unix: now.unix()
                 }

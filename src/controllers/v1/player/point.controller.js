@@ -49,7 +49,7 @@ module.exports = {
                         player_id: playerId,
                         amount: earnedPassiveCoins,
                         type: "PASSIVE_EARNINGS",
-                        data: JSON.stringify({
+                        data: yaml.dump({
                             nominal: earnedPassiveCoins,
                             previous_balance: playerEarning.coins_balance,
                             previous_total: playerEarning.coins_total,
@@ -186,7 +186,7 @@ module.exports = {
                         player_id: playerId,
                         amount: tapEarnings,
                         type: "TAP_EARNINGS",
-                        data: JSON.stringify({
+                        data: yaml.dump({
                             nominal: tapEarnings,
                             previous_balance: playerEarning.coins_balance,
                             previous_total: playerEarning.coins_total,
@@ -216,7 +216,7 @@ module.exports = {
                         player_id: playerId,
                         amount: earnedPassiveCoins,
                         type: "PASSIVE_EARNINGS",
-                        data: JSON.stringify({
+                        data: yaml.dump({
                             nominal: earnedPassiveCoins,
                             previous_balance: playerEarning.coins_balance,
                             previous_total: playerEarning.coins_total,

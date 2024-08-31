@@ -119,7 +119,7 @@ async function generateCard() {
                         name: card.name,
                         image: card.image,
                         category_id: category.id,
-                        levels: JSON.stringify(levels),
+                        levels: yaml.dump(levels),
                         created_at_unix: now.unix(),
                         updated_at_unix: now.unix()
                     }

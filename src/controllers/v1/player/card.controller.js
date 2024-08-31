@@ -53,7 +53,7 @@ module.exports = {
                 card.profit_per_hour = 0;
 
                 if (card.levels) {
-                    let levels = JSON.parse(card.levels);
+                    let levels = yaml.load(card.levels);
                     let currentLevel = levels.find(item => item.level === card.level);
                     let nextLevel = levels.find(item => item.level === card.level + 1);
 
@@ -65,7 +65,7 @@ module.exports = {
 
                         if (nextLevel) {
                             let isAvailable = true;
-                            let condition = JSON.parse(card.condition);
+                            let condition = yaml.load(card.condition);
                             if (condition) {
                                 isAvailable = false;
                                 let requiredCard = cards.find(item => item.id === condition.id);
@@ -177,7 +177,7 @@ module.exports = {
             card.profit_per_hour = 0;
 
             if (card.levels) {
-                let levels = JSON.parse(card.levels);
+                let levels = yaml.load(card.levels);
                 let currentLevel = levels.find(item => item.level === card.level);
                 let nextLevel = levels.find(item => item.level === card.level + 1);
 
@@ -187,7 +187,7 @@ module.exports = {
 
                     if (nextLevel) {
                         let isAvailable = true;
-                        let condition = JSON.parse(card.condition);
+                        let condition = yaml.load(card.condition);
                         if (condition) {
                             isAvailable = false;
                             let requiredCard = cards.find(item => item.id === condition.id);
@@ -285,7 +285,7 @@ module.exports = {
                         data: {
                             player_id: playerId,
                             level: currentLevel.level,
-                            data: JSON.stringify({
+                            data: yaml.dump({
                                 previous_level: player.level,
                                 new_level: currentLevel.level,
                                 note: `Upgrade player to level ${currentLevel.level}`,
@@ -318,7 +318,7 @@ module.exports = {
                                 player_id: player.referee_id,
                                 amount: currentLevel.level_up_reward,
                                 type: 'REFERRAL_BONUS',
-                                data: JSON.stringify({
+                                data: yaml.dump({
                                     nominal: currentLevel.level_up_reward,
                                     previous_balance: refereePoint.coins_balance,
                                     previous_total: refereePoint.coins_total,
@@ -346,7 +346,7 @@ module.exports = {
                         player_id: playerId,
                         amount: -card.upgrade.price,
                         type: 'CARD_UPGRADE',
-                        data: JSON.stringify({
+                        data: yaml.dump({
                             nominal: -card.upgrade.price,
                             previous_balance: point.coins_balance,
                             previous_total: point.coins_total,
@@ -363,7 +363,7 @@ module.exports = {
                         player_id: playerId,
                         amount: card.upgrade.profit_per_hour_delta,
                         type: 'CARD_UPGRADE',
-                        data: JSON.stringify({
+                        data: yaml.dump({
                             nominal: card.upgrade.profit_per_hour_delta,
                             previous_value: point.passive_per_hour,
                             new_value: newProfitPerHour,
@@ -394,7 +394,7 @@ module.exports = {
                         where: { id: cardLevel.id },
                         data: {
                             level: card.upgrade.level,
-                            data: JSON.stringify(levelData),
+                            data: yaml.dump(levelData),
                             updated_at_unix: now.unix()
                         }
                     });
@@ -404,7 +404,7 @@ module.exports = {
                             card_id: card.id,
                             player_id: playerId,
                             level: card.upgrade.level,
-                            data: JSON.stringify(levelData),
+                            data: yaml.dump(levelData),
                             created_at_unix: now.unix(),
                             updated_at_unix: now.unix(),
                         }
@@ -446,7 +446,7 @@ module.exports = {
                 }
             });
             if (comboSubmission) {
-                combination = JSON.parse(comboSubmission.combination);
+                combination = yaml.load(comboSubmission.combination);
                 combination = combination.map(cardId => {
                     let card = cards.find(card => card.id === cardId);
                     return {
@@ -520,7 +520,7 @@ module.exports = {
                 });
             }
 
-            let comboConfig = JSON.parse(comboData.combination);
+            let comboConfig = yaml.load(comboData.combination);
             let correctCombo = 0;
             for (let i = 0; i < combo.length; i++) {
                 if (combo[i] === comboConfig[i]) {
@@ -534,7 +534,7 @@ module.exports = {
                 data: {
                     player_id: playerId,
                     date: now.format('YYYY-MM-DD'),
-                    combination: JSON.stringify(combo),
+                    combination: yaml.dump(combo),
                     correct_combo: correctCombo,
                     created_at_unix: now.unix(),
                 }
@@ -559,7 +559,7 @@ module.exports = {
                         player_id: playerId,
                         amount: rewardCoins,
                         type: 'COMBO_REWARD',
-                        data: JSON.stringify({
+                        data: yaml.dump({
                             nominal: rewardCoins,
                             previous_balance: playerEarning.coins_balance,
                             previous_total: playerEarning.coins_total,

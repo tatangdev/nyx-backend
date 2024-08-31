@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const XLSX = require('xlsx');
+const yaml = require('js-yaml');
 
 const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
@@ -126,7 +127,7 @@ module.exports = {
                     });
                 }
 
-                let cardLevels = JSON.parse(card.levels);
+                let cardLevels = yaml.load(card.levels);
                 let levelExists = cardLevels.find((level) => level.level === condition.level);
                 if (!levelExists) {
                     return res.status(404).json({
@@ -173,8 +174,8 @@ module.exports = {
                     description,
                     image,
                     category_id,
-                    levels: JSON.stringify(levels),
-                    condition: condition ? JSON.stringify(condition) : null,
+                    levels: yaml.dump(levels),
+                    condition: condition ? yaml.dump(condition) : null,
                     created_at_unix: now.unix(),
                     updated_at_unix: now.unix(),
                     is_published: isPublished,
@@ -183,8 +184,8 @@ module.exports = {
                 },
             });
 
-            card.levels = JSON.parse(card.levels);
-            card.condition = JSON.parse(card.condition);
+            card.levels = yaml.load(card.levels);
+            card.condition = yaml.load(card.condition);
             return res.status(201).json({
                 status: true,
                 message: "Card created",
@@ -243,8 +244,8 @@ module.exports = {
                 });
             }
 
-            card.levels = JSON.parse(card.levels);
-            card.condition = JSON.parse(card.condition);
+            card.levels = yaml.load(card.levels);
+            card.condition = yaml.load(card.condition);
             return res.status(200).json({
                 status: true,
                 message: "Card found",
@@ -307,7 +308,7 @@ module.exports = {
                     });
                 }
                 levels = levels.map((level, index) => ({ ...level, level: index }));
-                data.levels = JSON.stringify(levels);
+                data.levels = yaml.dump(levels);
             }
             if (condition) {
                 if (typeof condition !== 'object') {
@@ -340,7 +341,7 @@ module.exports = {
                     });
                 }
 
-                let cardLevels = JSON.parse(card.levels);
+                let cardLevels = yaml.load(card.levels);
                 let levelExists = cardLevels.find((level) => level.level === condition.level);
                 if (!levelExists) {
                     return res.status(404).json({
@@ -356,7 +357,7 @@ module.exports = {
                     name: card.name,
                     level: condition.level,
                 };
-                data.condition = JSON.stringify(condition);
+                data.condition = yaml.dump(condition);
             }
 
             let updatedCard = await prisma.card.update({
@@ -367,8 +368,8 @@ module.exports = {
                 },
             });
 
-            updatedCard.levels = JSON.parse(updatedCard.levels);
-            updatedCard.condition = JSON.parse(updatedCard.condition);
+            updatedCard.levels = yaml.load(updatedCard.levels);
+            updatedCard.condition = yaml.load(updatedCard.condition);
             return res.status(200).json({
                 status: true,
                 message: "Card updated",

@@ -167,7 +167,7 @@ module.exports = {
                             player_id: playerId,
                             amount: pointNominalUpdate,
                             type: "ADMIN_UPDATE",
-                            data: JSON.stringify({
+                            data: yaml.dump({
                                 nominal: pointNominalUpdate,
                                 previous_balance: response.points_balance,
                                 previous_total: response.points_total,

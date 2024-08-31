@@ -49,7 +49,7 @@ module.exports = {
                         data: {
                             player_id: player.id,
                             level: 1,
-                            data: JSON.stringify({
+                            data: yaml.dump({
                                 previous_level: 0,
                                 new_level: 1,
                                 note: 'Initial level',
@@ -86,7 +86,7 @@ module.exports = {
                             player_id: player.id,
                             amount: defaultValues.coins_total,
                             type: "INITIAL",
-                            data: JSON.stringify({
+                            data: yaml.dump({
                                 nominal: defaultValues.coins_total,
                                 previous_balance: 0,
                                 previous_total: 0,
@@ -102,7 +102,7 @@ module.exports = {
                             player_id: player.id,
                             amount: defaultValues.coins_total,
                             type: "INITIAL",
-                            data: JSON.stringify({
+                            data: yaml.dump({
                                 nominal: defaultValues.coins_total,
                                 previous_value: 0,
                                 new_value: defaultValues.coins_total,
@@ -134,7 +134,7 @@ module.exports = {
                                 player_id: player.id,
                                 amount: referralCoins,
                                 type: "REFERRAL",
-                                data: JSON.stringify({
+                                data: yaml.dump({
                                     nominal: referralCoins,
                                     previous_balance: playerEarning.coins_balance,
                                     previous_total: playerEarning.coins_total,
@@ -148,7 +148,7 @@ module.exports = {
                                 player_id: referee.id,
                                 amount: referralCoins,
                                 type: "REFERRAL",
-                                data: JSON.stringify({
+                                data: yaml.dump({
                                     nominal: referralCoins,
                                     previous_balance: refereeEarning.coins_balance,
                                     previous_total: refereeEarning.coins_total,
