@@ -426,9 +426,13 @@ paths:
                 condition:
                   type: object
                   properties:
+                    type:
+                      type: string
                     card_id:
                       type: integer
-                    level:
+                    card_level:
+                      type: integer
+                    invite_friend_count:
                       type: integer
                 is_published:
                   type: boolean

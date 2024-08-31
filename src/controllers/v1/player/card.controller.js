@@ -7,6 +7,7 @@ const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 module.exports = {
     listV2: async (req, res, next) => {
+        const now = moment().tz(TIMEZONE);
         try {
             let filter = 'is_published';
             if (req.query.category_id) {
@@ -18,6 +19,15 @@ module.exports = {
                 select: {
                     id: true,
                     name: true,
+                }
+            });
+
+            let invitedFriends = await prisma.player.findMany({
+                where: {
+                    referee_id: req.user.id,
+                    created_at_unix: {
+                        lte: now.unix()
+                    }
                 }
             });
 
@@ -48,7 +58,6 @@ module.exports = {
                 ORDER BY cl.updated_at_unix DESC, c.published_at_unix, c.id ASC;
             `);
 
-            const now = moment().tz(TIMEZONE);
             cards = cards.map(card => {
                 card.upgrade = null;
                 card.profit_per_hour = 0;
@@ -69,9 +78,19 @@ module.exports = {
                             let condition = yaml.load(card.condition);
                             if (condition) {
                                 isAvailable = false;
-                                let requiredCard = cards.find(item => item.id === condition.id);
-                                if (requiredCard && requiredCard.level >= condition.level) {
-                                    isAvailable = true;
+
+                                switch (condition.type) {
+                                    case 'card':
+                                        let requiredCard = cards.find(item => item.id === condition.id);
+                                        if (requiredCard && requiredCard.level >= condition.level) {
+                                            isAvailable = true;
+                                        }
+                                        break;
+                                    case 'invite_friends':
+                                        if (invitedFriends.length >= condition.invite_friend_count) {
+                                            isAvailable = true;
+                                        }
+                                        break;
                                 }
                             }
 
@@ -191,9 +210,19 @@ module.exports = {
                         let condition = yaml.load(card.condition);
                         if (condition) {
                             isAvailable = false;
-                            let requiredCard = cards.find(item => item.id === condition.id);
-                            if (requiredCard && requiredCard.level >= condition.level) {
-                                isAvailable = true;
+
+                            switch (condition.type) {
+                                case 'card':
+                                    let requiredCard = cards.find(item => item.id === condition.id);
+                                    if (requiredCard && requiredCard.level >= condition.level) {
+                                        isAvailable = true;
+                                    }
+                                    break;
+                                case 'invite_friends':
+                                    if (invitedFriends.length >= condition.invite_friend_count) {
+                                        isAvailable = true;
+                                    }
+                                    break;
                             }
                         }
 

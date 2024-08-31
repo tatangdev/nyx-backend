@@ -96,7 +96,7 @@ module.exports = {
             }
 
             // validate condition
-            if (condition && condition.card_id && condition.level) {
+            if (condition) {
                 if (typeof condition !== 'object') {
                     return res.status(400).json({
                         status: false,
@@ -106,43 +106,90 @@ module.exports = {
                     });
                 }
 
-                if (!condition.card_id || !condition.level) {
-                    return res.status(400).json({
-                        status: false,
-                        message: "Condition card_id and level are required",
-                        error: null,
-                        data: null,
-                    });
-                }
+                switch (condition.type) {
+                    case 'card':
+                        if (!condition.card_id || !condition.card_level) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition card_id and card_level are required",
+                                error: null,
+                                data: null,
+                            });
+                        }
 
-                let card = await prisma.card.findUnique({
-                    where: { id: condition.card_id },
-                });
-                if (!card) {
-                    return res.status(404).json({
-                        status: false,
-                        message: "Condition card not found",
-                        error: null,
-                        data: null,
-                    });
-                }
+                        let card = await prisma.card.findUnique({
+                            where: { id: condition.card_id },
+                        });
+                        if (!card) {
+                            return res.status(404).json({
+                                status: false,
+                                message: "Condition card not found",
+                                error: null,
+                                data: null,
+                            });
+                        }
 
-                let cardLevels = yaml.load(card.levels);
-                let levelExists = cardLevels.find((level) => level.level === condition.level);
-                if (!levelExists) {
-                    return res.status(404).json({
-                        status: false,
-                        message: "Condition level not found",
-                        error: null,
-                        data: null,
-                    });
-                }
+                        let cardLevels = yaml.load(card.levels);
+                        let levelExists = cardLevels.find((level) => level.level === condition.card_level);
+                        if (!levelExists) {
+                            return res.status(404).json({
+                                status: false,
+                                message: "Condition card level not found",
+                                error: null,
+                                data: null,
+                            });
+                        }
 
-                condition = {
-                    id: card.id,
-                    name: card.name,
-                    level: condition.level,
-                };
+                        condition = {
+                            type: condition.type,
+                            card_id: card.id,
+                            card_name: card.name,
+                            card_level: condition.card_level
+                        };
+
+                        break;
+                    case 'invite_friends':
+                        if (condition.invite_friend_count === undefined) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition invite_friend_count is required",
+                                error: null,
+                                data: null,
+                            });
+                        }
+
+                        if (typeof condition.invite_friend_count !== 'number') {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition invite_friend_count must be a number",
+                                error: null,
+                                data: null,
+                            });
+                        }
+
+                        if (condition.invite_friend_count <= 0) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition invite_friend_count must be greater than 0",
+                                error: null,
+                                data: null,
+                            });
+                        }
+
+                        condition = {
+                            type: condition.type,
+                            invite_friend_count: condition.invite_friend_count
+                        };
+
+                        break;
+                    default:
+                        return res.status(400).json({
+                            status: false,
+                            message: "Condition type must be card or invite_friends",
+                            error: null,
+                            data: null,
+                        });
+                }
             }
 
             levels = levels.map((level, index) => ({ ...level, level: index }));
