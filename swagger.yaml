@@ -796,6 +796,16 @@ paths:
           required: false
           schema:
             type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: Success
@@ -1333,7 +1343,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        type: object  
+                        type: object
   /v1/admin/levels:
     post:
       summary: Create level
@@ -1684,6 +1694,16 @@ paths:
           required: false
           schema:
             type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: Success
@@ -1747,6 +1767,16 @@ paths:
           required: false
           schema:
             type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: Success
@@ -1805,6 +1835,16 @@ paths:
           required: false
           schema:
             type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: Success

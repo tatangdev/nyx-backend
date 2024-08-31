@@ -7,9 +7,9 @@ const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 module.exports = {
     points: async (req, res, next) => {
         try {
-            const limit = parseInt(req.query.limit, 10) || 50;
+            const perPage = parseInt(req.query.per_page, 10) || 50;
             const page = parseInt(req.query.page, 10) || 1;
-            const offset = (page - 1) * limit;
+            const offset = (page - 1) * perPage;
 
             let condition = 'ph.amount != 0';
 
@@ -46,7 +46,7 @@ module.exports = {
                     ${condition}
                 ORDER BY 
                     ph.created_at_unix DESC
-                LIMIT ${limit} OFFSET ${offset};`);
+                LIMIT ${perPage} OFFSET ${offset};`);
 
             const countResult = await prisma.$queryRawUnsafe(`
                 SELECT 
@@ -77,9 +77,9 @@ module.exports = {
 
     profit: async (req, res, next) => {
         try {
-            const limit = parseInt(req.query.limit, 10) || 50;
+            const perPage = parseInt(req.query.per_page, 10) || 50;
             const page = parseInt(req.query.page, 10) || 1;
-            const offset = (page - 1) * limit;
+            const offset = (page - 1) * perPage;
 
             let condition = 'peh.amount != 0';
 
@@ -116,7 +116,7 @@ module.exports = {
                     ${condition}
                 ORDER BY 
                     peh.created_at_unix DESC
-                LIMIT ${limit} OFFSET ${offset};`);
+                LIMIT ${perPage} OFFSET ${offset};`);
 
             const countResult = await prisma.$queryRawUnsafe(`
                 SELECT 
@@ -147,9 +147,9 @@ module.exports = {
 
     level: async (req, res, next) => {
         try {
-            const limit = parseInt(req.query.limit, 10) || 50;
+            const perPage = parseInt(req.query.per_page, 10) || 50;
             const page = parseInt(req.query.page, 10) || 1;
-            const offset = (page - 1) * limit;
+            const offset = (page - 1) * perPage;
 
             let condition = 'lh.level != 0';
 
@@ -180,7 +180,7 @@ module.exports = {
                     ${condition}
                 ORDER BY 
                     lh.created_at_unix DESC
-                LIMIT ${limit} OFFSET ${offset};`);
+                LIMIT ${perPage} OFFSET ${offset};`);
 
             const countResult = await prisma.$queryRawUnsafe(`
                 SELECT 
