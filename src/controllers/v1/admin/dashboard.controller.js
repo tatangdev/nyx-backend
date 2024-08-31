@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const yaml = require('js-yaml');
 
 module.exports = {
     index: async (req, res, next) => {
