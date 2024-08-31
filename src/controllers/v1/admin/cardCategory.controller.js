@@ -1,6 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 
+const moment = require('moment-timezone');
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
+
 module.exports = {
     create: async (req, res, next) => {
         try {
@@ -14,12 +17,12 @@ module.exports = {
                 });
             }
 
-            let now = Math.floor(Date.now() / 1000);
+            const now = moment().tz(TIMEZONE);
             let cardCategory = await prisma.cardCategory.create({
                 data: {
                     name,
-                    created_at_unix: now,
-                    updated_at_unix: now,
+                    created_at_unix: now.unix(),
+                    updated_at_unix: now.unix(),
                 }
             });
 
@@ -119,14 +122,14 @@ module.exports = {
                 ...(is_active !== undefined && { is_active })
             };
 
-            let now = Math.floor(Date.now() / 1000);
+            const now = moment().tz(TIMEZONE);
             let updatedCardCategory = await prisma.cardCategory.update({
                 where: {
                     id: cardCategoryId
                 },
                 data: {
                     ...data,
-                    updated_at_unix: now
+                    updated_at_unix: now.unix()
                 }
             });
 

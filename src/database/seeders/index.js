@@ -5,22 +5,22 @@ const data = require('./data.json');
 
 async function generateAdmin() {
     try {
-        let now = Math.floor(Date.now() / 1000);
+        const now = moment().tz(TIMEZONE);
 
         let users = [
             {
                 username: "superadmin",
                 password: bcrypt.hashSync('password', 10),
                 is_superadmin: true,
-                created_at_unix: now,
-                updated_at_unix: now
+                created_at_unix: now.unix(),
+                updated_at_unix: now.unix()
             },
             {
                 username: "admin",
                 password: bcrypt.hashSync('password', 10),
                 is_superadmin: false,
-                created_at_unix: now,
-                updated_at_unix: now
+                created_at_unix: now.unix(),
+                updated_at_unix: now.unix()
             }
         ];
 
@@ -53,14 +53,14 @@ function normalizeTitle(title) {
 
 async function generateCard() {
     try {
-        let now = Math.floor(Date.now() / 1000);
+        const now = moment().tz(TIMEZONE);
 
         for (let cat of data.categories) {
             let category = await prisma.cardCategory.create({
                 data: {
                     name: cat.name,
-                    created_at_unix: now,
-                    updated_at_unix: now
+                    created_at_unix: now.unix(),
+                    updated_at_unix: now.unix()
                 }
             });
 
@@ -120,8 +120,8 @@ async function generateCard() {
                         image: card.image,
                         category_id: category.id,
                         levels: JSON.stringify(levels),
-                        created_at_unix: now,
-                        updated_at_unix: now
+                        created_at_unix: now.unix(),
+                        updated_at_unix: now.unix()
                     }
                 });
             }
@@ -136,7 +136,7 @@ async function generateCard() {
 
 async function generateCardCombo() {
     try {
-        let now = Math.floor(Date.now() / 1000);
+        const now = moment().tz(TIMEZONE);
 
         let combos = await prisma.card.findMany({
             where: {
@@ -144,7 +144,7 @@ async function generateCardCombo() {
             }
         });
 
-        // generate date from today to +30 days with format 2024-12-31 in a array
+        // generate date from now to +30 days with format 2024-12-31 in a array
         let dates = [];
         for (let i = 0; i < 30; i++) {
             let date = new Date();
@@ -166,15 +166,15 @@ async function generateCardCombo() {
         //         username: "superadmin",
         //         password: bcrypt.hashSync('password', 10),
         //         is_superadmin: true,
-        //         created_at_unix: now,
-        //         updated_at_unix: now
+        //         created_at_unix: now.unix(),
+        //         updated_at_unix: now.unix()
         //     },
         //     {
         //         username: "admin",
         //         password: bcrypt.hashSync('password', 10),
         //         is_superadmin: false,
-        //         created_at_unix: now,
-        //         updated_at_unix: now
+        //         created_at_unix: now.unix(),
+        //         updated_at_unix: now.unix()
         //     }
         // ];
 

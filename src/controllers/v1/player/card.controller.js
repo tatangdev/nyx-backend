@@ -1,8 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const yaml = require('js-yaml');
+
 const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
-const yaml = require('js-yaml');
 
 module.exports = {
     listV2: async (req, res, next) => {
@@ -46,7 +47,7 @@ module.exports = {
                 ORDER BY published_at_unix ASC, c.id DESC;
             `);
 
-            let now = Math.floor(Date.now() / 1000);
+            const now = moment().tz(TIMEZONE);
             cards = cards.map(card => {
                 card.upgrade = null;
                 card.profit_per_hour = 0;
@@ -77,7 +78,7 @@ module.exports = {
                             if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
                                 availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
 
-                                if (now < availableAt) {
+                                if (now.unix() < availableAt) {
                                     isAvailable = false;
                                 } else {
                                     availableAt = null;
@@ -89,7 +90,7 @@ module.exports = {
                             let availableUntil = null;
                             if (!currentLevel.level && card.available_duration && card.published_at_unix) {
                                 let availableAtUnix = card.published_at_unix + card.available_duration * 60 * 60;
-                                if (now > availableAtUnix) {
+                                if (now.unix() > availableAtUnix) {
                                     isAvailable = false;
                                     availableAt = null;
                                 }
@@ -162,7 +163,7 @@ module.exports = {
                 ORDER BY c.id;
             `);
 
-            let now = Math.floor(Date.now() / 1000);
+            const now = moment().tz(TIMEZONE);
             let card = cards.find(item => item.id === cardId);
             if (!card) {
                 return res.status(404).json({
@@ -199,7 +200,7 @@ module.exports = {
                         if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
                             availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
 
-                            if (now < availableAt) {
+                            if (now.unix() < availableAt) {
                                 isAvailable = false;
                             } else {
                                 availableAt = null;
@@ -211,7 +212,7 @@ module.exports = {
                         let availableUntil = null;
                         if (!currentLevel.level && card.available_duration && card.published_at_unix) {
                             let availableAtUnix = card.published_at_unix + card.available_duration * 60 * 60;
-                            if (now > availableAtUnix) {
+                            if (now.unix() > availableAtUnix) {
                                 isAvailable = false;
                                 availableAt = null;
                             }
@@ -253,7 +254,6 @@ module.exports = {
             }
 
             await prisma.$transaction(async (prisma) => {
-                let now = Math.floor(Date.now() / 1000);
                 let point = await prisma.playerEarning.findFirst({
                     where: {
                         player_id: playerId
@@ -277,7 +277,7 @@ module.exports = {
                         where: { id: playerId },
                         data: {
                             level: currentLevel.level,
-                            updated_at_unix: now
+                            updated_at_unix: now.unix()
                         }
                     });
 
@@ -291,7 +291,7 @@ module.exports = {
                                 note: `Upgrade player to level ${currentLevel.level}`,
                                 spend: newPlayerSpend
                             }),
-                            created_at_unix: now,
+                            created_at_unix: now.unix(),
                         }
                     });
 
@@ -305,7 +305,7 @@ module.exports = {
                                 coins_total: {
                                     increment: currentLevel.level_up_reward
                                 },
-                                updated_at_unix: now
+                                updated_at_unix: now.unix()
                             }
                         });
 
@@ -326,7 +326,7 @@ module.exports = {
                                     new_total: refereePoint.coins_total + currentLevel.level_up_reward,
                                     note: `Referral bonus for player level up to level ${currentLevel.level}`,
                                 }),
-                                created_at_unix: now,
+                                created_at_unix: now.unix(),
                             }
                         });
                     }
@@ -337,7 +337,7 @@ module.exports = {
                     data: {
                         coins_balance: newBalance,
                         passive_per_hour: newProfitPerHour,
-                        updated_at_unix: now
+                        updated_at_unix: now.unix()
                     }
                 });
 
@@ -354,7 +354,7 @@ module.exports = {
                             new_total: point.coins_total,
                             note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
                         }),
-                        created_at_unix: now,
+                        created_at_unix: now.unix(),
                     }
                 });
 
@@ -369,7 +369,7 @@ module.exports = {
                             new_value: newProfitPerHour,
                             note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
                         }),
-                        created_at_unix: now,
+                        created_at_unix: now.unix(),
                     }
                 });
 
@@ -379,7 +379,7 @@ module.exports = {
                     point_history_id: pointHistory.id,
                     passive_earning_history_id: passiveEarningHistory.id,
                     note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
-                    upgrade_at: Math.floor(Date.now() / 1000)
+                    upgrade_at: now.unix()
                 });
 
                 let cardLevel = await prisma.cardLevel.findFirst({
@@ -395,7 +395,7 @@ module.exports = {
                         data: {
                             level: card.upgrade.level,
                             data: JSON.stringify(levelData),
-                            updated_at_unix: now
+                            updated_at_unix: now.unix()
                         }
                     });
                 } else {
@@ -405,8 +405,8 @@ module.exports = {
                             player_id: playerId,
                             level: card.upgrade.level,
                             data: JSON.stringify(levelData),
-                            created_at_unix: now,
-                            updated_at_unix: now,
+                            created_at_unix: now.unix(),
+                            updated_at_unix: now.unix(),
                         }
                     });
                 }
@@ -425,13 +425,13 @@ module.exports = {
 
     combo: async (req, res, next) => {
         try {
-            const today = moment().tz(TIMEZONE);
-            const remainSeconds = moment(today).endOf('day').diff(today, 'seconds');
+            const now = moment().tz(TIMEZONE);
+            const remainSeconds = moment(now).endOf('day').diff(now, 'seconds');
             let playerId = req.user.id;
 
             let combo = await prisma.cardCombo.findFirst({
                 where: {
-                    date: today.format('YYYY-MM-DD')
+                    date: now.format('YYYY-MM-DD')
                 }
             });
             let cards = await prisma.card.findMany();
@@ -442,7 +442,7 @@ module.exports = {
             let comboSubmission = await prisma.comboSubmission.findFirst({
                 where: {
                     player_id: playerId,
-                    date: today.format('YYYY-MM-DD')
+                    date: now.format('YYYY-MM-DD')
                 }
             });
             if (comboSubmission) {
@@ -482,8 +482,8 @@ module.exports = {
 
     submitCombo: async (req, res, next) => {
         try {
-            const today = moment().tz(TIMEZONE);
-            const remainSeconds = moment(today).endOf('day').diff(today, 'seconds');
+            const now = moment().tz(TIMEZONE);
+            const remainSeconds = moment(now).endOf('day').diff(now, 'seconds');
             const playerId = req.user.id;
             const { combo } = req.body;
 
@@ -497,7 +497,7 @@ module.exports = {
             }
 
             const comboData = await prisma.cardCombo.findFirst({
-                where: { date: today.format('YYYY-MM-DD') }
+                where: { date: now.format('YYYY-MM-DD') }
             });
             if (!comboData) {
                 return res.status(404).json({
@@ -509,7 +509,7 @@ module.exports = {
             }
 
             const existingSubmission = await prisma.comboSubmission.findFirst({
-                where: { player_id: playerId, date: today.format('YYYY-MM-DD') }
+                where: { player_id: playerId, date: now.format('YYYY-MM-DD') }
             });
             if (existingSubmission) {
                 return res.status(400).json({
@@ -533,10 +533,10 @@ module.exports = {
             const newSubmission = await prisma.comboSubmission.create({
                 data: {
                     player_id: playerId,
-                    date: today.format('YYYY-MM-DD'),
+                    date: now.format('YYYY-MM-DD'),
                     combination: JSON.stringify(combo),
                     correct_combo: correctCombo,
-                    created_at_unix: today.unix(),
+                    created_at_unix: now.unix(),
                 }
             });
 
@@ -550,7 +550,7 @@ module.exports = {
                     data: {
                         coins_balance: playerEarning.coins_balance + rewardCoins,
                         coins_total: playerEarning.coins_total + rewardCoins,
-                        updated_at_unix: today.unix(),
+                        updated_at_unix: now.unix(),
                     }
                 });
 
@@ -568,7 +568,7 @@ module.exports = {
                             note: "Combo reward",
                             combo_submission_id: newSubmission.id
                         }),
-                        created_at_unix: today.unix(),
+                        created_at_unix: now.unix(),
                     }
                 });
             }

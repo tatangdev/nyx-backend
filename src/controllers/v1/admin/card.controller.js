@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const XLSX = require('xlsx');
+
 const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
@@ -72,7 +73,7 @@ const validateLevels = (levels) => {
 module.exports = {
     create: async (req, res, next) => {
         try {
-            const today = moment().tz(TIMEZONE);
+            const now = moment().tz(TIMEZONE);
             let { name, description, image, is_published, category_id, levels, condition, available_duration } = req.body;
             if (!name || !image || !category_id || !levels.length) {
                 return res.status(400).json({
@@ -163,10 +164,9 @@ module.exports = {
             };
             let publishedAtUnix = null;
             if (isPublished) {
-                publishedAtUnix = today.unix();
+                publishedAtUnix = now.unix();
             }
 
-            let now = Math.floor(Date.now() / 1000);
             let card = await prisma.card.create({
                 data: {
                     name,
@@ -175,8 +175,8 @@ module.exports = {
                     category_id,
                     levels: JSON.stringify(levels),
                     condition: condition ? JSON.stringify(condition) : null,
-                    created_at_unix: now,
-                    updated_at_unix: now,
+                    created_at_unix: now.unix(),
+                    updated_at_unix: now.unix(),
                     is_published: isPublished,
                     published_at_unix: publishedAtUnix,
                     available_duration
@@ -258,6 +258,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            const now = moment().tz(TIMEZONE);
             let { name, description, image, category_id, levels, is_published, condition } = req.body;
 
             let card = await prisma.card.findUnique({
@@ -290,7 +291,10 @@ module.exports = {
                 }
                 data.category_id = category_id;
             }
-            if (is_published !== undefined) data.is_published = is_published;
+            if (is_published !== undefined) (
+                data.published_at_unix = is_published ? now.unix() : null,
+                data.is_published = is_published
+            );
 
             if (levels && levels.length) {
                 let validation = validateLevels(levels);
@@ -355,12 +359,11 @@ module.exports = {
                 data.condition = JSON.stringify(condition);
             }
 
-            let now = Math.floor(Date.now() / 1000);
             let updatedCard = await prisma.card.update({
                 where: { id: parseInt(req.params.id) },
                 data: {
                     ...data,
-                    updated_at_unix: now
+                    updated_at_unix: now.unix(),
                 },
             });
 

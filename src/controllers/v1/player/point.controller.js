@@ -2,6 +2,9 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const yaml = require('js-yaml');
 
+const moment = require('moment-timezone');
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
+
 module.exports = {
     sync: async (req, res, next) => {
         try {
@@ -10,11 +13,11 @@ module.exports = {
             // Fetch player's current earnings
             const playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
 
-            let currentTimeInSeconds = Math.floor(Date.now() / 1000);
+            const now = moment().tz(TIMEZONE);
 
             // Calculate passive earnings
             const MAX_PASSIVE_EARNINGS_DURATION = 180 * 60; // 180 minutes in seconds
-            const elapsedTime = currentTimeInSeconds - playerEarning.updated_at_unix;
+            const elapsedTime = now.unix() - playerEarning.updated_at_unix;
             const passiveEarningsDuration = Math.min(elapsedTime, MAX_PASSIVE_EARNINGS_DURATION);
             const passiveEarningsPerSecond = playerEarning.passive_per_hour / 3600;
             const earnedPassiveCoins = Math.floor(passiveEarningsDuration * passiveEarningsPerSecond);
@@ -38,7 +41,7 @@ module.exports = {
                         tap_available: availableTapAmount,
                         coins_total: totalCoins,
                         coins_balance: balanceCoins,
-                        updated_at_unix: currentTimeInSeconds,
+                        updated_at_unix: now.unix(),
                     }
                 });
                 await prisma.pointHistory.create({
@@ -54,7 +57,7 @@ module.exports = {
                             new_total: totalCoins,
                             note: "Passive earnings"
                         }),
-                        created_at_unix: currentTimeInSeconds,
+                        created_at_unix: now.unix(),
                     }
                 });
             }
@@ -112,7 +115,7 @@ module.exports = {
                 level: levelData,
                 total_coins: totalCoins,
                 balance: balanceCoins,
-                last_sync: currentTimeInSeconds,
+                last_sync: now.unix(),
             };
 
             return res.status(200).json({
@@ -134,7 +137,8 @@ module.exports = {
             // Fetch player's current earnings
             const playerEarning = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
 
-            let currentTimeInSeconds = Math.floor(Date.now() / 1000);
+            const now = moment().tz(TIMEZONE);
+            let currentTimeInSeconds = now.unix();
 
             // Validate tap data and timestamp
             if (tapCount > 0) {

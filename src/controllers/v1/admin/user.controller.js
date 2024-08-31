@@ -2,6 +2,9 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const bcrypt = require('bcrypt');
 
+const moment = require('moment-timezone');
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
+
 module.exports = {
     create: async (req, res, next) => {
         try {
@@ -27,14 +30,14 @@ module.exports = {
                 });
             }
 
+            const now = moment().tz(TIMEZONE);
             let hashedPassword = bcrypt.hashSync(password, 10);
-            let now = Math.floor(Date.now() / 1000);
             let newUser = await prisma.user.create({
                 data: {
                     username,
                     password: hashedPassword,
-                    created_at_unix: now,
-                    updated_at_unix: now,
+                    created_at_unix: now.unix(),
+                    updated_at_unix: now.unix(),
                 }
             });
 
@@ -148,12 +151,12 @@ module.exports = {
                 data.is_superadmin = is_superadmin;
             }
 
-            let now = Math.floor(Date.now() / 1000);
+            const now = moment().tz(TIMEZONE);
             let updatedUser = await prisma.user.update({
                 where: { id: userId },
                 data: {
                     ...data,
-                    updated_at_unix: now
+                    updated_at_unix: now.unix()
                 }
             });
 

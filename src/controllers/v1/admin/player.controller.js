@@ -114,7 +114,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            const today = moment().tz(TIMEZONE);
+            const now = moment().tz(TIMEZONE);
             let playerId = parseInt(req.params.id);
             let { points_balance: pointsBalance } = req.body;
 
@@ -158,7 +158,7 @@ module.exports = {
                         data: {
                             coins_balance: newPointsBalance,
                             coins_total: response.points_total + pointNominalUpdate,
-                            updated_at_unix: today.unix()
+                            updated_at_unix: now.unix()
                         }
                     });
 
@@ -174,7 +174,7 @@ module.exports = {
                                 new_balance: newPointsBalance,
                                 new_total: response.points_total + pointNominalUpdate,
                             }),
-                            created_at_unix: today.unix(),
+                            created_at_unix: now.unix(),
                         }
                     });
                 });

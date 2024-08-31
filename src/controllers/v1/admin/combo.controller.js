@@ -83,14 +83,14 @@ module.exports = {
                 });
             }
 
-            let today = moment().tz(TIMEZONE);
+            let now = moment().tz(TIMEZONE);
             const combo = await prisma.cardCombo.create({
                 data: {
                     date: date,
                     combination: JSON.stringify(combination),
                     reward_coins: reward_coins,
-                    created_at_unix: today.unix(),
-                    updated_at_unix: today.unix()
+                    created_at_unix: now.unix(),
+                    updated_at_unix: now.unix()
                 }
             });
 
@@ -249,7 +249,7 @@ module.exports = {
                 });
             }
 
-            let today = moment().tz(TIMEZONE);
+            let now = moment().tz(TIMEZONE);
             const combo = await prisma.cardCombo.update({
                 where: {
                     id: id
@@ -258,7 +258,7 @@ module.exports = {
                     date: date,
                     combination: JSON.stringify(combination),
                     reward_coins: reward_coins,
-                    updated_at_unix: today.unix()
+                    updated_at_unix: now.unix()
                 }
             });
 

@@ -4,6 +4,9 @@ const { uid } = require('uid');
 const jwt = require('jsonwebtoken');
 const yaml = require('js-yaml');
 
+const moment = require('moment-timezone');
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
+
 module.exports = {
     login: async (req, res, next) => {
         const { telegram_id, username, first_name, last_name, referral_code } = req.body;
@@ -15,7 +18,7 @@ module.exports = {
                 let player = await prisma.player.findFirst({ where: { telegram_id } });
                 let referee = null;
                 let isNewUser = !player;
-                let currentTime = Math.floor(Date.now() / 1000);
+                const now = moment().tz(TIMEZONE);
 
                 if (isNewUser) {
                     if (referral_code) {
@@ -37,8 +40,8 @@ module.exports = {
                             last_name,
                             referral_code: uid(),
                             referee_id: referee ? referee.id : null,
-                            created_at_unix: currentTime,
-                            updated_at_unix: currentTime,
+                            created_at_unix: now.unix(),
+                            updated_at_unix: now.unix(),
                         }
                     });
 
@@ -51,7 +54,7 @@ module.exports = {
                                 new_level: 1,
                                 note: 'Initial level',
                             }),
-                            created_at_unix: currentTime,
+                            created_at_unix: now.unix(),
                         }
                     });
                 }
@@ -73,8 +76,8 @@ module.exports = {
                             player_id: player.id,
                             ...defaultValues,
                             coins_balance: defaultValues.coins_total,
-                            created_at_unix: currentTime,
-                            updated_at_unix: currentTime,
+                            created_at_unix: now.unix(),
+                            updated_at_unix: now.unix(),
                         }
                     });
 
@@ -90,7 +93,7 @@ module.exports = {
                                 new_balance: defaultValues.coins_total,
                                 new_total: defaultValues.coins_total,
                             }),
-                            created_at_unix: currentTime,
+                            created_at_unix: now.unix(),
                         }
                     });
 
@@ -104,7 +107,7 @@ module.exports = {
                                 previous_value: 0,
                                 new_value: defaultValues.coins_total,
                             }),
-                            created_at_unix: currentTime,
+                            created_at_unix: now.unix(),
                         }
                     });
                 }
@@ -139,7 +142,7 @@ module.exports = {
                                     new_total: playerEarning.coins_total + referralCoins,
                                     referee_id: referee.id
                                 }),
-                                created_at_unix: currentTime,
+                                created_at_unix: now.unix(),
                             },
                             {
                                 player_id: referee.id,
@@ -153,7 +156,7 @@ module.exports = {
                                     new_total: refereeEarning.coins_total + referralCoins,
                                     referrer_id: player.id
                                 }),
-                                created_at_unix: currentTime,
+                                created_at_unix: now.unix(),
                             }
                         ]
                     });

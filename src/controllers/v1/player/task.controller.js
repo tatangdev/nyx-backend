@@ -10,7 +10,7 @@ module.exports = {
         try {
             const playerId = req.user.id;
             const tasksResult = await prisma.task.findMany({ where: { is_published: true } });
-            const today = moment().tz(TIMEZONE);
+            const now = moment().tz(TIMEZONE);
             let taskSubmissions = await prisma.taskSubmission.findMany({
                 where: { player_id: playerId }
             });
@@ -18,7 +18,7 @@ module.exports = {
             const tasks = await Promise.all(tasksResult.map(async (task) => {
                 switch (task.type) {
                     case 'daily_check_in':
-                        const remainSeconds = moment(today).endOf('day').diff(today, 'seconds');
+                        const remainSeconds = moment(now).endOf('day').diff(now, 'seconds');
                         const dailyStreakRewardValue = yaml.load(task.config);
 
 
@@ -29,7 +29,7 @@ module.exports = {
 
                         if (attendance) {
                             const lastAttendDate = moment.unix(attendance.last_attendance).tz(TIMEZONE);
-                            const daysDiff = moment(today).startOf('day').diff(moment(lastAttendDate).startOf('day'), 'days');
+                            const daysDiff = moment(now).startOf('day').diff(moment(lastAttendDate).startOf('day'), 'days');
 
                             if (daysDiff < 1) {
                                 isCompleted = true;
