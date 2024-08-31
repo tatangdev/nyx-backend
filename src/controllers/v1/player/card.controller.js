@@ -34,7 +34,8 @@ module.exports = {
                     cl.updated_at_unix AS last_upgrade_at,
                     c.is_published,
                     c.available_duration,
-                    c.published_at_unix
+                    c.published_at_unix,
+                    c.updated_at_unix
                 FROM
                     cards c
                 LEFT JOIN 
