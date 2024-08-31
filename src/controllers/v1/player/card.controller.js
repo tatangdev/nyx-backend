@@ -44,7 +44,7 @@ module.exports = {
                 WHERE ${filter}
                     AND c.is_published
                     AND cat.is_active
-                ORDER BY published_at_unix ASC, c.id DESC;
+                ORDER BY cl.updated_at_unix DESC, c.published_at_unix, c.id ASC;
             `);
 
             const now = moment().tz(TIMEZONE);
