@@ -21,7 +21,7 @@ module.exports = {
                 `
             ]);
 
-            let parsedLevels = JSON.parse(levels[0]?.value || '[]');
+            let parsedLevels = yaml.load(levels[0]?.value || '[]');
             let levelCnt = parsedLevels.length;
 
             let playerLevelCnt = parsedLevels.map(level => ({
