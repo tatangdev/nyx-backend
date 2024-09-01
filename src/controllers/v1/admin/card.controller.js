@@ -407,6 +407,7 @@ module.exports = {
                             card_name: card.name,
                             card_level: condition.card_level
                         };
+                        data.condition = yaml.dump(condition);
 
                         break;
                     case 'invite_friends':
@@ -441,6 +442,7 @@ module.exports = {
                             type: condition.type,
                             invite_friend_count: condition.invite_friend_count
                         };
+                        data.condition = yaml.dump(condition);
 
                         break;
                     default:
