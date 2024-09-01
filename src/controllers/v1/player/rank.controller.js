@@ -54,7 +54,7 @@ module.exports = {
                     level_name: currentLevel.name,
                     level_image: currentLevel.image_url,
                     level_minimum_score: currentLevel.minimum_score,
-                    next_level_percentage: nextLevel && topUsers.length ? Math.floor(((myRank.spending_amount - currentLevel.minimum_score) / (nextLevel.minimum_score - currentLevel.minimum_score)) * 100) : null,
+                    next_level_percentage: nextLevel && topUsers.length && myRank ? Math.floor(((myRank.spending_amount - currentLevel.minimum_score) / (nextLevel.minimum_score - currentLevel.minimum_score)) * 100) : null,
                     my_rank: myRank ? myRank.rank : null,
                     top_users: topUsers
                 }
