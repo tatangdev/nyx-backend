@@ -27,18 +27,24 @@ const validateLevels = (levels) => {
         }
 
         // validate level values
-        if (level.level < 0 || level.price_multiplier < 0 || level.profit_per_hour_multiplier < 0 || level.respawn_time < 0) {
+        if (level.level < 0) {
             return {
                 isValid: false,
-                message: "level, price_multiplier, profit_per_hour_multiplier and respawn_time must be greater or equal to 0",
+                message: "level must be greater or equal to 0",
             };
         }
-        // if (level.upgrade_price <= 0 || level.profit_per_hour <= 0 || level.profit_per_hour_increase <= 0) {
+        // if (level.level < 0 || level.price_multiplier < 0 || level.profit_per_hour_multiplier < 0 || level.respawn_time < 0) {
         //     return {
         //         isValid: false,
-        //         message: "upgrade_price, profit_per_hour and profit_per_hour_increase must be greater than 0",
+        //         message: "level, price_multiplier, profit_per_hour_multiplier and respawn_time must be greater or equal to 0",
         //     };
         // }
+        if (level.upgrade_price <= 0 || level.profit_per_hour <= 0 || level.profit_per_hour_increase <= 0) {
+            return {
+                isValid: false,
+                message: "upgrade_price, profit_per_hour and profit_per_hour_increase must be greater than 0",
+            };
+        }
 
         // validate level order
         if (level.level !== i) {
