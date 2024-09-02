@@ -28,7 +28,7 @@ model User {
 model Player {
   id              Int     @id @default(autoincrement())
   telegram_id     String  @unique
-  username        String
+  username        String?
   first_name      String?
   last_name       String?
   referee_id      Int?
