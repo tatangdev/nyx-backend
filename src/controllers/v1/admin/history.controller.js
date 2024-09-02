@@ -7,25 +7,25 @@ const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 module.exports = {
     points: async (req, res, next) => {
         try {
-            const perPage = parseInt(req.query.per_page, 10) || 50;
-            const page = parseInt(req.query.page, 10) || 1;
-            const offset = (page - 1) * perPage;
-
-            let condition = 'ph.amount != 0';
-
+            let condition = '';
             if (req.query.player_id) {
                 condition += ` AND ph.player_id = ${Number(req.query.player_id)}`;
             }
             if (req.query.type) {
                 condition += ` AND ph.type = '${req.query.type}'`;
             }
-            if (req.query.start_date) {
-                const startDate = moment.tz(req.query.start_date, TIMEZONE).startOf('day').unix();
-                condition += ` AND ph.created_at_unix >= ${startDate}`;
-            }
-            if (req.query.end_date) {
-                const endDate = moment.tz(req.query.end_date, TIMEZONE).endOf('day').unix();
-                condition += ` AND ph.created_at_unix <= ${endDate}`;
+
+            let startDate = moment().tz(TIMEZONE).startOf('day');
+            let endDate = moment().tz(TIMEZONE).endOf('day');
+            if (req.query.start_date) startDate = moment.tz(req.query.start_date, TIMEZONE).startOf('day');
+            if (req.query.end_date) endDate = moment.tz(req.query.end_date, TIMEZONE).endOf('day');
+            if (startDate.isAfter(endDate)) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'Start date must be before end date',
+                    error: null,
+                    data: null
+                });
             }
 
             const logs = await prisma.$queryRawUnsafe(`
@@ -42,11 +42,13 @@ module.exports = {
                 INNER JOIN 
                     players p 
                     ON p.id = ph.player_id
-                WHERE 
+                WHERE
+                    ph.amount != 0
+                    AND ph.created_at_unix >= ${startDate.unix()}
+                    AND ph.created_at_unix <= ${endDate.unix()}
                     ${condition}
                 ORDER BY 
-                    ph.created_at_unix DESC
-                LIMIT ${perPage} OFFSET ${offset};`);
+                    ph.created_at_unix DESC`);
 
             const countResult = await prisma.$queryRawUnsafe(`
                 SELECT 
@@ -56,7 +58,10 @@ module.exports = {
                 INNER JOIN 
                     players p 
                     ON p.id = ph.player_id
-                WHERE 
+                WHERE
+                    ph.amount != 0
+                    AND ph.created_at_unix >= ${startDate.unix()}
+                    AND ph.created_at_unix <= ${endDate.unix()}
                     ${condition};`);
 
             const total = countResult[0].count;
@@ -66,6 +71,8 @@ module.exports = {
                 message: 'OK',
                 error: null,
                 data: {
+                    start_date: startDate.format('YYYY-MM-DD'),
+                    end_date: endDate.format('YYYY-MM-DD'),
                     total: Number(total),
                     items: logs
                 }
@@ -77,25 +84,25 @@ module.exports = {
 
     profit: async (req, res, next) => {
         try {
-            const perPage = parseInt(req.query.per_page, 10) || 50;
-            const page = parseInt(req.query.page, 10) || 1;
-            const offset = (page - 1) * perPage;
-
-            let condition = 'peh.amount != 0';
-
+            let condition = '';
             if (req.query.player_id) {
                 condition += ` AND peh.player_id = ${Number(req.query.player_id)}`;
             }
             if (req.query.type) {
                 condition += ` AND peh.type = '${req.query.type}'`;
             }
-            if (req.query.start_date) {
-                const startDate = moment.tz(req.query.start_date, TIMEZONE).startOf('day').unix();
-                condition += ` AND peh.created_at_unix >= ${startDate}`;
-            }
-            if (req.query.end_date) {
-                const endDate = moment.tz(req.query.end_date, TIMEZONE).endOf('day').unix();
-                condition += ` AND peh.created_at_unix <= ${endDate}`;
+
+            let startDate = moment().tz(TIMEZONE).startOf('day');
+            let endDate = moment().tz(TIMEZONE).endOf('day');
+            if (req.query.start_date) startDate = moment.tz(req.query.start_date, TIMEZONE).startOf('day');
+            if (req.query.end_date) endDate = moment.tz(req.query.end_date, TIMEZONE).endOf('day');
+            if (startDate.isAfter(endDate)) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'Start date must be before end date',
+                    error: null,
+                    data: null
+                });
             }
 
             const logs = await prisma.$queryRawUnsafe(`
@@ -112,11 +119,13 @@ module.exports = {
                 INNER JOIN 
                     players p 
                     ON p.id = peh.player_id
-                WHERE 
+                WHERE
+                    peh.amount != 0
+                    AND peh.created_at_unix >= ${startDate.unix()}
+                    AND peh.created_at_unix <= ${endDate.unix()}
                     ${condition}
                 ORDER BY 
-                    peh.created_at_unix DESC
-                LIMIT ${perPage} OFFSET ${offset};`);
+                    peh.created_at_unix DESC`);
 
             const countResult = await prisma.$queryRawUnsafe(`
                 SELECT 
@@ -126,7 +135,10 @@ module.exports = {
                 INNER JOIN 
                     players p 
                     ON p.id = peh.player_id
-                WHERE 
+                WHERE
+                    peh.amount != 0
+                    AND peh.created_at_unix >= ${startDate.unix()}
+                    AND peh.created_at_unix <= ${endDate.unix()}
                     ${condition};`);
 
             const total = countResult[0].count;
@@ -136,6 +148,8 @@ module.exports = {
                 message: 'OK',
                 error: null,
                 data: {
+                    start_date: startDate.format('YYYY-MM-DD'),
+                    end_date: endDate.format('YYYY-MM-DD'),
                     total: Number(total),
                     items: logs
                 }
@@ -147,22 +161,22 @@ module.exports = {
 
     level: async (req, res, next) => {
         try {
-            const perPage = parseInt(req.query.per_page, 10) || 50;
-            const page = parseInt(req.query.page, 10) || 1;
-            const offset = (page - 1) * perPage;
-
-            let condition = 'lh.level != 0';
-
+            let condition = '';
             if (req.query.player_id) {
                 condition += ` AND lh.player_id = ${Number(req.query.player_id)}`;
             }
-            if (req.query.start_date) {
-                const startDate = moment.tz(req.query.start_date, TIMEZONE).startOf('day').unix();
-                condition += ` AND lh.created_at_unix >= ${startDate}`;
-            }
-            if (req.query.end_date) {
-                const endDate = moment.tz(req.query.end_date, TIMEZONE).endOf('day').unix();
-                condition += ` AND lh.created_at_unix <= ${endDate}`;
+
+            let startDate = moment().tz(TIMEZONE).startOf('day');
+            let endDate = moment().tz(TIMEZONE).endOf('day');
+            if (req.query.start_date) startDate = moment.tz(req.query.start_date, TIMEZONE).startOf('day');
+            if (req.query.end_date) endDate = moment.tz(req.query.end_date, TIMEZONE).endOf('day');
+            if (startDate.isAfter(endDate)) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'Start date must be before end date',
+                    error: null,
+                    data: null
+                });
             }
 
             const logs = await prisma.$queryRawUnsafe(`
@@ -176,11 +190,14 @@ module.exports = {
                 FROM 
                     level_histories lh
                 INNER JOIN players p ON p.id = lh.player_id
-                WHERE 
+                WHERE
+                    lh.level != 0
+                    AND lh.created_at_unix >= ${startDate.unix()}
+                    AND lh.created_at_unix <= ${endDate.unix()}
                     ${condition}
                 ORDER BY 
-                    lh.created_at_unix DESC
-                LIMIT ${perPage} OFFSET ${offset};`);
+                    lh.created_at_unix DESC`);
+            // LIMIT ${perPage} OFFSET ${offset};`);
 
             const countResult = await prisma.$queryRawUnsafe(`
                 SELECT 
@@ -189,6 +206,9 @@ module.exports = {
                     level_histories lh
                 INNER JOIN players p ON p.id = lh.player_id
                 WHERE 
+                    lh.level != 0
+                    AND lh.created_at_unix >= ${startDate.unix()}
+                    AND lh.created_at_unix <= ${endDate.unix()}
                     ${condition};`);
 
             const total = countResult[0].count;
@@ -198,6 +218,8 @@ module.exports = {
                 message: 'OK',
                 error: null,
                 data: {
+                    start_date: startDate.format('YYYY-MM-DD'),
+                    end_date: endDate.format('YYYY-MM-DD'),
                     total: Number(total),
                     items: logs
                 }
