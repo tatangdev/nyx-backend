@@ -158,6 +158,12 @@ module.exports = {
             let player = req.user;
             let cardId = parseInt(req.body.card_id);
 
+            let invitedFriends = await prisma.player.findMany({
+                where: {
+                    referee_id: req.user.id
+                }
+            });
+
             let cards = await prisma.$queryRawUnsafe(`
                 SELECT 
                     c.id, 
