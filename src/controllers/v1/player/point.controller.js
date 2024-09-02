@@ -37,7 +37,7 @@ module.exports = {
                 await prisma.playerEarning.update({
                     where: { id: playerEarning.id },
                     data: {
-                        tap_available: availableTapAmount,
+                        tap_earning_energy_available: availableTapAmount,
                         coins_total: totalCoins,
                         coins_balance: balanceCoins,
                         updated_at_unix: now.unix(),
@@ -202,7 +202,7 @@ module.exports = {
                 await prisma.playerEarning.update({
                     where: { id: playerEarning.id },
                     data: {
-                        tap_available: availableTapAmount,
+                        tap_earning_energy_available: availableTapAmount,
                         coins_total: totalCoins,
                         coins_balance: balanceCoins,
                         created_at_unix: currentTimeInSeconds,
