@@ -313,6 +313,12 @@ module.exports = {
                 let newProfitPerHour = point.passive_per_hour + card.upgrade.profit_per_hour_delta;
                 let newPlayerSpend = point.coins_total - newBalance;
 
+                let updateEarningData = {
+                    coins_balance: newBalance,
+                    passive_per_hour: newProfitPerHour,
+                    updated_at_unix: now.unix()
+                };
+
                 // determine current user level
                 let currentLevel = playerLevels.reduce((acc, level) => {
                     return level.minimum_score <= newPlayerSpend ? level : acc;
@@ -325,6 +331,11 @@ module.exports = {
                             updated_at_unix: now.unix()
                         }
                     });
+
+                    updateEarningData.tap_earning_value = currentLevel.tap_earning_value;
+                    updateEarningData.tap_earning_energy = currentLevel.tap_earning_energy;
+                    updateEarningData.tap_earning_energy_recovery = currentLevel.tap_earning_energy_recovery;
+                    updateEarningData.tap_earning_energy_available = point.tap_earning_energy_available + (currentLevel.tap_earning_energy - point.tap_earning_energy);
 
                     await prisma.levelHistory.create({
                         data: {
@@ -379,11 +390,7 @@ module.exports = {
 
                 await prisma.playerEarning.update({
                     where: { id: point.id },
-                    data: {
-                        coins_balance: newBalance,
-                        passive_per_hour: newProfitPerHour,
-                        updated_at_unix: now.unix()
-                    }
+                    data: updateEarningData
                 });
 
                 let pointHistory = await prisma.pointHistory.create({
