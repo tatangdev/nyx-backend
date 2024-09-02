@@ -33,12 +33,12 @@ const validateLevels = (levels) => {
                 message: "level, price_multiplier, profit_per_hour_multiplier and respawn_time must be greater or equal to 0",
             };
         }
-        if (level.upgrade_price <= 0 || level.profit_per_hour <= 0 || level.profit_per_hour_increase <= 0) {
-            return {
-                isValid: false,
-                message: "upgrade_price, profit_per_hour and profit_per_hour_increase must be greater than 0",
-            };
-        }
+        // if (level.upgrade_price <= 0 || level.profit_per_hour <= 0 || level.profit_per_hour_increase <= 0) {
+        //     return {
+        //         isValid: false,
+        //         message: "upgrade_price, profit_per_hour and profit_per_hour_increase must be greater than 0",
+        //     };
+        // }
 
         // validate level order
         if (level.level !== i) {
@@ -54,18 +54,18 @@ const validateLevels = (levels) => {
                     message: "level must be greater than previous level",
                 };
             }
-            if (i != 1 && (level.upgrade_price <= levels[i - 1].upgrade_price)) {
-                return {
-                    isValid: false,
-                    message: "upgrade_price must be greater than previous upgrade_price",
-                };
-            }
-            if (level.profit_per_hour <= levels[i - 1].profit_per_hour) {
-                return {
-                    isValid: false,
-                    message: "profit_per_hour must be greater than previous profit_per_hour",
-                };
-            }
+            // if (i != 1 && (level.upgrade_price <= levels[i - 1].upgrade_price)) {
+            //     return {
+            //         isValid: false,
+            //         message: "upgrade_price must be greater than previous upgrade_price",
+            //     };
+            // }
+            // if (level.profit_per_hour <= levels[i - 1].profit_per_hour) {
+            //     return {
+            //         isValid: false,
+            //         message: "profit_per_hour must be greater than previous profit_per_hour",
+            //     };
+            // }
         }
     }
     return { isValid: true };
