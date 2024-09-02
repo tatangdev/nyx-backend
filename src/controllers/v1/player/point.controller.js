@@ -15,24 +15,24 @@ module.exports = {
 
             const now = moment().tz(TIMEZONE);
 
-            // Calculate passive earnings
+            /* handle passive earnings */
             const MAX_PASSIVE_EARNINGS_DURATION = 180 * 60; // 180 minutes in seconds
             const elapsedTime = now.unix() - playerEarning.updated_at_unix;
             const passiveEarningsDuration = Math.min(elapsedTime, MAX_PASSIVE_EARNINGS_DURATION);
             const passiveEarningsPerSecond = playerEarning.passive_per_hour / 3600;
             const earnedPassiveCoins = Math.floor(passiveEarningsDuration * passiveEarningsPerSecond);
 
-            // Update total and balance coins
+            // update total and balance coins
             let totalCoins = playerEarning.coins_total + earnedPassiveCoins;
             let balanceCoins = playerEarning.coins_balance + earnedPassiveCoins;
 
-            // Calculate available tap earnings
+            /* handle tap earnings */
             let availableTapAmount = Math.min(
                 playerEarning.tap_earning_energy_available + elapsedTime * playerEarning.tap_earning_energy_recovery,
                 playerEarning.tap_earning_energy
             );
 
-            // Update player earnings in the database
+            /* update player earning */
             if (earnedPassiveCoins != 0) {
                 await prisma.playerEarning.update({
                     where: { id: playerEarning.id },
@@ -153,23 +153,41 @@ module.exports = {
                 currentTimeInSeconds = timestamp;
             }
 
-            // Calculate passive earnings
+            /* handle passive earnings */
             const MAX_PASSIVE_EARNINGS_DURATION = 180 * 60; // 180 minutes in seconds
             const elapsedTime = currentTimeInSeconds - playerEarning.updated_at_unix;
             const passiveEarningsDuration = Math.min(elapsedTime, MAX_PASSIVE_EARNINGS_DURATION);
             const passiveEarningsPerSecond = playerEarning.passive_per_hour / 3600;
             const earnedPassiveCoins = Math.floor(passiveEarningsDuration * passiveEarningsPerSecond);
 
-            // Update total and balance coins
+            // update total and balance coins
             let totalCoins = playerEarning.coins_total + earnedPassiveCoins;
             let balanceCoins = playerEarning.coins_balance + earnedPassiveCoins;
 
-            // Calculate available tap earnings
+            if (earnedPassiveCoins != 0) {
+                await prisma.pointHistory.create({
+                    data: {
+                        player_id: playerId,
+                        amount: earnedPassiveCoins,
+                        type: "PASSIVE_EARNINGS",
+                        data: yaml.dump({
+                            nominal: earnedPassiveCoins,
+                            previous_balance: playerEarning.coins_balance,
+                            previous_total: playerEarning.coins_total,
+                            new_balance: playerEarning.coins_balance + earnedPassiveCoins,
+                            new_total: playerEarning.coins_total + earnedPassiveCoins,
+                            note: "Tap earnings"
+                        }),
+                        created_at_unix: currentTimeInSeconds,
+                    }
+                });
+            }
+
+            /* handle tap earnings */
             let availableTapAmount = Math.min(
                 playerEarning.tap_earning_energy_available + elapsedTime * playerEarning.tap_earning_energy_recovery,
                 playerEarning.tap_earning_energy
             );
-
             if (tapCount > 0) {
                 // Update coins based on tap earnings
                 const tapEarnings = Math.min(tapCount * playerEarning.tap_earning_value, availableTapAmount);
@@ -197,32 +215,15 @@ module.exports = {
                 });
             }
 
-            // Update player earnings in the database
-            if (earnedPassiveCoins != 0) {
+            /* update player earning */
+            if (earnedPassiveCoins != 0 || tapCount > 0) {
                 await prisma.playerEarning.update({
                     where: { id: playerEarning.id },
                     data: {
                         tap_earning_energy_available: availableTapAmount,
                         coins_total: totalCoins,
                         coins_balance: balanceCoins,
-                        created_at_unix: currentTimeInSeconds,
                         updated_at_unix: currentTimeInSeconds,
-                    }
-                });
-                await prisma.pointHistory.create({
-                    data: {
-                        player_id: playerId,
-                        amount: earnedPassiveCoins,
-                        type: "PASSIVE_EARNINGS",
-                        data: yaml.dump({
-                            nominal: earnedPassiveCoins,
-                            previous_balance: playerEarning.coins_balance,
-                            previous_total: playerEarning.coins_total,
-                            new_balance: playerEarning.coins_balance + earnedPassiveCoins,
-                            new_total: playerEarning.coins_total + earnedPassiveCoins,
-                            note: "Tap earnings"
-                        }),
-                        created_at_unix: currentTimeInSeconds,
                     }
                 });
             }
