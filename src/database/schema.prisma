@@ -29,8 +29,8 @@ model Player {
   id              Int     @id @default(autoincrement())
   telegram_id     String  @unique
   username        String
-  first_name      String
-  last_name       String
+  first_name      String?
+  last_name       String?
   referee_id      Int?
   referral_code   String? @unique
   level           Int     @default(1)
@@ -148,9 +148,6 @@ model PlayerEarning {
   id               Int  @id @default(autoincrement())
   player_id        Int  @unique
   passive_per_hour Int
-  tap_max          Int // deprecated
-  tap_points       Int // deprecated
-  tap_available    Int // deprecated
   coins_total      Int
   coins_balance    Int
   created_at_unix  Int?

@@ -20,6 +20,9 @@ module.exports = {
                 let isNewUser = !player;
                 const now = moment().tz(TIMEZONE);
 
+                const levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
+                const levelData = yaml.load(levelConfig.value);
+
                 if (isNewUser) {
                     if (referral_code) {
                         referee = await prisma.player.findFirst({ where: { referral_code } });
@@ -60,11 +63,13 @@ module.exports = {
                 }
 
                 // Default values
+                let firstLevel = levelData.find(l => l.level === 1);
                 const defaultValues = {
+                    tap_earning_value: firstLevel.tap_earning_value,
+                    tap_earning_energy: firstLevel.tap_earning_energy,
+                    tap_earning_energy_recovery: firstLevel.tap_earning_energy_recovery,
+                    tap_earning_energy_available: firstLevel.tap_earning_energy,
                     passive_per_hour: parseInt(process.env.DEFAULT_PROFIT_PER_HOUR, 10) || 0,
-                    tap_max: parseInt(process.env.DEFAULT_TAP_MAX, 10) || 0,
-                    tap_points: parseInt(process.env.DEFAULT_TAP_POINTS, 10) || 0,
-                    tap_available: parseInt(process.env.DEFAULT_TAP_MAX, 10) || 0,
                     coins_total: parseInt(process.env.DEFAULT_COINS, 10) || 0
                 };
 
@@ -114,8 +119,6 @@ module.exports = {
 
                 // Handle referral bonuses
                 if (isNewUser && referee) {
-                    const levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
-                    const levelData = yaml.load(levelConfig.value);
                     const referralCoins = levelData[0].level_up_reward;
 
                     await prisma.playerEarning.updateMany({
