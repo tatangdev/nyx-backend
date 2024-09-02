@@ -3,6 +3,7 @@ const fs = require('fs');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 let data = require('./cards.json');
+const yaml = require('js-yaml');
 
 const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';

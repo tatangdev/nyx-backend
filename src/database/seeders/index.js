@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const bcrypt = require('bcrypt');
 const data = require('./data.json');
+const yaml = require('js-yaml');
 
 async function generateAdmin() {
     try {
