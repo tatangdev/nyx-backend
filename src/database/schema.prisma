@@ -148,13 +148,18 @@ model PlayerEarning {
   id               Int  @id @default(autoincrement())
   player_id        Int  @unique
   passive_per_hour Int
-  tap_max          Int
-  tap_points       Int
-  tap_available    Int
+  tap_max          Int // deprecated
+  tap_points       Int // deprecated
+  tap_available    Int // deprecated
   coins_total      Int
   coins_balance    Int
   created_at_unix  Int?
   updated_at_unix  Int?
+
+  tap_earning_value            Int? // applied
+  tap_earning_energy           Int? // applied
+  tap_earning_energy_recovery  Int? // applied
+  tap_earning_energy_available Int? // applied
 
   @@map("player_earnings")
 }

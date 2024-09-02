@@ -27,10 +27,9 @@ module.exports = {
             let balanceCoins = playerEarning.coins_balance + earnedPassiveCoins;
 
             // Calculate available tap earnings
-            const TAP_RECOVERY_RATE = 3; // Taps recovered per second
             let availableTapAmount = Math.min(
-                playerEarning.tap_available + elapsedTime * TAP_RECOVERY_RATE,
-                playerEarning.tap_max
+                playerEarning.tap_earning_energy_available + elapsedTime * playerEarning.tap_earning_energy_recovery,
+                playerEarning.tap_earning_energy
             );
 
             // Update player earnings in the database
@@ -107,10 +106,10 @@ module.exports = {
                     last_earned: earnedPassiveCoins,
                 },
                 tap_earnings: {
-                    per_tap: playerEarning.tap_points,
-                    max_taps: playerEarning.tap_max,
+                    per_tap: playerEarning.tap_earning_value,
+                    max_taps: playerEarning.tap_earning_energy,
                     available_taps: availableTapAmount,
-                    recovery_per_second: TAP_RECOVERY_RATE,
+                    recovery_per_second: playerEarning.tap_earning_energy_recovery,
                 },
                 level: levelData,
                 total_coins: totalCoins,
@@ -166,15 +165,14 @@ module.exports = {
             let balanceCoins = playerEarning.coins_balance + earnedPassiveCoins;
 
             // Calculate available tap earnings
-            const TAP_RECOVERY_RATE = 3; // Taps recovered per second
             let availableTapAmount = Math.min(
-                playerEarning.tap_available + elapsedTime * TAP_RECOVERY_RATE,
-                playerEarning.tap_max
+                playerEarning.tap_earning_energy_available + elapsedTime * playerEarning.tap_earning_energy_recovery,
+                playerEarning.tap_earning_energy
             );
 
             if (tapCount > 0) {
                 // Update coins based on tap earnings
-                const tapEarnings = Math.min(tapCount * playerEarning.tap_points, availableTapAmount);
+                const tapEarnings = Math.min(tapCount * playerEarning.tap_earning_value, availableTapAmount);
                 totalCoins += tapEarnings;
                 balanceCoins += tapEarnings;
 
@@ -274,10 +272,10 @@ module.exports = {
                     last_earned: earnedPassiveCoins,
                 },
                 tap_earnings: {
-                    per_tap: playerEarning.tap_points,
-                    max_taps: playerEarning.tap_max,
+                    per_tap: playerEarning.tap_earning_value,
+                    max_taps: playerEarning.tap_earning_energy,
                     available_taps: availableTapAmount,
-                    recovery_per_second: TAP_RECOVERY_RATE,
+                    recovery_per_second: playerEarning.tap_earning_energy_recovery,
                 },
                 level: levelData,
                 total_coins: totalCoins,
