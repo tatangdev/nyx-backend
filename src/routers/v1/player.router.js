@@ -13,8 +13,8 @@ router.post('/auth/login', auth.login);
 router.get('/auth/whoami', validate, isPlayer, auth.whoami);
 
 // media
-router.post('/media/images', validate, isAdmin, image.single('image'), media.imageKitUpload);
-router.get('/media/images', validate, isAdmin, media.imageKitList);
+router.post('/media/images', validate, image.single('image'), media.imageKitUpload);
+router.get('/media/images', validate, media.imageKitList);
 
 // cards
 router.get('/cards/combo', validate, isPlayer, card.combo);
