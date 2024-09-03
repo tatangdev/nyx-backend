@@ -3,7 +3,7 @@ let imagekit = require('../../../src/libs/imagekit');
 
 
 async function main() {
-    let category = 'ecosystem';
+    let category = 'race';
     let files = await imagekit.listFiles({
         path: `chipmunk/${category}`
     });

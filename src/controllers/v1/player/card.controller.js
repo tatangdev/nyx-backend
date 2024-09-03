@@ -58,6 +58,7 @@ module.exports = {
             cards = cards.map(card => {
                 card.upgrade = null;
                 card.profit_per_hour = 0;
+                card.image = card.image ? card.image + '?tr=h-200' : null;
 
                 if (card.levels) {
                     let levels = yaml.load(card.levels);
