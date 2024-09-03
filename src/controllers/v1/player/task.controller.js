@@ -53,7 +53,7 @@ module.exports = {
                         return {
                             id: task.id,
                             name: task.name,
-                            image: task.image,
+                            image: task.image ? task.image + '?tr=h-200' : null,
                             type: task.type,
                             reward_coins: todayReward.reward_coins,
                             requires_admin_approval: task.requires_admin_approval,
@@ -68,7 +68,7 @@ module.exports = {
                         let response = {
                             id: task.id,
                             name: task.name,
-                            image: task.image,
+                            image: task.image ? task.image + '?tr=h-200' : null,
                             type: task.type,
                             reward_coins: task.reward_coins,
                             requires_admin_approval: task.requires_admin_approval,
