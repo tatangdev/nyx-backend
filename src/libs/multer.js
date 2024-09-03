@@ -1,4 +1,4 @@
-fconst multer = require('multer');
+const multer = require('multer');
 const path = require('path');
 
 const filename = (req, file, callback) => {
