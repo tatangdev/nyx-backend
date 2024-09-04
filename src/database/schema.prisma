@@ -33,11 +33,31 @@ model Player {
   last_name       String?
   referee_id      Int?
   referral_code   String? @unique
-  level           Int     @default(1)
+  level           Int     @default(1) // deprecated
   created_at_unix Int?
   updated_at_unix Int?
 
   @@map("players")
+}
+
+model PlayerEarning {
+  id               Int  @id @default(autoincrement())
+  player_id        Int  @unique
+  player_level     Int? @default(1)
+  passive_per_hour Int
+  coins_total      Int
+  coins_balance    Int
+  coins_spent      Int?
+
+  tap_earning_value            Int?
+  tap_earning_energy           Int?
+  tap_earning_energy_recovery  Int?
+  tap_earning_energy_available Int?
+
+  created_at_unix Int?
+  updated_at_unix Int?
+
+  @@map("player_earnings")
 }
 
 model CardCategory {
@@ -142,23 +162,6 @@ model Config {
   updated_at_unix Int?
 
   @@map("configs")
-}
-
-model PlayerEarning {
-  id               Int  @id @default(autoincrement())
-  player_id        Int  @unique
-  passive_per_hour Int
-  coins_total      Int
-  coins_balance    Int
-  created_at_unix  Int?
-  updated_at_unix  Int?
-
-  tap_earning_value            Int? // applied
-  tap_earning_energy           Int? // applied
-  tap_earning_energy_recovery  Int? // applied
-  tap_earning_energy_available Int? // applied
-
-  @@map("player_earnings")
 }
 
 model Attendance {
