@@ -1,4 +1,16 @@
 -- CreateTable
+CREATE TABLE "configs" (
+    "id" SERIAL NOT NULL,
+    "key" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at_unix" INTEGER,
+    "updated_at_unix" INTEGER,
+
+    CONSTRAINT "configs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
     "username" TEXT NOT NULL,
@@ -15,9 +27,9 @@ CREATE TABLE "users" (
 CREATE TABLE "players" (
     "id" SERIAL NOT NULL,
     "telegram_id" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
-    "first_name" TEXT NOT NULL,
-    "last_name" TEXT NOT NULL,
+    "username" TEXT,
+    "first_name" TEXT,
+    "last_name" TEXT,
     "referee_id" INTEGER,
     "referral_code" TEXT,
     "level" INTEGER NOT NULL DEFAULT 1,
@@ -25,6 +37,25 @@ CREATE TABLE "players" (
     "updated_at_unix" INTEGER,
 
     CONSTRAINT "players_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "player_earnings" (
+    "id" SERIAL NOT NULL,
+    "player_id" INTEGER NOT NULL,
+    "player_level" INTEGER DEFAULT 1,
+    "passive_per_hour" INTEGER NOT NULL,
+    "coins_total" INTEGER NOT NULL,
+    "coins_balance" INTEGER NOT NULL,
+    "coins_spent" INTEGER,
+    "tap_earning_value" INTEGER,
+    "tap_earning_energy" INTEGER,
+    "tap_earning_energy_recovery" INTEGER,
+    "tap_earning_energy_available" INTEGER,
+    "created_at_unix" INTEGER,
+    "updated_at_unix" INTEGER,
+
+    CONSTRAINT "player_earnings_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -42,15 +73,42 @@ CREATE TABLE "card_categories" (
 CREATE TABLE "cards" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "icon_url" TEXT NOT NULL,
+    "description" TEXT,
+    "image" TEXT,
     "category_id" INTEGER NOT NULL,
-    "is_active" BOOLEAN NOT NULL DEFAULT true,
     "levels" TEXT,
-    "requirements" TEXT,
+    "condition" TEXT,
+    "available_duration" INTEGER,
+    "is_published" BOOLEAN NOT NULL DEFAULT false,
+    "published_at_unix" INTEGER,
     "created_at_unix" INTEGER,
     "updated_at_unix" INTEGER,
 
     CONSTRAINT "cards_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "card_combos" (
+    "id" SERIAL NOT NULL,
+    "date" TEXT NOT NULL,
+    "combination" TEXT,
+    "reward_coins" INTEGER NOT NULL,
+    "created_at_unix" INTEGER,
+    "updated_at_unix" INTEGER,
+
+    CONSTRAINT "card_combos_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "combo_submissions" (
+    "id" SERIAL NOT NULL,
+    "date" TEXT NOT NULL,
+    "player_id" INTEGER NOT NULL,
+    "combination" TEXT,
+    "correct_combo" INTEGER NOT NULL,
+    "created_at_unix" INTEGER,
+
+    CONSTRAINT "combo_submissions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -74,7 +132,6 @@ CREATE TABLE "point_histories" (
     "type" TEXT NOT NULL,
     "data" TEXT,
     "created_at_unix" INTEGER,
-    "updated_at_unix" INTEGER,
 
     CONSTRAINT "point_histories_pkey" PRIMARY KEY ("id")
 );
@@ -87,7 +144,6 @@ CREATE TABLE "passive_earning_histories" (
     "type" TEXT NOT NULL,
     "data" TEXT,
     "created_at_unix" INTEGER,
-    "updated_at_unix" INTEGER,
 
     CONSTRAINT "passive_earning_histories_pkey" PRIMARY KEY ("id")
 );
@@ -99,37 +155,48 @@ CREATE TABLE "level_histories" (
     "level" INTEGER NOT NULL,
     "data" TEXT,
     "created_at_unix" INTEGER,
-    "updated_at_unix" INTEGER,
 
     CONSTRAINT "level_histories_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "configs" (
+CREATE TABLE "tasks" (
     "id" SERIAL NOT NULL,
-    "key" TEXT NOT NULL,
-    "value" TEXT NOT NULL,
-    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "name" TEXT NOT NULL,
+    "image" TEXT,
+    "type" TEXT,
+    "reward_coins" INTEGER,
+    "config" TEXT,
+    "is_published" BOOLEAN NOT NULL DEFAULT false,
+    "requires_admin_approval" BOOLEAN NOT NULL DEFAULT false,
     "created_at_unix" INTEGER,
     "updated_at_unix" INTEGER,
 
-    CONSTRAINT "configs_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tasks_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "player_earnings" (
+CREATE TABLE "task_submissions" (
     "id" SERIAL NOT NULL,
     "player_id" INTEGER NOT NULL,
-    "passive_per_hour" INTEGER NOT NULL,
-    "tap_max" INTEGER NOT NULL,
-    "tap_points" INTEGER NOT NULL,
-    "tap_available" INTEGER NOT NULL,
-    "coins_total" INTEGER NOT NULL,
-    "coins_balance" INTEGER NOT NULL,
-    "created_at_unix" INTEGER,
-    "updated_at_unix" INTEGER,
+    "task_id" INTEGER NOT NULL,
+    "image" TEXT,
+    "is_approved" BOOLEAN,
+    "approval_by" INTEGER,
+    "submitted_at_unix" INTEGER NOT NULL,
+    "completed_at_unix" INTEGER,
 
-    CONSTRAINT "player_earnings_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "task_submissions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "attendances" (
+    "id" SERIAL NOT NULL,
+    "player_id" INTEGER NOT NULL,
+    "days" INTEGER DEFAULT 1,
+    "last_attendance" INTEGER,
+
+    CONSTRAINT "attendances_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -140,3 +207,9 @@ CREATE UNIQUE INDEX "players_telegram_id_key" ON "players"("telegram_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "players_referral_code_key" ON "players"("referral_code");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "player_earnings_player_id_key" ON "player_earnings"("player_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "card_combos_date_key" ON "card_combos"("date");

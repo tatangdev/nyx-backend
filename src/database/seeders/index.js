@@ -88,7 +88,7 @@ const configs = require('./configs.json');
 async function generateConfig() {
     try {
         for (let config of configs) {
-            await prisma.cardCombo.create({
+            await prisma.config.create({
                 data: {
                     key: config.key,
                     value: config.value,
