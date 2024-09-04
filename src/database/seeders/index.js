@@ -65,7 +65,7 @@ const tasks = require('./tasks.json');
 async function generateTask() {
     try {
         for (let task of tasks) {
-            await prisma.cardCombo.create({
+            await prisma.task.create({
                 data: {
                     name: task.name,
                     image: task.image,
@@ -88,7 +88,7 @@ const configs = require('./configs.json');
 async function generateConfig() {
     try {
         for (let config of configs) {
-            await prisma.cardCombo.create({
+            await prisma.config.create({
                 data: {
                     key: config.key,
                     value: config.value,

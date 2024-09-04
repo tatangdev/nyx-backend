@@ -13,6 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Config {
+  id              Int     @id @default(autoincrement())
+  key             String
+  value           String
+  is_active       Boolean @default(true)
+  created_at_unix Int?
+  updated_at_unix Int?
+
+  @@map("configs")
+}
+
 model User {
   id              Int     @id @default(autoincrement())
   username        String  @unique
@@ -78,11 +89,11 @@ model Card {
   category_id        Int
   levels             String?
   condition          String?
+  available_duration Int?
   is_published       Boolean @default(false)
+  published_at_unix  Int?
   created_at_unix    Int?
   updated_at_unix    Int?
-  available_duration Int?
-  published_at_unix  Int?
 
   @@map("cards")
 }
@@ -153,26 +164,6 @@ model LevelHistory {
   @@map("level_histories")
 }
 
-model Config {
-  id              Int     @id @default(autoincrement())
-  key             String
-  value           String
-  is_active       Boolean @default(true)
-  created_at_unix Int?
-  updated_at_unix Int?
-
-  @@map("configs")
-}
-
-model Attendance {
-  id              Int  @id @default(autoincrement())
-  player_id       Int
-  days            Int? @default(1)
-  last_attendance Int?
-
-  @@map("attendances")
-}
-
 model Task {
   id                      Int     @id @default(autoincrement())
   name                    String
@@ -193,10 +184,19 @@ model TaskSubmission {
   player_id         Int
   task_id           Int
   image             String?
-  submitted_at_unix Int
-  completed_at_unix Int?
   is_approved       Boolean?
   approval_by       Int?
+  submitted_at_unix Int
+  completed_at_unix Int?
 
   @@map("task_submissions")
+}
+
+model Attendance {
+  id              Int  @id @default(autoincrement())
+  player_id       Int
+  days            Int? @default(1)
+  last_attendance Int?
+
+  @@map("attendances")
 }
