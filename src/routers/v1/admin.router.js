@@ -43,6 +43,10 @@ router.get('/tasks/:id', validate, isAdmin, task.show);
 router.put('/tasks/:id', validate, isAdmin, task.update);
 router.delete('/tasks/:id', validate, isAdmin, task.destroy);
 
+// task submissions
+router.get('/task-submissions', validate, isAdmin, task.submissions);
+router.put('/task-submissions/:id', validate, isAdmin, task.approval);
+
 router.post('/levels', validate, isAdmin, level.update);
 router.get('/levels', validate, isAdmin, level.get);
 

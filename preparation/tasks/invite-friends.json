@@ -1,0 +1,13 @@
+{
+    "name": "Invite 3 friends",
+    "image": "https://cdn.hamsterkombat.io/earn/friends.png",
+    "type": "invite_friends",
+    "reward_coins": 25000,
+    "is_published": true,
+    "requires_admin_approval": false,
+    "config": {
+        "modal_title": "Invite 3 friends",
+        "modal_link_button": "Join",
+        "referee_count": 3
+    }
+}

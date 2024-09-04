@@ -1,0 +1,584 @@
+{
+    "categories": [
+        {
+            "name": "Food",
+            "cards": [
+                {
+                    "name": "Apple",
+                    "description": "Apples provide chipmunks with natural sugars like fructose and glucose.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/apple_-aZqYsdEE.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Banana",
+                    "description": "The carbohydrates in bananas help maintain the energy levels needed for their daily activities.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/banana_2Yv5OzBXy.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Grape",
+                    "description": "Grapes are high in antioxidants, such as flavonoids and resveratrol, which help protect chipmunks.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/grape_RgQTot4Se.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Strawberry",
+                    "description": "Strawberries contain smaller amounts of folate, potassium, and dietary fiber, beneficial for chipmunks.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/strawberry_qc5W0VzOo.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Cherry",
+                    "description": "Cherries have a high water content, helping to keep chipmunks hydrated.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/cherry_q-DW1_5U3C.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Blueberry",
+                    "description": "Blueberries contain natural sugars that provide a quick energy boost.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/blueberry_6J51BGM8v.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Raspberry",
+                    "description": "Although raspberries are soft, chewing on them can still contribute to dental health.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/raspberry_hc4YRBnMN.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Melon",
+                    "description": "Melons are easy to store and serve. They can be cut into small, manageable pieces for chipmunks.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/melon_tE_pvYMHs.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Canary",
+                    "description": "Canary seeds are a good source of protein, which supports muscle growth and repair in chipmunks.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/canary_EfSah9u-B.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Worms",
+                    "description": "Worms provide essential nutrients, including B vitamins (such as B12), iron, and zinc.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/worms_oESAq8u9i.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Egg",
+                    "description": "Eggs provide important vitamins such as vitamin A, which supports vision and immune function, and vitamin D.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/egg_6DgpOxQMo.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Pellets",
+                    "description": "Many pellets contain fiber to support healthy digestion and regular bowel movements.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/pellet_q4vydhP9H.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Nuts",
+                    "description": "Nuts are high in healthy fats, including unsaturated fats and omega-3 fatty acids.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/nuts_Muv9SI5qU.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Seeds",
+                    "description": "Many seeds, such as sunflower and pumpkin seeds, are good sources of protein.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/seeds_7D1Rhh4sc.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Snails",
+                    "description": "Snails contain vitamins such as vitamin B12.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/snail_N7vfm67ie.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Bird Egg",
+                    "description": "Bird eggs provide important vitamins such as vitamin A.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/food/bird_egg_B8H8jhAJj.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                }
+            ]
+        },
+        {
+            "name": "Race",
+            "cards": [
+                {
+                    "name": "Eutamias Sibiricus",
+                    "description": "Siberian chipmunks are native to a range that includes parts of Siberia.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/eutamias_sibiricus_4jiqYYaVh.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Tamias Striatus",
+                    "description": "Eastern chipmunks typically measure about 8 to 10 inches (20 to 25 cm) in total length, including their tail.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/tamias_striatus_k0A98NCpk.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Tamias Aristus",
+                    "description": "Arizona chipmunks are relatively small rodents.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/tamias_aristus_ujianw8r5Y.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Neotamias Senex",
+                    "description": "Neotamias senex, or Allen's chipmunk, is a species found in certain habitats.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/neotamias_senex_cJAeJlv1qj.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Neotamias Alpinus",
+                    "description": "Alpine chipmunks are native to high-altitude areas in the western United States.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/neotamias_alpinus_zwbMn6KTy.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Neotamias Bulleri",
+                    "description": "Buller's chipmunk is found in the mountainous regions of the southwestern United States.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/neotamias_bulleri_HkHXlVi3L.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Neotamias Dorsalis",
+                    "description": "Neotamias dorsalis prefers habitats such as coniferous forests, mixed woodlands, and rocky slopes.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/neotamias_dorsalis_U-gu6M4Ip.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Neotamias Quadrivittatus",
+                    "description": "They are diurnal, meaning they are active during the day.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/neotamias_quadrivittatus_DuC5Ut1h6.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Durangae",
+                    "description": "Female Durango chipmunks give birth to litters of about 2 to 6 young.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/durangae_fEOshaShB.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Cinereicollis",
+                    "description": "The young are weaned and become independent after about 6 to 8 weeks.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/cinereicollis_TSLpbEJ2o.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Canipes",
+                    "description": "Their fur color, especially their grayish or light-colored feet, distinguishes them.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/canipes_Cx7SMQqFs.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Rufus",
+                    "description": "The red chipmunk is generally considered to be of 'Least Concern.'",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/rufus_fRuzRgLlB.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Minimus",
+                    "description": "The least chipmunk is found primarily in the northern parts of North America.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/minimus_JBCnRaQfO.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Speciosus",
+                    "description": "This species plays an important role as a forager and prey in its ecosystem.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/speciosus_ZqN_AO5WG.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Quadrimaculatus",
+                    "description": "Their habitats include coniferous forests, oak woodlands, and rocky slopes.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/quadrimaculatus_b7x903ndY.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Merriami",
+                    "description": "Its distinctive markings and behaviors make it a recognizable species.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/race/merriami_ngaIq3QQv.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                }
+            ]
+        },
+        {
+            "name": "Ecosystem",
+            "cards": [
+                {
+                    "name": "Liquidity Provider",
+                    "description": "Liquidity providers contribute assets to liquidity pools.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/liquidity_provider_UE2QROkt8.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Farming",
+                    "description": "Farming involves providing liquidity to DeFi platforms or participating in staking and lending activities to earn rewards.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/farming_22IOEhKqI.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Staking",
+                    "description": "Staking involves locking up a certain amount of cryptocurrency in a wallet or smart contract.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/staking_K_WsePdFz.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Game Center",
+                    "description": "A game center is a platform or ecosystem designed for gaming.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/game_center_lqs3Qy4t2.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Item Marketplace",
+                    "description": "An item marketplace is a digital platform where users can exchange items.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/item_marketplace_oQxssYPBD.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Bridges and Protocols",
+                    "description": "Bridges in the blockchain context are mechanisms that enable the transfer of assets across different networks.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/bridges_and_protocols__tHXexKEc.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Crosschain",
+                    "description": "Cross-chain technology involves enabling communication and interaction between different blockchain networks.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/crosschain_ZbwNY72oa.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Exchanges",
+                    "description": "A cryptocurrency exchange is a platform that allows users to trade cryptocurrencies.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/exchanges_lWG1g-tRL.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Dapps",
+                    "description": "A decentralized application (dApp) is a software application that operates on a decentralized network.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/dapps_fIt3ZOBuo.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Wallets",
+                    "description": "A cryptocurrency wallet is a digital tool that enables users to store, manage, and transfer cryptocurrencies.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/wallets_5TNGBZWkz.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Crypto Bots",
+                    "description": "A crypto bot is an automated tool that performs cryptocurrency trading operations based on predefined rules or strategies.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/crypto_bots_PglL3CZK6.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Infrastructure and Tools",
+                    "description": "Blockchain networks provide the foundational infrastructure for tokens and decentralized applications.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/infrastructure_and_tools_nQbznUfP-.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Live Streaming",
+                    "description": "Live streaming is the process of transmitting live video and audio content over the internet to viewers in real time.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/live_streaming_QODs4row8.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Playground",
+                    "description": "In a general sense, a playground game refers to any game or activity designed to be played for fun.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/playground_qf3Fa_sHK.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Play to Earn",
+                    "description": "Play to earn is a concept within the gaming industry that allows players to earn real-world value.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/play_to_earn_XAldehE0i.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Communities",
+                    "description": "The concept of a community can apply to both physical and virtual spaces where people interact and share common interests.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/ecosystem/communities_1yQ2dZJAo.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                }
+            ]
+        },
+        {
+            "name": "Special",
+            "cards": [
+                {
+                    "name": "Chipmunk Master",
+                    "description": "Evokes wisdom and expertise in chipmunk knowledge.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/specials/chipmunk_master_IsMLxcShy.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Chipmunk Father",
+                    "description": "A playful and endearing term for a father figure.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/specials/chipmunk_father_V83Lag70p.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Chipmunk Whales",
+                    "description": "Highlights the importance and significant role of these buyers.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/specials/chipmunk_whales_1WNYLdJux.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Chipmunk Friends",
+                    "description": "Emphasizes the friendly and adorable nature of chipmunk relationships.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/specials/chipmunk_friends_RI3YgBSq85.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Chipmunk On TON",
+                    "description": "Implies an active and competitive space within the blockchain environment.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/specials/chipmunk_on_ton_HObbGrqS8.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Chipmunk Bank",
+                    "description": "Conveys the idea of a secure place for storing chipmunk treasures.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/specials/chipmunk_bank_oTTUIZVze.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Chipmunk Call Trump",
+                    "description": "Suggests an amusing scenario of a chipmunk reaching out to Trump.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/specials/chipmunk_call_trump_1_u3-JOQ_XPm.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                },
+                {
+                    "name": "Chipmunk Buy TON",
+                    "description": "Implies that chipmunks have a new favorite thing—TON cryptocurrency.",
+                    "image": "https://ik.imagekit.io/taetang/nyx-backend/cards/specials/chipmunk_buy_ton_ozBYuumRP.png",
+                    "base_profit_per_hour": 7000,
+                    "base_price": 5000,
+                    "profit_per_hour_multiplier": 0.1,
+                    "price_multiplier": 0.5,
+                    "level_count": 25
+                }
+            ]
+        }
+    ]
+}

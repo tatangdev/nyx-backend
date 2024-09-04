@@ -2,6 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
+const yaml = require('js-yaml');
 
 function buildTree(data, refereeId = null) {
     return data
@@ -114,7 +115,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
-            const today = moment().tz(TIMEZONE);
+            const now = moment().tz(TIMEZONE);
             let playerId = parseInt(req.params.id);
             let { points_balance: pointsBalance } = req.body;
 
@@ -158,7 +159,7 @@ module.exports = {
                         data: {
                             coins_balance: newPointsBalance,
                             coins_total: response.points_total + pointNominalUpdate,
-                            updated_at_unix: today.unix()
+                            updated_at_unix: now.unix()
                         }
                     });
 
@@ -167,14 +168,14 @@ module.exports = {
                             player_id: playerId,
                             amount: pointNominalUpdate,
                             type: "ADMIN_UPDATE",
-                            data: JSON.stringify({
+                            data: yaml.dump({
                                 nominal: pointNominalUpdate,
                                 previous_balance: response.points_balance,
                                 previous_total: response.points_total,
                                 new_balance: newPointsBalance,
                                 new_total: response.points_total + pointNominalUpdate,
                             }),
-                            created_at_unix: today.unix(),
+                            created_at_unix: now.unix(),
                         }
                     });
                 });

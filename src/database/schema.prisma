@@ -28,16 +28,36 @@ model User {
 model Player {
   id              Int     @id @default(autoincrement())
   telegram_id     String  @unique
-  username        String
-  first_name      String
-  last_name       String
+  username        String?
+  first_name      String?
+  last_name       String?
   referee_id      Int?
   referral_code   String? @unique
-  level           Int     @default(1)
+  level           Int     @default(1) // deprecated
   created_at_unix Int?
   updated_at_unix Int?
 
   @@map("players")
+}
+
+model PlayerEarning {
+  id               Int  @id @default(autoincrement())
+  player_id        Int  @unique
+  player_level     Int? @default(1)
+  passive_per_hour Int
+  coins_total      Int
+  coins_balance    Int
+  coins_spent      Int?
+
+  tap_earning_value            Int?
+  tap_earning_energy           Int?
+  tap_earning_energy_recovery  Int?
+  tap_earning_energy_available Int?
+
+  created_at_unix Int?
+  updated_at_unix Int?
+
+  @@map("player_earnings")
 }
 
 model CardCategory {
@@ -108,7 +128,6 @@ model PointHistory {
   type            String
   data            String?
   created_at_unix Int?
-  updated_at_unix Int?
 
   @@map("point_histories")
 }
@@ -120,7 +139,6 @@ model PassiveEarningHistory {
   type            String
   data            String?
   created_at_unix Int?
-  updated_at_unix Int?
 
   @@map("passive_earning_histories")
 }
@@ -131,7 +149,6 @@ model LevelHistory {
   level           Int
   data            String?
   created_at_unix Int?
-  updated_at_unix Int?
 
   @@map("level_histories")
 }
@@ -147,21 +164,6 @@ model Config {
   @@map("configs")
 }
 
-model PlayerEarning {
-  id               Int  @id @default(autoincrement())
-  player_id        Int  @unique
-  passive_per_hour Int
-  tap_max          Int
-  tap_points       Int
-  tap_available    Int
-  coins_total      Int
-  coins_balance    Int
-  created_at_unix  Int?
-  updated_at_unix  Int?
-
-  @@map("player_earnings")
-}
-
 model Attendance {
   id              Int  @id @default(autoincrement())
   player_id       Int
@@ -172,25 +174,29 @@ model Attendance {
 }
 
 model Task {
-  id              String  @id @unique
-  name            String
-  image           String?
-  type            String? @default("Default")
-  reward_coins    Int?
-  periodicity     String  @default("Once")
-  config          String?
-  is_published    Boolean @default(false)
-  created_at_unix Int?
-  updated_at_unix Int?
+  id                      Int     @id @default(autoincrement())
+  name                    String
+  image                   String?
+  type                    String?
+  reward_coins            Int?
+  config                  String?
+  is_published            Boolean @default(false)
+  requires_admin_approval Boolean @default(false)
+  created_at_unix         Int?
+  updated_at_unix         Int?
 
   @@map("tasks")
 }
 
-model TaskCompletion {
-  id                Int    @id @default(autoincrement())
+model TaskSubmission {
+  id                Int      @id @default(autoincrement())
   player_id         Int
-  task_id           String
-  completed_at_unix Int
+  task_id           Int
+  image             String?
+  submitted_at_unix Int
+  completed_at_unix Int?
+  is_approved       Boolean?
+  approval_by       Int?
 
-  @@map("task_completions")
+  @@map("task_submissions")
 }

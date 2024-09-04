@@ -1,10 +1,13 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const yaml = require('js-yaml');
+
 const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 module.exports = {
     listV2: async (req, res, next) => {
+        const now = moment().tz(TIMEZONE);
         try {
             let filter = 'is_published';
             if (req.query.category_id) {
@@ -16,6 +19,12 @@ module.exports = {
                 select: {
                     id: true,
                     name: true,
+                }
+            });
+
+            let invitedFriends = await prisma.player.findMany({
+                where: {
+                    referee_id: req.user.id
                 }
             });
 
@@ -32,7 +41,8 @@ module.exports = {
                     cl.updated_at_unix AS last_upgrade_at,
                     c.is_published,
                     c.available_duration,
-                    c.published_at_unix
+                    c.published_at_unix,
+                    c.updated_at_unix
                 FROM
                     cards c
                 LEFT JOIN 
@@ -42,72 +52,87 @@ module.exports = {
                 WHERE ${filter}
                     AND c.is_published
                     AND cat.is_active
-                ORDER BY c.id;
+                ORDER BY cl.updated_at_unix DESC, c.published_at_unix, c.id ASC;
             `);
 
-            let now = Math.floor(Date.now() / 1000);
             cards = cards.map(card => {
                 card.upgrade = null;
                 card.profit_per_hour = 0;
+                card.image = card.image ? card.image + '?tr=h-200' : null;
 
                 if (card.levels) {
-                    let levels = JSON.parse(card.levels);
+                    let levels = yaml.load(card.levels);
                     let currentLevel = levels.find(item => item.level === card.level);
                     let nextLevel = levels.find(item => item.level === card.level + 1);
-
-
 
                     if (currentLevel) {
                         card.level = currentLevel.level;
                         card.profit_per_hour = currentLevel.profit_per_hour - currentLevel.profit_per_hour_increase;
+                    }
 
-                        if (nextLevel) {
-                            let isAvailable = true;
-                            let condition = JSON.parse(card.condition);
+                    if (nextLevel) {
+                        let isAvailable = true;
+                        let isLimited = false;
+                        let availableUntil = null;
+                        let availableAt = null;
+                        let condition = yaml.load(card.condition);
+
+                        // check unlock condition
+                        if (!currentLevel.level) {
+                            // check is required condition
                             if (condition) {
                                 isAvailable = false;
-                                let requiredCard = cards.find(item => item.id === condition.id);
-                                if (requiredCard && requiredCard.level >= condition.level) {
-                                    isAvailable = true;
+
+                                switch (condition.type) {
+                                    case 'card':
+                                        let requiredCard = cards.find(item => item.id === condition.card_id);
+                                        if (requiredCard && requiredCard.level >= condition.card_level) {
+                                            isAvailable = true;
+                                        }
+                                        break;
+                                    case 'invite_friends':
+                                        invitedFriends = invitedFriends.filter(friend => friend.created_at_unix > card.published_at_unix);
+                                        if (invitedFriends.length >= condition.invite_friend_count) {
+                                            isAvailable = true;
+                                        }
+                                        break;
                                 }
                             }
 
-                            let availableAt = null;
-                            if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
-                                availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
-
-                                if (now < availableAt) {
-                                    isAvailable = false;
-                                } else {
-                                    availableAt = null;
-                                }
-                            }
-
-                            // limited available time
-                            let isLimited = false;
-                            let availableUntil = null;
-                            if (!currentLevel.level && card.available_duration && card.published_at_unix) {
+                            // check is limited available time
+                            if (card.available_duration && card.published_at_unix) {
                                 let availableAtUnix = card.published_at_unix + card.available_duration * 60 * 60;
-                                if (now > availableAtUnix) {
+                                if (now.unix() > availableAtUnix) {
                                     isAvailable = false;
                                     availableAt = null;
                                 }
                                 availableUntil = availableAtUnix;
                                 isLimited = true;
                             }
-
-                            card.upgrade = {
-                                level: nextLevel.level,
-                                price: currentLevel.upgrade_price,
-                                profit_per_hour: currentLevel.profit_per_hour,
-                                profit_per_hour_delta: currentLevel.profit_per_hour_increase,
-                                is_available: isAvailable,
-                                available_at: availableAt,
-                                is_limited: isLimited,
-                                available_until: availableUntil,
-                                condition
-                            };
                         }
+
+                        // check is limited available time
+                        if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
+                            availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
+
+                            if (now.unix() < availableAt) {
+                                isAvailable = false;
+                            } else {
+                                availableAt = null;
+                            }
+                        }
+
+                        card.upgrade = {
+                            level: nextLevel.level,
+                            price: currentLevel.upgrade_price,
+                            profit_per_hour: currentLevel.profit_per_hour,
+                            profit_per_hour_delta: currentLevel.profit_per_hour_increase,
+                            is_available: isAvailable,
+                            available_at: availableAt,
+                            is_limited: isLimited,
+                            available_until: availableUntil,
+                            condition
+                        };
                     }
                 }
 
@@ -133,6 +158,12 @@ module.exports = {
             let playerId = req.user.id;
             let player = req.user;
             let cardId = parseInt(req.body.card_id);
+
+            let invitedFriends = await prisma.player.findMany({
+                where: {
+                    referee_id: req.user.id
+                }
+            });
 
             let cards = await prisma.$queryRawUnsafe(`
                 SELECT 
@@ -161,7 +192,7 @@ module.exports = {
                 ORDER BY c.id;
             `);
 
-            let now = Math.floor(Date.now() / 1000);
+            const now = moment().tz(TIMEZONE);
             let card = cards.find(item => item.id === cardId);
             if (!card) {
                 return res.status(404).json({
@@ -175,61 +206,78 @@ module.exports = {
             card.profit_per_hour = 0;
 
             if (card.levels) {
-                let levels = JSON.parse(card.levels);
+                let levels = yaml.load(card.levels);
                 let currentLevel = levels.find(item => item.level === card.level);
                 let nextLevel = levels.find(item => item.level === card.level + 1);
 
                 if (currentLevel) {
                     card.level = currentLevel.level;
                     card.profit_per_hour = currentLevel.profit_per_hour - currentLevel.profit_per_hour_increase;
+                }
 
-                    if (nextLevel) {
-                        let isAvailable = true;
-                        let condition = JSON.parse(card.condition);
+                if (nextLevel) {
+                    let isAvailable = true;
+                    let isLimited = false;
+                    let availableUntil = null;
+                    let availableAt = null;
+                    let condition = yaml.load(card.condition);
+
+                    // check unlock condition
+                    if (!currentLevel.level) {
+                        // check is required condition
                         if (condition) {
                             isAvailable = false;
-                            let requiredCard = cards.find(item => item.id === condition.id);
-                            if (requiredCard && requiredCard.level >= condition.level) {
-                                isAvailable = true;
+
+                            switch (condition.type) {
+                                case 'card':
+                                    let requiredCard = cards.find(item => item.id === condition.card_id);
+                                    if (requiredCard && requiredCard.level >= condition.card_level) {
+                                        isAvailable = true;
+                                    }
+                                    break;
+                                case 'invite_friends':
+                                    invitedFriends = invitedFriends.filter(friend => friend.created_at_unix > card.published_at_unix);
+                                    if (invitedFriends.length >= condition.invite_friend_count) {
+                                        isAvailable = true;
+                                    }
+                                    break;
                             }
                         }
 
-                        let availableAt = null;
-                        if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
-                            availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
-
-                            if (now < availableAt) {
-                                isAvailable = false;
-                            } else {
-                                availableAt = null;
-                            }
-                        }
-
-                        // limited available time
-                        let isLimited = false;
-                        let availableUntil = null;
-                        if (!currentLevel.level && card.available_duration && card.published_at_unix) {
+                        // check is limited available time
+                        if (card.available_duration && card.published_at_unix) {
                             let availableAtUnix = card.published_at_unix + card.available_duration * 60 * 60;
-                            if (now > availableAtUnix) {
+                            if (now.unix() > availableAtUnix) {
                                 isAvailable = false;
                                 availableAt = null;
                             }
                             availableUntil = availableAtUnix;
                             isLimited = true;
                         }
-
-                        card.upgrade = {
-                            level: nextLevel.level,
-                            price: currentLevel.upgrade_price,
-                            profit_per_hour: currentLevel.profit_per_hour,
-                            profit_per_hour_delta: currentLevel.profit_per_hour_increase,
-                            is_available: isAvailable,
-                            available_at: availableAt,
-                            is_limited: isLimited,
-                            available_until: availableUntil,
-                            condition
-                        };
                     }
+
+                    // check is limited available time
+                    if (currentLevel && currentLevel.respawn_time && card.last_upgrade_at) {
+                        availableAt = card.last_upgrade_at + currentLevel.respawn_time * 60;
+
+                        if (now.unix() < availableAt) {
+                            isAvailable = false;
+                        } else {
+                            availableAt = null;
+                        }
+                    }
+
+                    card.upgrade = {
+                        level: nextLevel.level,
+                        price: currentLevel.upgrade_price,
+                        profit_per_hour: currentLevel.profit_per_hour,
+                        profit_per_hour_delta: currentLevel.profit_per_hour_increase,
+                        is_available: isAvailable,
+                        available_at: availableAt,
+                        is_limited: isLimited,
+                        available_until: availableUntil,
+                        condition
+                    };
                 }
             }
 
@@ -237,7 +285,7 @@ module.exports = {
             let playerLevels = [];
             let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
             if (levelConfig) {
-                playerLevels = JSON.parse(levelConfig.value);
+                playerLevels = yaml.load(levelConfig.value);
             }
 
             if (!card.upgrade || !card.upgrade.is_available) {
@@ -252,7 +300,6 @@ module.exports = {
             }
 
             await prisma.$transaction(async (prisma) => {
-                let now = Math.floor(Date.now() / 1000);
                 let point = await prisma.playerEarning.findFirst({
                     where: {
                         player_id: playerId
@@ -267,6 +314,12 @@ module.exports = {
                 let newProfitPerHour = point.passive_per_hour + card.upgrade.profit_per_hour_delta;
                 let newPlayerSpend = point.coins_total - newBalance;
 
+                let updateEarningData = {
+                    coins_balance: newBalance,
+                    passive_per_hour: newProfitPerHour,
+                    updated_at_unix: now.unix()
+                };
+
                 // determine current user level
                 let currentLevel = playerLevels.reduce((acc, level) => {
                     return level.minimum_score <= newPlayerSpend ? level : acc;
@@ -276,22 +329,26 @@ module.exports = {
                         where: { id: playerId },
                         data: {
                             level: currentLevel.level,
-                            updated_at_unix: now
+                            updated_at_unix: now.unix()
                         }
                     });
+
+                    updateEarningData.tap_earning_value = currentLevel.tap_earning_value;
+                    updateEarningData.tap_earning_energy = currentLevel.tap_earning_energy;
+                    updateEarningData.tap_earning_energy_recovery = currentLevel.tap_earning_energy_recovery;
+                    updateEarningData.tap_earning_energy_available = point.tap_earning_energy_available + (currentLevel.tap_earning_energy - point.tap_earning_energy);
 
                     await prisma.levelHistory.create({
                         data: {
                             player_id: playerId,
                             level: currentLevel.level,
-                            data: JSON.stringify({
+                            data: yaml.dump({
                                 previous_level: player.level,
                                 new_level: currentLevel.level,
                                 note: `Upgrade player to level ${currentLevel.level}`,
                                 spend: newPlayerSpend
                             }),
-                            created_at_unix: now,
-                            updated_at_unix: now,
+                            created_at_unix: now.unix(),
                         }
                     });
 
@@ -305,7 +362,7 @@ module.exports = {
                                 coins_total: {
                                     increment: currentLevel.level_up_reward
                                 },
-                                updated_at_unix: now
+                                updated_at_unix: now.unix()
                             }
                         });
 
@@ -318,7 +375,7 @@ module.exports = {
                                 player_id: player.referee_id,
                                 amount: currentLevel.level_up_reward,
                                 type: 'REFERRAL_BONUS',
-                                data: JSON.stringify({
+                                data: yaml.dump({
                                     nominal: currentLevel.level_up_reward,
                                     previous_balance: refereePoint.coins_balance,
                                     previous_total: refereePoint.coins_total,
@@ -326,8 +383,7 @@ module.exports = {
                                     new_total: refereePoint.coins_total + currentLevel.level_up_reward,
                                     note: `Referral bonus for player level up to level ${currentLevel.level}`,
                                 }),
-                                created_at_unix: now,
-                                updated_at_unix: now,
+                                created_at_unix: now.unix(),
                             }
                         });
                     }
@@ -335,11 +391,7 @@ module.exports = {
 
                 await prisma.playerEarning.update({
                     where: { id: point.id },
-                    data: {
-                        coins_balance: newBalance,
-                        passive_per_hour: newProfitPerHour,
-                        updated_at_unix: now
-                    }
+                    data: updateEarningData
                 });
 
                 let pointHistory = await prisma.pointHistory.create({
@@ -347,7 +399,7 @@ module.exports = {
                         player_id: playerId,
                         amount: -card.upgrade.price,
                         type: 'CARD_UPGRADE',
-                        data: JSON.stringify({
+                        data: yaml.dump({
                             nominal: -card.upgrade.price,
                             previous_balance: point.coins_balance,
                             previous_total: point.coins_total,
@@ -355,8 +407,7 @@ module.exports = {
                             new_total: point.coins_total,
                             note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
                         }),
-                        created_at_unix: now,
-                        updated_at_unix: now,
+                        created_at_unix: now.unix(),
                     }
                 });
 
@@ -365,24 +416,23 @@ module.exports = {
                         player_id: playerId,
                         amount: card.upgrade.profit_per_hour_delta,
                         type: 'CARD_UPGRADE',
-                        data: JSON.stringify({
+                        data: yaml.dump({
                             nominal: card.upgrade.profit_per_hour_delta,
                             previous_value: point.passive_per_hour,
                             new_value: newProfitPerHour,
                             note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
                         }),
-                        created_at_unix: now,
-                        updated_at_unix: now,
+                        created_at_unix: now.unix(),
                     }
                 });
 
-                let levelData = card.level_data ? JSON.parse(card.level_data) : [];
+                let levelData = card.level_data ? yaml.load(card.level_data) : [];
                 levelData.push({
                     ...card.upgrade,
                     point_history_id: pointHistory.id,
                     passive_earning_history_id: passiveEarningHistory.id,
                     note: `Upgrade card ${card.name} to level ${card.upgrade.level}`,
-                    upgrade_at: Math.floor(Date.now() / 1000)
+                    upgrade_at: now.unix()
                 });
 
                 let cardLevel = await prisma.cardLevel.findFirst({
@@ -397,8 +447,8 @@ module.exports = {
                         where: { id: cardLevel.id },
                         data: {
                             level: card.upgrade.level,
-                            data: JSON.stringify(levelData),
-                            updated_at_unix: now
+                            data: yaml.dump(levelData),
+                            updated_at_unix: now.unix()
                         }
                     });
                 } else {
@@ -407,9 +457,9 @@ module.exports = {
                             card_id: card.id,
                             player_id: playerId,
                             level: card.upgrade.level,
-                            data: JSON.stringify(levelData),
-                            created_at_unix: now,
-                            updated_at_unix: now,
+                            data: yaml.dump(levelData),
+                            created_at_unix: now.unix(),
+                            updated_at_unix: now.unix(),
                         }
                     });
                 }
@@ -428,13 +478,13 @@ module.exports = {
 
     combo: async (req, res, next) => {
         try {
-            const today = moment().tz(TIMEZONE);
-            const remainSeconds = moment(today).endOf('day').diff(today, 'seconds');
+            const now = moment().tz(TIMEZONE);
+            const remainSeconds = moment(now).endOf('day').diff(now, 'seconds');
             let playerId = req.user.id;
 
             let combo = await prisma.cardCombo.findFirst({
                 where: {
-                    date: today.format('YYYY-MM-DD')
+                    date: now.format('YYYY-MM-DD')
                 }
             });
             let cards = await prisma.card.findMany();
@@ -445,11 +495,11 @@ module.exports = {
             let comboSubmission = await prisma.comboSubmission.findFirst({
                 where: {
                     player_id: playerId,
-                    date: today.format('YYYY-MM-DD')
+                    date: now.format('YYYY-MM-DD')
                 }
             });
             if (comboSubmission) {
-                combination = JSON.parse(comboSubmission.combination);
+                combination = yaml.load(comboSubmission.combination);
                 combination = combination.map(cardId => {
                     let card = cards.find(card => card.id === cardId);
                     return {
@@ -485,8 +535,8 @@ module.exports = {
 
     submitCombo: async (req, res, next) => {
         try {
-            const today = moment().tz(TIMEZONE);
-            const remainSeconds = moment(today).endOf('day').diff(today, 'seconds');
+            const now = moment().tz(TIMEZONE);
+            const remainSeconds = moment(now).endOf('day').diff(now, 'seconds');
             const playerId = req.user.id;
             const { combo } = req.body;
 
@@ -500,7 +550,7 @@ module.exports = {
             }
 
             const comboData = await prisma.cardCombo.findFirst({
-                where: { date: today.format('YYYY-MM-DD') }
+                where: { date: now.format('YYYY-MM-DD') }
             });
             if (!comboData) {
                 return res.status(404).json({
@@ -512,7 +562,7 @@ module.exports = {
             }
 
             const existingSubmission = await prisma.comboSubmission.findFirst({
-                where: { player_id: playerId, date: today.format('YYYY-MM-DD') }
+                where: { player_id: playerId, date: now.format('YYYY-MM-DD') }
             });
             if (existingSubmission) {
                 return res.status(400).json({
@@ -523,7 +573,7 @@ module.exports = {
                 });
             }
 
-            let comboConfig = JSON.parse(comboData.combination);
+            let comboConfig = yaml.load(comboData.combination);
             let correctCombo = 0;
             for (let i = 0; i < combo.length; i++) {
                 if (combo[i] === comboConfig[i]) {
@@ -536,10 +586,10 @@ module.exports = {
             const newSubmission = await prisma.comboSubmission.create({
                 data: {
                     player_id: playerId,
-                    date: today.format('YYYY-MM-DD'),
-                    combination: JSON.stringify(combo),
+                    date: now.format('YYYY-MM-DD'),
+                    combination: yaml.dump(combo),
                     correct_combo: correctCombo,
-                    created_at_unix: today.unix(),
+                    created_at_unix: now.unix(),
                 }
             });
 
@@ -553,7 +603,7 @@ module.exports = {
                     data: {
                         coins_balance: playerEarning.coins_balance + rewardCoins,
                         coins_total: playerEarning.coins_total + rewardCoins,
-                        updated_at_unix: today.unix(),
+                        updated_at_unix: now.unix(),
                     }
                 });
 
@@ -562,7 +612,7 @@ module.exports = {
                         player_id: playerId,
                         amount: rewardCoins,
                         type: 'COMBO_REWARD',
-                        data: JSON.stringify({
+                        data: yaml.dump({
                             nominal: rewardCoins,
                             previous_balance: playerEarning.coins_balance,
                             previous_total: playerEarning.coins_total,
@@ -571,8 +621,7 @@ module.exports = {
                             note: "Combo reward",
                             combo_submission_id: newSubmission.id
                         }),
-                        created_at_unix: today.unix(),
-                        updated_at_unix: today.unix(),
+                        created_at_unix: now.unix(),
                     }
                 });
             }

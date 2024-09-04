@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const yaml = require('js-yaml');
 
 module.exports = {
     index: async (req, res, next) => {
@@ -21,7 +22,7 @@ module.exports = {
                 `
             ]);
 
-            let parsedLevels = JSON.parse(levels[0]?.value || '[]');
+            let parsedLevels = yaml.load(levels[0]?.value || '[]');
             let levelCnt = parsedLevels.length;
 
             let playerLevelCnt = parsedLevels.map(level => ({

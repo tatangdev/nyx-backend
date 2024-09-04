@@ -6,14 +6,15 @@ const media = require('../../controllers/v1/media.controller');
 const card = require('../../controllers/v1/player/card.controller');
 const point = require('../../controllers/v1/player/point.controller');
 const task = require('../../controllers/v1/player/task.controller');
+const rank = require('../../controllers/v1/player/rank.controller');
 
 // auth
 router.post('/auth/login', auth.login);
 router.get('/auth/whoami', validate, isPlayer, auth.whoami);
 
 // media
-router.post('/media/images', validate, isAdmin, image.single('image'), media.imageKitUpload);
-router.get('/media/images', validate, isAdmin, media.imageKitList);
+router.post('/media/images', validate, image.single('image'), media.imageKitUpload);
+router.get('/media/images', validate, media.imageKitList);
 
 // cards
 router.get('/cards/combo', validate, isPlayer, card.combo);
@@ -24,6 +25,7 @@ router.post('/card-upgrade', validate, isPlayer, card.upgrade);
 // point
 router.get('/sync', validate, isPlayer, point.sync);
 router.post('/tap', validate, isPlayer, point.tapUpdate);
+router.get('/rank', validate, isPlayer, rank.index);
 
 // task
 router.get('/tasks', validate, isPlayer, task.index);

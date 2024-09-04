@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
 const XLSX = require('xlsx');
+const yaml = require('js-yaml');
+
 const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
@@ -10,13 +12,13 @@ const validateLevels = (levels) => {
 
         // validate level keys
         if (
-            typeof level.level !== 'number' ||
-            typeof level.upgrade_price !== 'number' ||
-            typeof level.profit_per_hour !== 'number' ||
-            typeof level.profit_per_hour_increase !== 'number' ||
-            typeof level.price_multiplier !== 'number' ||
-            typeof level.profit_per_hour_multiplier !== 'number' ||
-            typeof level.respawn_time !== 'number'
+            (level.level !== null && typeof level.level !== 'number') ||
+            (level.upgrade_price !== null && typeof level.upgrade_price !== 'number') ||
+            (level.profit_per_hour !== null && typeof level.profit_per_hour !== 'number') ||
+            (level.profit_per_hour_increase !== null && typeof level.profit_per_hour_increase !== 'number') ||
+            (level.price_multiplier !== null && typeof level.price_multiplier !== 'number') ||
+            (level.profit_per_hour_multiplier !== null && typeof level.profit_per_hour_multiplier !== 'number') ||
+            (level.respawn_time !== null && typeof level.respawn_time !== 'number')
         ) {
             return {
                 isValid: false,
@@ -25,12 +27,18 @@ const validateLevels = (levels) => {
         }
 
         // validate level values
-        if (level.level < 0 || level.price_multiplier < 0 || level.profit_per_hour_multiplier < 0 || level.respawn_time < 0) {
+        if (level.level < 0) {
             return {
                 isValid: false,
-                message: "level, price_multiplier, profit_per_hour_multiplier and respawn_time must be greater or equal to 0",
+                message: "level must be greater or equal to 0",
             };
         }
+        // if (level.level < 0 || level.price_multiplier < 0 || level.profit_per_hour_multiplier < 0 || level.respawn_time < 0) {
+        //     return {
+        //         isValid: false,
+        //         message: "level, price_multiplier, profit_per_hour_multiplier and respawn_time must be greater or equal to 0",
+        //     };
+        // }
         if (level.upgrade_price <= 0 || level.profit_per_hour <= 0 || level.profit_per_hour_increase <= 0) {
             return {
                 isValid: false,
@@ -52,18 +60,18 @@ const validateLevels = (levels) => {
                     message: "level must be greater than previous level",
                 };
             }
-            if (i != 1 && (level.upgrade_price <= levels[i - 1].upgrade_price)) {
-                return {
-                    isValid: false,
-                    message: "upgrade_price must be greater than previous upgrade_price",
-                };
-            }
-            if (level.profit_per_hour <= levels[i - 1].profit_per_hour) {
-                return {
-                    isValid: false,
-                    message: "profit_per_hour must be greater than previous profit_per_hour",
-                };
-            }
+            // if (i != 1 && (level.upgrade_price <= levels[i - 1].upgrade_price)) {
+            //     return {
+            //         isValid: false,
+            //         message: "upgrade_price must be greater than previous upgrade_price",
+            //     };
+            // }
+            // if (level.profit_per_hour <= levels[i - 1].profit_per_hour) {
+            //     return {
+            //         isValid: false,
+            //         message: "profit_per_hour must be greater than previous profit_per_hour",
+            //     };
+            // }
         }
     }
     return { isValid: true };
@@ -72,7 +80,7 @@ const validateLevels = (levels) => {
 module.exports = {
     create: async (req, res, next) => {
         try {
-            const today = moment().tz(TIMEZONE);
+            const now = moment().tz(TIMEZONE);
             let { name, description, image, is_published, category_id, levels, condition, available_duration } = req.body;
             if (!name || !image || !category_id || !levels.length) {
                 return res.status(400).json({
@@ -94,7 +102,7 @@ module.exports = {
             }
 
             // validate condition
-            if (condition && condition.card_id && condition.level) {
+            if (condition) {
                 if (typeof condition !== 'object') {
                     return res.status(400).json({
                         status: false,
@@ -104,43 +112,90 @@ module.exports = {
                     });
                 }
 
-                if (!condition.card_id || !condition.level) {
-                    return res.status(400).json({
-                        status: false,
-                        message: "Condition card_id and level are required",
-                        error: null,
-                        data: null,
-                    });
-                }
+                switch (condition.type) {
+                    case 'card':
+                        if (!condition.card_id || !condition.card_level) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition card_id and card_level are required",
+                                error: null,
+                                data: null,
+                            });
+                        }
 
-                let card = await prisma.card.findUnique({
-                    where: { id: condition.card_id },
-                });
-                if (!card) {
-                    return res.status(404).json({
-                        status: false,
-                        message: "Condition card not found",
-                        error: null,
-                        data: null,
-                    });
-                }
+                        let card = await prisma.card.findUnique({
+                            where: { id: condition.card_id },
+                        });
+                        if (!card) {
+                            return res.status(404).json({
+                                status: false,
+                                message: "Condition card not found",
+                                error: null,
+                                data: null,
+                            });
+                        }
 
-                let cardLevels = JSON.parse(card.levels);
-                let levelExists = cardLevels.find((level) => level.level === condition.level);
-                if (!levelExists) {
-                    return res.status(404).json({
-                        status: false,
-                        message: "Condition level not found",
-                        error: null,
-                        data: null,
-                    });
-                }
+                        let cardLevels = yaml.load(card.levels);
+                        let levelExists = cardLevels.find((level) => level.level === condition.card_level);
+                        if (!levelExists) {
+                            return res.status(404).json({
+                                status: false,
+                                message: "Condition card level not found",
+                                error: null,
+                                data: null,
+                            });
+                        }
 
-                condition = {
-                    id: card.id,
-                    name: card.name,
-                    level: condition.level,
-                };
+                        condition = {
+                            type: condition.type,
+                            card_id: card.id,
+                            card_name: card.name,
+                            card_level: condition.card_level
+                        };
+
+                        break;
+                    case 'invite_friends':
+                        if (condition.invite_friend_count === undefined) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition invite_friend_count is required",
+                                error: null,
+                                data: null,
+                            });
+                        }
+
+                        if (typeof condition.invite_friend_count !== 'number') {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition invite_friend_count must be a number",
+                                error: null,
+                                data: null,
+                            });
+                        }
+
+                        if (condition.invite_friend_count <= 0) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition invite_friend_count must be greater than 0",
+                                error: null,
+                                data: null,
+                            });
+                        }
+
+                        condition = {
+                            type: condition.type,
+                            invite_friend_count: condition.invite_friend_count
+                        };
+
+                        break;
+                    default:
+                        return res.status(400).json({
+                            status: false,
+                            message: "Condition type must be card or invite_friends",
+                            error: null,
+                            data: null,
+                        });
+                }
             }
 
             levels = levels.map((level, index) => ({ ...level, level: index }));
@@ -163,28 +218,27 @@ module.exports = {
             };
             let publishedAtUnix = null;
             if (isPublished) {
-                publishedAtUnix = today.unix();
+                publishedAtUnix = now.unix();
             }
 
-            let now = Math.floor(Date.now() / 1000);
             let card = await prisma.card.create({
                 data: {
                     name,
                     description,
                     image,
                     category_id,
-                    levels: JSON.stringify(levels),
-                    condition: condition ? JSON.stringify(condition) : null,
-                    created_at_unix: now,
-                    updated_at_unix: now,
+                    levels: yaml.dump(levels),
+                    condition: condition ? yaml.dump(condition) : null,
+                    created_at_unix: now.unix(),
+                    updated_at_unix: now.unix(),
                     is_published: isPublished,
                     published_at_unix: publishedAtUnix,
                     available_duration
                 },
             });
 
-            card.levels = JSON.parse(card.levels);
-            card.condition = JSON.parse(card.condition);
+            card.levels = yaml.load(card.levels);
+            card.condition = yaml.load(card.condition);
             return res.status(201).json({
                 status: true,
                 message: "Card created",
@@ -243,8 +297,8 @@ module.exports = {
                 });
             }
 
-            card.levels = JSON.parse(card.levels);
-            card.condition = JSON.parse(card.condition);
+            card.levels = yaml.load(card.levels);
+            card.condition = yaml.load(card.condition);
             return res.status(200).json({
                 status: true,
                 message: "Card found",
@@ -258,6 +312,7 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            const now = moment().tz(TIMEZONE);
             let { name, description, image, category_id, levels, is_published, condition } = req.body;
 
             let card = await prisma.card.findUnique({
@@ -290,7 +345,10 @@ module.exports = {
                 }
                 data.category_id = category_id;
             }
-            if (is_published !== undefined) data.is_published = is_published;
+            if (is_published !== undefined) (
+                data.published_at_unix = is_published ? now.unix() : null,
+                data.is_published = is_published
+            );
 
             if (levels && levels.length) {
                 let validation = validateLevels(levels);
@@ -303,7 +361,7 @@ module.exports = {
                     });
                 }
                 levels = levels.map((level, index) => ({ ...level, level: index }));
-                data.levels = JSON.stringify(levels);
+                data.levels = yaml.dump(levels);
             }
             if (condition) {
                 if (typeof condition !== 'object') {
@@ -315,57 +373,104 @@ module.exports = {
                     });
                 }
 
-                if (!condition.card_id || !condition.level) {
-                    return res.status(400).json({
-                        status: false,
-                        message: "Condition card_id and level are required",
-                        error: null,
-                        data: null,
-                    });
-                }
+                switch (condition.type) {
+                    case 'card':
+                        if (!condition.card_id || !condition.card_level) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition card_id and card_level are required",
+                                error: null,
+                                data: null,
+                            });
+                        }
 
-                let card = await prisma.card.findUnique({
-                    where: { id: condition.card_id },
-                });
-                if (!card) {
-                    return res.status(404).json({
-                        status: false,
-                        message: "Condition card not found",
-                        error: null,
-                        data: null,
-                    });
-                }
+                        let card = await prisma.card.findUnique({
+                            where: { id: condition.card_id },
+                        });
+                        if (!card) {
+                            return res.status(404).json({
+                                status: false,
+                                message: "Condition card not found",
+                                error: null,
+                                data: null,
+                            });
+                        }
 
-                let cardLevels = JSON.parse(card.levels);
-                let levelExists = cardLevels.find((level) => level.level === condition.level);
-                if (!levelExists) {
-                    return res.status(404).json({
-                        status: false,
-                        message: "Condition level not found",
-                        error: null,
-                        data: null,
-                    });
-                }
+                        let cardLevels = yaml.load(card.levels);
+                        let levelExists = cardLevels.find((level) => level.level === condition.card_level);
+                        if (!levelExists) {
+                            return res.status(404).json({
+                                status: false,
+                                message: "Condition card level not found",
+                                error: null,
+                                data: null,
+                            });
+                        }
 
-                condition = {
-                    id: card.id,
-                    name: card.name,
-                    level: condition.level,
-                };
-                data.condition = JSON.stringify(condition);
+                        condition = {
+                            type: condition.type,
+                            card_id: card.id,
+                            card_name: card.name,
+                            card_level: condition.card_level
+                        };
+                        data.condition = yaml.dump(condition);
+
+                        break;
+                    case 'invite_friends':
+                        if (condition.invite_friend_count === undefined) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition invite_friend_count is required",
+                                error: null,
+                                data: null,
+                            });
+                        }
+
+                        if (typeof condition.invite_friend_count !== 'number') {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition invite_friend_count must be a number",
+                                error: null,
+                                data: null,
+                            });
+                        }
+
+                        if (condition.invite_friend_count <= 0) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "Condition invite_friend_count must be greater than 0",
+                                error: null,
+                                data: null,
+                            });
+                        }
+
+                        condition = {
+                            type: condition.type,
+                            invite_friend_count: condition.invite_friend_count
+                        };
+                        data.condition = yaml.dump(condition);
+
+                        break;
+                    default:
+                        return res.status(400).json({
+                            status: false,
+                            message: "Condition type must be card or invite_friends",
+                            error: null,
+                            data: null,
+                        });
+                }
             }
 
-            let now = Math.floor(Date.now() / 1000);
             let updatedCard = await prisma.card.update({
                 where: { id: parseInt(req.params.id) },
                 data: {
                     ...data,
-                    updated_at_unix: now
+                    updated_at_unix: now.unix(),
                 },
             });
 
-            updatedCard.levels = JSON.parse(updatedCard.levels);
-            updatedCard.condition = JSON.parse(updatedCard.condition);
+            updatedCard.levels = yaml.load(updatedCard.levels);
+            updatedCard.condition = yaml.load(updatedCard.condition);
             return res.status(200).json({
                 status: true,
                 message: "Card updated",

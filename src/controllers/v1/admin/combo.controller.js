@@ -1,9 +1,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
+const yaml = require('js-yaml');
 
 const moment = require('moment-timezone');
-const { update } = require('./player.controller');
-const { destroy } = require('./task.controller');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 module.exports = {
@@ -83,18 +82,18 @@ module.exports = {
                 });
             }
 
-            let today = moment().tz(TIMEZONE);
+            let now = moment().tz(TIMEZONE);
             const combo = await prisma.cardCombo.create({
                 data: {
                     date: date,
-                    combination: JSON.stringify(combination),
+                    combination: yaml.dump(combination),
                     reward_coins: reward_coins,
-                    created_at_unix: today.unix(),
-                    updated_at_unix: today.unix()
+                    created_at_unix: now.unix(),
+                    updated_at_unix: now.unix()
                 }
             });
 
-            combo.combination = JSON.parse(combo.combination);
+            combo.combination = yaml.load(combo.combination);
             combo.combination = combo.combination.map(cardId => {
                 let card = cards.find(card => card.id === cardId);
                 return {
@@ -118,24 +117,36 @@ module.exports = {
 
     index: async (req, res, next) => {
         try {
-            const limit = parseInt(req.query.limit, 10) || 50;
+            const perPage = parseInt(req.query.per_page, 10) || 50;
             const page = parseInt(req.query.page, 10) || 1;
-            const offset = (page - 1) * limit;
+            const date = req.query.date;
+            const offset = (page - 1) * perPage;
 
             const combos = await prisma.cardCombo.findMany({
-                take: limit,
+                take: perPage,
                 skip: offset,
                 orderBy: {
                     date: 'desc'
+                },
+                where: {
+                    date: {
+                        contains: date
+                    }
                 }
             });
 
             let cards = await prisma.card.findMany();
 
-            const count = await prisma.cardCombo.count();
+            const count = await prisma.cardCombo.count({
+                where: {
+                    date: {
+                        contains: date
+                    }
+                }
+            });
 
             combos.forEach(combo => {
-                combo.combination = JSON.parse(combo.combination);
+                combo.combination = yaml.load(combo.combination);
                 combo.combination = combo.combination.map(cardId => {
                     let card = cards.find(card => card.id === cardId);
                     return {
@@ -181,7 +192,7 @@ module.exports = {
                 });
             }
 
-            combo.combination = JSON.parse(combo.combination);
+            combo.combination = yaml.load(combo.combination);
             combo.combination = combo.combination.map(cardId => {
                 let card = cards.find(card => card.id === cardId);
                 return {
@@ -249,16 +260,16 @@ module.exports = {
                 });
             }
 
-            let today = moment().tz(TIMEZONE);
+            let now = moment().tz(TIMEZONE);
             const combo = await prisma.cardCombo.update({
                 where: {
                     id: id
                 },
                 data: {
                     date: date,
-                    combination: JSON.stringify(combination),
+                    combination: yaml.dump(combination),
                     reward_coins: reward_coins,
-                    updated_at_unix: today.unix()
+                    updated_at_unix: now.unix()
                 }
             });
 

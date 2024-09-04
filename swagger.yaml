@@ -426,9 +426,13 @@ paths:
                 condition:
                   type: object
                   properties:
+                    type:
+                      type: string
                     card_id:
                       type: integer
-                    level:
+                    card_level:
+                      type: integer
+                    invite_friend_count:
                       type: integer
                 is_published:
                   type: boolean
@@ -792,6 +796,16 @@ paths:
           required: false
           schema:
             type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
       responses:
         "200":
           description: Success
@@ -987,12 +1001,30 @@ paths:
                   type: string
                 reward_coins:
                   type: integer
-                periodicity:
-                  type: string
                 is_published:
+                  type: boolean
+                requires_admin_approval:
                   type: boolean
                 config:
                   type: object
+                  properties:
+                    modal_title:
+                      type: string
+                    modal_description:
+                      type: string
+                    modal_link_button:
+                      type: string
+                    modal_link_url:
+                      type: string
+                    check_in_data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          day:
+                            type: integer
+                          reward_coins:
+                            type: integer
       responses:
         "200":
           description: Success
@@ -1088,7 +1120,7 @@ paths:
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
           description: Success
@@ -1196,6 +1228,110 @@ paths:
           required: true
           schema:
             type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+  /v1/admin/task-submissions:
+    get:
+      summary: Get all task submissions
+      tags:
+        - Admin - Task Submissions
+      parameters:
+        - name: task_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: player_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: is_approved
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            player_id:
+                              type: integer
+                            player_name:
+                              type: string
+                            submitted_at_unix:
+                              type: integer
+                            is_approved:
+                              type: boolean
+                              nullable: true
+                            approved_by_admin_id:
+                              type: integer
+                              nullable: true
+                            approved_by_admin_username:
+                              type: string
+                              nullable: true
+                            task_id:
+                              type: integer
+                            task_name:
+                              type: string
+                            image:
+                              type: string
+                              format: uri
+      security:
+        - bearerAuth: []
+  /v1/admin/task-submissions/{id}:
+    put:
+      summary: Update task submission by id
+      tags:
+        - Admin - Task Submissions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_approved:
+                  type: boolean
       responses:
         "200":
           description: Success
@@ -2045,6 +2181,8 @@ paths:
               type: object
               properties:
                 task_id:
+                  type: integer
+                image:
                   type: string
       responses:
         "200":
@@ -2099,6 +2237,29 @@ paths:
                                   type: integer
                           count:
                             type: integer
+  /v1/rank:
+    get:
+      summary: Get player rank
+      tags:
+        - Player
+      parameters:
+        - name: level
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
 components:
   schemas:
     AnyValue:
