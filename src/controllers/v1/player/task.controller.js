@@ -142,7 +142,8 @@ module.exports = {
             let taskSubmitted = await prisma.taskSubmission.findFirst({
                 where: {
                     player_id: playerId,
-                    task_id: taskId
+                    task_id: taskId,
+                    is_approved: null
                 }
             });
 
