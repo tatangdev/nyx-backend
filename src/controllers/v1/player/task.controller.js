@@ -91,7 +91,11 @@ module.exports = {
                             response.approved_at = taskSubmission.is_approved ? taskSubmission.completed_at_unix : null;
                             response.status = "completed";
                             response.is_completed = true;
-                            if (task.requires_admin_approval && !taskSubmission.is_approved) {
+                            if (task.requires_admin_approval && taskSubmission.is_approved == false) {
+                                response.is_completed = false;
+                                response.status = "rejected";
+                            }
+                            if (task.requires_admin_approval && taskSubmission.is_approved == null) {
                                 response.is_completed = false;
                                 response.status = "pending_approval";
                             }
