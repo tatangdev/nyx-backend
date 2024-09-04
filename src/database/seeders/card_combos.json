@@ -1,0 +1,410 @@
+[
+  {
+    "id": 12,
+    "date": "2024-09-05",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 7\n- 20\n- 19\n- 29\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 13,
+    "date": "2024-09-06",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 25\n- 34\n- 41\n- 40\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 14,
+    "date": "2024-09-07",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 21\n- 27\n- 6\n- 1\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 15,
+    "date": "2024-09-08",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 37\n- 13\n- 47\n- 26\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 16,
+    "date": "2024-09-09",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 22\n- 16\n- 8\n- 20\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 17,
+    "date": "2024-09-10",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 28\n- 19\n- 44\n- 49\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 18,
+    "date": "2024-09-11",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 21\n- 36\n- 37\n- 9\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 19,
+    "date": "2024-09-12",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 31\n- 46\n- 1\n- 35\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 20,
+    "date": "2024-09-13",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 4\n- 6\n- 21\n- 45\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 21,
+    "date": "2024-09-14",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 20\n- 52\n- 19\n- 38\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 22,
+    "date": "2024-09-15",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 27\n- 29\n- 28\n- 24\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 23,
+    "date": "2024-09-16",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 54\n- 44\n- 46\n- 10\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 24,
+    "date": "2024-09-17",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 20\n- 44\n- 27\n- 2\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 25,
+    "date": "2024-09-18",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 11\n- 9\n- 52\n- 17\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 26,
+    "date": "2024-09-19",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 17\n- 11\n- 27\n- 56\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 27,
+    "date": "2024-09-20",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 33\n- 19\n- 34\n- 45\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 28,
+    "date": "2024-09-21",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 26\n- 9\n- 35\n- 24\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 29,
+    "date": "2024-09-22",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 22\n- 5\n- 56\n- 6\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 30,
+    "date": "2024-09-23",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 33\n- 2\n- 11\n- 40\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 31,
+    "date": "2024-09-24",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 20\n- 23\n- 24\n- 15\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 32,
+    "date": "2024-09-25",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 55\n- 14\n- 38\n- 43\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 33,
+    "date": "2024-09-26",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 28\n- 19\n- 52\n- 7\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 34,
+    "date": "2024-09-27",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 50\n- 2\n- 44\n- 20\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 35,
+    "date": "2024-09-28",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 35\n- 7\n- 16\n- 15\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 36,
+    "date": "2024-09-29",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 1\n- 37\n- 9\n- 38\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 37,
+    "date": "2024-09-30",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 28\n- 14\n- 20\n- 22\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 38,
+    "date": "2024-10-01",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 24\n- 2\n- 4\n- 26\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 39,
+    "date": "2024-10-02",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 2\n- 16\n- 30\n- 20\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 40,
+    "date": "2024-10-03",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 28\n- 36\n- 32\n- 2\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 41,
+    "date": "2024-10-04",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 52\n- 3\n- 53\n- 51\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 42,
+    "date": "2024-10-05",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 21\n- 51\n- 25\n- 32\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 43,
+    "date": "2024-10-06",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 10\n- 30\n- 26\n- 7\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 44,
+    "date": "2024-10-07",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 15\n- 16\n- 55\n- 12\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 45,
+    "date": "2024-10-08",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 23\n- 51\n- 10\n- 35\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 46,
+    "date": "2024-10-09",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 45\n- 5\n- 55\n- 6\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 47,
+    "date": "2024-10-10",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 27\n- 8\n- 4\n- 21\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 48,
+    "date": "2024-10-11",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 46\n- 4\n- 9\n- 3\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 49,
+    "date": "2024-10-12",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 34\n- 33\n- 56\n- 13\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 50,
+    "date": "2024-10-13",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 6\n- 20\n- 42\n- 45\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 51,
+    "date": "2024-10-14",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 52\n- 36\n- 50\n- 14\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 52,
+    "date": "2024-10-15",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 30\n- 16\n- 34\n- 18\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 53,
+    "date": "2024-10-16",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 32\n- 5\n- 7\n- 23\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 54,
+    "date": "2024-10-17",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 40\n- 13\n- 37\n- 22\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 55,
+    "date": "2024-10-18",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 1\n- 40\n- 55\n- 51\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 56,
+    "date": "2024-10-19",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 23\n- 11\n- 24\n- 48\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 57,
+    "date": "2024-10-20",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 21\n- 19\n- 28\n- 26\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 58,
+    "date": "2024-10-21",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 30\n- 43\n- 14\n- 49\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 59,
+    "date": "2024-10-22",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 42\n- 43\n- 3\n- 7\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 60,
+    "date": "2024-10-23",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 34\n- 12\n- 54\n- 39\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 61,
+    "date": "2024-10-24",
+    "created_at_unix": 1724596790,
+    "updated_at_unix": 1724596790,
+    "combination": "- 1\n- 50\n- 54\n- 39\n",
+    "reward_coins": 5000000
+  },
+  {
+    "id": 62,
+    "date": "2024-10-26",
+    "created_at_unix": 1725129947,
+    "updated_at_unix": 1725169030,
+    "combination": "- 46\n- 3\n- 24\n- 28\n",
+    "reward_coins": 5000000
+  }
+]

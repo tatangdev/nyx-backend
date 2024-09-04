@@ -1,0 +1,122 @@
+[
+  {
+    "id": 4,
+    "name": "Follow our Telegram",
+    "image": "https://ik.imagekit.io/taetang/nyx-backend/1725370837684_78p_BqJKq.png",
+    "type": "with_link",
+    "reward_coins": 50000,
+    "config": "modal_title: Follow our Telegram\nmodal_description: Follow to get new updates\nmodal_link_button: Join\nmodal_link_url: https://t.me/chipmunk_kombat\nreward_delay_seconds: 0\n",
+    "is_published": true,
+    "requires_admin_approval": true,
+    "created_at_unix": 1724872650,
+    "updated_at_unix": 1725373022
+  },
+  {
+    "id": 5,
+    "name": "Daily Reward",
+    "image": "https://cdn.hamsterkombat.io/earn/calendar.png",
+    "type": "daily_check_in",
+    "reward_coins": 6649000,
+    "config": "- day: 1\n  reward_coins: 500\n- day: 2\n  reward_coins: 1000\n- day: 3\n  reward_coins: 2500\n- day: 4\n  reward_coins: 5000\n- day: 5\n  reward_coins: 15000\n- day: 6\n  reward_coins: 25000\n- day: 7\n  reward_coins: 100000\n- day: 8\n  reward_coins: 500000\n- day: 9\n  reward_coins: 1000000\n- day: 10\n  reward_coins: 5000000\n",
+    "is_published": true,
+    "requires_admin_approval": false,
+    "created_at_unix": 1724944408,
+    "updated_at_unix": 1724944507
+  },
+  {
+    "id": 6,
+    "name": "Check our website",
+    "image": "https://ik.imagekit.io/taetang/nyx-backend/1725367281476_qHeGJG7Sf.jpeg",
+    "type": "with_link",
+    "reward_coins": 50000,
+    "config": "modal_title: Check our website\nmodal_description: Check our website and read our roadmap\nmodal_link_button: Check\nmodal_link_url: https://chipmunkkombat.com/\nreward_delay_seconds: 0\n",
+    "is_published": true,
+    "requires_admin_approval": true,
+    "created_at_unix": 1725370295,
+    "updated_at_unix": 1725457658
+  },
+  {
+    "id": 11,
+    "name": "Follow Our Facebook",
+    "image": "https://ik.imagekit.io/taetang/nyx-backend/1725457908316_TAy_RE0rs.png",
+    "type": "with_link",
+    "reward_coins": 50000,
+    "config": "modal_title: Follow Our Facebook\nmodal_description: Follow Our Facebook\nmodal_link_button: Join\nmodal_link_url: https://www.facebook.com/chipmunkkombat/\nreward_delay_seconds: 0\n",
+    "is_published": true,
+    "requires_admin_approval": true,
+    "created_at_unix": 1725457912,
+    "updated_at_unix": 1725457912
+  },
+  {
+    "id": 12,
+    "name": "Follow Our Tiktok",
+    "image": "https://ik.imagekit.io/taetang/nyx-backend/1725457991928_b1fyJmgZ_.png",
+    "type": "with_link",
+    "reward_coins": 50000,
+    "config": "modal_title: Follow Our Tiktok\nmodal_description: Follow Our Tiktok\nmodal_link_button: Join\nmodal_link_url: https://tiktok.com/chipmunk_kombat\nreward_delay_seconds: 0\n",
+    "is_published": true,
+    "requires_admin_approval": true,
+    "created_at_unix": 1725457996,
+    "updated_at_unix": 1725457996
+  },
+  {
+    "id": 1,
+    "name": "Invite 3 friends",
+    "image": "https://cdn.hamsterkombat.io/earn/friends.png",
+    "type": "invite_friends",
+    "reward_coins": 50000,
+    "config": "modal_title: Invite 3 friends\nmodal_description: Invite your friends to share benefits\nreferee_count: 3\nreward_delay_seconds: 0\n",
+    "is_published": true,
+    "requires_admin_approval": false,
+    "created_at_unix": 1724872455,
+    "updated_at_unix": 1725098407
+  },
+  {
+    "id": 10,
+    "name": "Follow our X",
+    "image": "https://ik.imagekit.io/taetang/nyx-backend/1725372064852_rlEmWWU_p.png",
+    "type": "with_link",
+    "reward_coins": 50000,
+    "config": "modal_title: Follow our X\nmodal_description: Follow our X\nmodal_link_button: Join\nmodal_link_url: https://x.com/chipmunk_kombat\nreward_delay_seconds: 0\n",
+    "is_published": true,
+    "requires_admin_approval": true,
+    "created_at_unix": 1725372070,
+    "updated_at_unix": 1725372719
+  },
+  {
+    "id": 9,
+    "name": "Follow our Discord",
+    "image": "https://ik.imagekit.io/taetang/nyx-backend/1725372006064_otbJrQ33W.png",
+    "type": "with_link",
+    "reward_coins": 50000,
+    "config": "modal_title: Follow our Discord\nmodal_description: Follow our Discord\nmodal_link_button: Join\nmodal_link_url: https://discord.gg/8fxEE9C2\nreward_delay_seconds: 0\n",
+    "is_published": true,
+    "requires_admin_approval": true,
+    "created_at_unix": 1725372012,
+    "updated_at_unix": 1725372994
+  },
+  {
+    "id": 8,
+    "name": "Subscribe our Youtube",
+    "image": "https://ik.imagekit.io/taetang/nyx-backend/1725371893295_YOUVyntnf.png",
+    "type": "with_link",
+    "reward_coins": 50000,
+    "config": "modal_title: Subscribe our Youtube\nmodal_description: Subscribe our Youtube\nmodal_link_button: Subscribe\nmodal_link_url: https://www.youtube.com/@Chipmunk_kombat\nreward_delay_seconds: 0\n",
+    "is_published": true,
+    "requires_admin_approval": true,
+    "created_at_unix": 1725371903,
+    "updated_at_unix": 1725373001
+  },
+  {
+    "id": 7,
+    "name": "Follow us on Telegram",
+    "image": "https://ik.imagekit.io/taetang/nyx-backend/1725371381910_8j88220Xb.png",
+    "type": "with_link",
+    "reward_coins": 50000,
+    "config": "modal_title: Follow us on Telegram\nmodal_description: Follow us on Telegram\nmodal_link_button: Follow us on Telegram\nmodal_link_url: https://t.me/chipmunk_kombat_chat\nreward_delay_seconds: 0\n",
+    "is_published": true,
+    "requires_admin_approval": true,
+    "created_at_unix": 1725371837,
+    "updated_at_unix": 1725373008
+  }
+]
