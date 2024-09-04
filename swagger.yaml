@@ -6,6 +6,7 @@ info:
 servers:
   - url: https://nyx-backend.up.railway.app/api
   - url: http://localhost:3000/api
+  - url: https://nyx-backend-production.up.railway.app/api
 security:
   - bearerAuth: []
 paths:
