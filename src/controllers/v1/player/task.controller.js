@@ -11,9 +11,22 @@ module.exports = {
             const playerId = req.user.id;
             const tasksResult = await prisma.task.findMany({ where: { is_published: true } });
             const now = moment().tz(TIMEZONE);
-            let taskSubmissions = await prisma.taskSubmission.findMany({
-                where: { player_id: playerId }
-            });
+            let taskSubmissions = await prisma.$queryRawUnsafe(`
+            SELECT DISTINCT ON (player_id, task_id)
+                id,
+                player_id,
+                task_id,
+                image,
+                is_approved,
+                approval_by,
+                submitted_at_unix,
+                completed_at_unix
+            FROM 
+                task_submissions
+            ORDER BY 
+                player_id, 
+                task_id, 
+                submitted_at_unix DESC;`);
 
             const tasks = await Promise.all(tasksResult.map(async (task) => {
                 switch (task.type) {
