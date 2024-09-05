@@ -23,6 +23,8 @@ module.exports = {
                 completed_at_unix
             FROM 
                 task_submissions
+            WHERE
+                player_id = ${playerId}
             ORDER BY 
                 player_id, 
                 task_id, 
