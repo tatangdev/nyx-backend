@@ -52,13 +52,13 @@ model Player {
 }
 
 model PlayerEarning {
-  id               Int     @id @default(autoincrement())
-  player_id        Int     @unique
-  player_level     Int?    @default(1)
-  passive_per_hour BigInt
-  coins_total      BigInt
-  coins_balance    BigInt
-  coins_spent      BigInt?
+  id               Int  @id @default(autoincrement())
+  player_id        Int  @unique
+  player_level     Int? @default(1)
+  passive_per_hour Int
+  coins_total      Int
+  coins_balance    Int
+  coins_spent      Int?
 
   tap_earning_value            Int?
   tap_earning_energy           Int?
@@ -135,7 +135,7 @@ model CardLevel {
 model PointHistory {
   id              Int     @id @default(autoincrement())
   player_id       Int
-  amount          BigInt
+  amount          Int
   type            String
   data            String?
   created_at_unix Int?
@@ -146,7 +146,7 @@ model PointHistory {
 model PassiveEarningHistory {
   id              Int     @id @default(autoincrement())
   player_id       Int
-  amount          BigInt
+  amount          Int
   type            String
   data            String?
   created_at_unix Int?
