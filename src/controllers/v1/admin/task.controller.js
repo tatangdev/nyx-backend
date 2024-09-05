@@ -524,7 +524,10 @@ module.exports = {
                 ts.submitted_at_unix,
                 ts.is_approved,
                 u.id AS approved_by_admin_id,
-                u.username AS approved_by_admin_username,
+                CASE
+                    WHEN ts.approval_by = -1 THEN 'System'
+                    ELSE u.username
+                END AS approved_by_admin_username,
                 t.id AS task_id,
                 t.name AS task_name,
                 ts.image

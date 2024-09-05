@@ -58,3 +58,10 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     console.log(`Server running at port`, port);
 });
+
+const cron = require('node-cron');
+const { approveTasks } = require('./cron/tasks.js');
+
+cron.schedule('*/10 * * * *', () => {
+    approveTasks();
+});

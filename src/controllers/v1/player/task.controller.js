@@ -11,9 +11,22 @@ module.exports = {
             const playerId = req.user.id;
             const tasksResult = await prisma.task.findMany({ where: { is_published: true } });
             const now = moment().tz(TIMEZONE);
-            let taskSubmissions = await prisma.taskSubmission.findMany({
-                where: { player_id: playerId }
-            });
+            let taskSubmissions = await prisma.$queryRawUnsafe(`
+            SELECT DISTINCT ON (player_id, task_id)
+                id,
+                player_id,
+                task_id,
+                image,
+                is_approved,
+                approval_by,
+                submitted_at_unix,
+                completed_at_unix
+            FROM 
+                task_submissions
+            ORDER BY 
+                player_id, 
+                task_id, 
+                submitted_at_unix DESC;`);
 
             const tasks = await Promise.all(tasksResult.map(async (task) => {
                 switch (task.type) {
@@ -91,7 +104,11 @@ module.exports = {
                             response.approved_at = taskSubmission.is_approved ? taskSubmission.completed_at_unix : null;
                             response.status = "completed";
                             response.is_completed = true;
-                            if (task.requires_admin_approval && !taskSubmission.is_approved) {
+                            if (task.requires_admin_approval && taskSubmission.is_approved == false) {
+                                response.is_completed = false;
+                                response.status = "rejected";
+                            }
+                            if (task.requires_admin_approval && taskSubmission.is_approved == null) {
                                 response.is_completed = false;
                                 response.status = "pending_approval";
                             }
@@ -138,7 +155,8 @@ module.exports = {
             let taskSubmitted = await prisma.taskSubmission.findFirst({
                 where: {
                     player_id: playerId,
-                    task_id: taskId
+                    task_id: taskId,
+                    is_approved: null
                 }
             });
 
