@@ -63,7 +63,7 @@ async function approveTasks() {
             }
         }
 
-
+        console.log('Approved tasks:', submissions.length);
     } catch (error) {
         console.log(error);
     }
