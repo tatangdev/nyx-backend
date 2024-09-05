@@ -121,8 +121,18 @@ module.exports = {
                 if (isNewUser && referee) {
                     const referralCoins = levelData[0].level_up_reward;
 
-                    await prisma.playerEarning.updateMany({
-                        where: { player_id: { in: [player.id, referee.id] } },
+                    // player
+                    await prisma.playerEarning.update({
+                        where: { player_id: player.id },
+                        data: {
+                            coins_total: { increment: referralCoins * 0.5 },
+                            coins_balance: { increment: referralCoins * 0.5 },
+                        }
+                    });
+
+                    // referee
+                    await prisma.playerEarning.update({
+                        where: { player_id: referee.id },
                         data: {
                             coins_total: { increment: referralCoins },
                             coins_balance: { increment: referralCoins },
@@ -135,14 +145,14 @@ module.exports = {
                         data: [
                             {
                                 player_id: player.id,
-                                amount: referralCoins,
+                                amount: referralCoins * 0.5,
                                 type: "REFERRAL",
                                 data: yaml.dump({
-                                    nominal: referralCoins,
+                                    nominal: referralCoins * 0.5,
                                     previous_balance: playerEarning.coins_balance,
                                     previous_total: playerEarning.coins_total,
-                                    new_balance: playerEarning.coins_balance + referralCoins,
-                                    new_total: playerEarning.coins_total + referralCoins,
+                                    new_balance: playerEarning.coins_balance + referralCoins * 0.5,
+                                    new_total: playerEarning.coins_total + referralCoins * 0.5,
                                     referee_id: referee.id
                                 }),
                                 created_at_unix: now.unix(),
