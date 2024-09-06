@@ -536,7 +536,7 @@ module.exports = {
                 INNER JOIN tasks t ON t.id = ts.task_id
                 INNER JOIN players p ON p.id = ts.player_id
                 LEFT JOIN users u ON u.id = ts.approval_by
-            WHERE t.requires_admin_approval AND (is_approved IS NULL OR NOT is_approved)`;
+            WHERE t.requires_admin_approval AND is_approved IS NULL`;
 
             if (req.query.task_id) query += ` AND t.id = ${req.query.task_id}`;
             if (req.query.player_id) query += ` AND ts.player_id = ${req.query.player_id}`;
