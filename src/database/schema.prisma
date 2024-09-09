@@ -64,6 +64,9 @@ model PlayerEarning {
   tap_earning_energy           Int?
   tap_earning_energy_recovery  Int?
   tap_earning_energy_available Int?
+  tap_earning_level            Int? @default(1)
+  tap_earning_energy_level     Int? @default(1)
+  recharge_earning_energy      Int? @default(6)
 
   created_at_unix Int?
   updated_at_unix Int?
