@@ -492,6 +492,7 @@ module.exports = {
             let isSubmitted = false;
             let submittedAt = null;
             let combination = null;
+            let correctComboCnt = 0;
             let comboSubmission = await prisma.comboSubmission.findFirst({
                 where: {
                     player_id: playerId,
@@ -506,7 +507,10 @@ module.exports = {
                 combination = combination.map((cardId, index) => {
                     let card = cards.find(card => card.id === cardId);
                     let isCorrect = false;
-                    if (correctCombo[index] === cardId) isCorrect = true;
+                    if (correctCombo[index] === cardId) {
+                        isCorrect = true;
+                        correctComboCnt++;
+                    };
 
                     return {
                         id: card.id,
@@ -528,6 +532,7 @@ module.exports = {
                 error: null,
                 data: {
                     bonus_coins: combo ? combo.reward_coins : 0,
+                    accquired_bonus_coins: isSubmitted ? Math.floor((correctComboCnt / 4) * combo.reward_coins) : 0,
                     is_submitted: isSubmitted,
                     remain_seconds: remainSeconds,
                     submitted_at: submittedAt,

@@ -2004,6 +2004,8 @@ paths:
                           properties:
                             bonus_coins:
                               type: integer
+                            accquired_bonus_coins:
+                              type: integer
                             is_submitted:
                               type: boolean
                             remain_seconds:
