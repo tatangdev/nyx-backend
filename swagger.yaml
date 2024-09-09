@@ -2004,10 +2004,29 @@ paths:
                           properties:
                             bonus_coins:
                               type: integer
-                            is_claimed:
+                            is_submitted:
                               type: boolean
                             remain_seconds:
                               type: integer
+                            submitted_at:
+                              type: string
+                              format: date-time
+                            combination:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  name:
+                                    type: string
+                                  description:
+                                    type: string
+                                  image:
+                                    type: string
+                                    format: uri
+                                  is_correct:
+                                    type: boolean
       security:
         - bearerAuth: []
     post:
