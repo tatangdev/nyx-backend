@@ -499,14 +499,21 @@ module.exports = {
                 }
             });
             if (comboSubmission) {
+                let correctCombo = [];
+                if (combo) correctCombo = yaml.load(combo.combination);
+
                 combination = yaml.load(comboSubmission.combination);
-                combination = combination.map(cardId => {
+                combination = combination.map((cardId, index) => {
                     let card = cards.find(card => card.id === cardId);
+                    let isCorrect = false;
+                    if (correctCombo[index] === cardId) isCorrect = true;
+
                     return {
                         id: card.id,
                         name: card.name,
                         description: card.description,
-                        image: card.image
+                        image: card.image,
+                        is_correct: isCorrect
                     };
                 });
 
