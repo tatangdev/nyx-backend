@@ -25,6 +25,7 @@ router.post('/card-upgrade', validate, isPlayer, card.upgrade);
 
 // boost
 router.get('/boost', validate, isPlayer, boost.index);
+router.post('/boost', validate, isPlayer, boost.upgrade);
 
 // point
 router.get('/sync', validate, isPlayer, point.sync);

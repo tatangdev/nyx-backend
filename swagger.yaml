@@ -2086,6 +2086,31 @@ paths:
                         type: array
                         items:
                           type: object
+    post:
+      summary: Boost earnings
+      tags:
+        - Boosts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                boost_id:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
   /v1/cards-v2:
     get:
       summary: Get all cards

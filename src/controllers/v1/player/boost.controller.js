@@ -1,7 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
-const { max } = require('moment-timezone');
 const prisma = new PrismaClient({ log: ['query'] });
 yaml = require('js-yaml');
+
+const moment = require('moment-timezone');
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 module.exports = {
     index: async (req, res, next) => {
@@ -77,6 +79,7 @@ module.exports = {
     },
 
     upgrade: async (req, res, next) => {
+        const now = moment().tz(TIMEZONE);
         try {
             let playerId = req.user.id;
 
@@ -101,36 +104,38 @@ module.exports = {
             // player level
             let _levelConfig = configs.find(c => c.key === 'level');
             let levels = yaml.load(_levelConfig.value);
-            let playerLevel = levels.find(l => l.level === player.level);
 
             let message = "";
-            let energyLevel = earning ? earning.tap_earning_energy_level : 1;
-            let _boostMaxTap = configs.find(c => c.key === 'boost_max_taps');
-            let boostMaxTap = yaml.load(_boostMaxTap.value);
+
+            let updateEarningData = {};
+            let requireUpdatePlayerLevel = false;
+            let playerLevel = levels.find(l => l.level === player.level);
+            let newPlayerSpend = 0;
+            let newBalance = 0;
             switch (req.body.boost_id) {
                 case 'boost_full_available_taps':
-                    // all quota tu full the energy is runout
                     if (earning.recharge_earning_energy <= 0) {
-                        return res.json({
+                        return res.status(400).json({
                             status: false,
-                            message: "Your quota is empty",
+                            message: "Reach quota limit",
                             error: null,
                             data: null
                         });
                     }
 
-                    // update the energy
-                    let currentBoostMaxTap = boostMaxTap.find(b => b.level === energyLevel);
-                    await prisma.playerEarning.update({
-                        where: {
-                            player_id: playerId
-                        },
-                        data: {
-                            tap_earning_energy: playerLevel.tap_earning_energy + currentBoostMaxTap.addition_value,
-                            tap_earning_energy_available: playerLevel.tap_earning_energy + currentBoostMaxTap.addition_value,
-                            recharge_earning_energy: earning.recharge_earning_energy - 1
-                        }
-                    });
+                    if (earning.tap_earning_energy_available === earning.tap_earning_energy) {
+                        return res.status(400).json({
+                            status: false,
+                            message: "Energy is full",
+                            error: null,
+                            data: null
+                        });
+                    }
+
+                    updateEarningData = {
+                        tap_earning_energy_available: earning.tap_earning_energy,
+                        recharge_earning_energy: earning.recharge_earning_energy - 1,
+                    };
 
                     message = "Energy recharged!";
                     break;
@@ -141,7 +146,7 @@ module.exports = {
                     let nextBoostEarningTap = boostEarningTap.find(b => b.level === tapLevel + 1);
 
                     if (!nextBoostEarningTap) {
-                        return res.json({
+                        return res.status(400).json({
                             status: false,
                             message: "Max level reached",
                             error: null,
@@ -150,7 +155,7 @@ module.exports = {
                     }
 
                     if (earning.coins_balance < nextBoostEarningTap.upgrade_price) {
-                        return res.json({
+                        return res.status(400).json({
                             status: false,
                             message: "Insufficient balance",
                             error: null,
@@ -158,19 +163,36 @@ module.exports = {
                         });
                     }
 
-                    // update earning: tap_earning_level, coins_total, coins_balance, passive_per_hour, 
+                    newBalance = earning.coins_balance - nextBoostEarningTap.upgrade_price;
+                    newPlayerSpend = earning.coins_total - newBalance;
 
-                    // point history
+                    // determine current user level
+                    playerLevel = levels.reduce((acc, level) => {
+                        return level.minimum_score <= newPlayerSpend ? level : acc;
+                    }, levels[0]);
 
-                    // passive earning history
+                    // update player level
+                    if (playerLevel.level > player.level) {
+                        requireUpdatePlayerLevel = true;
+                    }
+
+                    updateEarningData = {
+                        coins_balance: newBalance,
+                        tap_earning_value: playerLevel.tap_earning_value + nextBoostEarningTap.addition_value,
+                        tap_earning_level: nextBoostEarningTap.level,
+                        updated_at_unix: now.unix()
+                    };
 
                     message = `Boost is yours! Multitap ${nextBoostEarningTap.level} lvl`;
                     break;
                 case 'boost_max_taps':
+                    let energyLevel = earning ? earning.tap_earning_energy_level : 1;
+                    let _boostMaxTap = configs.find(c => c.key === 'boost_max_taps');
+                    let boostMaxTap = yaml.load(_boostMaxTap.value);
                     let nextBoostMaxTap = boostMaxTap.find(b => b.level === energyLevel + 1);
 
                     if (!nextBoostMaxTap) {
-                        return res.json({
+                        return res.status(400).json({
                             status: false,
                             message: "Max level reached",
                             error: null,
@@ -179,7 +201,7 @@ module.exports = {
                     }
 
                     if (earning.coins_balance < nextBoostMaxTap.upgrade_price) {
-                        return res.json({
+                        return res.status(400).json({
                             status: false,
                             message: "Insufficient balance",
                             error: null,
@@ -187,7 +209,27 @@ module.exports = {
                         });
                     }
 
-                       // update earning: tap_earning_level, coins_total, coins_balance, passive_per_hour
+                    newBalance = earning.coins_balance - nextBoostMaxTap.upgrade_price;
+                    newPlayerSpend = earning.coins_total - newBalance;
+
+                    // determine current user level
+                    playerLevel = levels.reduce((acc, level) => {
+                        return level.minimum_score <= newPlayerSpend ? level : acc;
+                    }, levels[0]);
+
+                    // update player level
+                    if (playerLevel.level > player.level) {
+                        requireUpdatePlayerLevel = true;
+                    }
+
+                    updateEarningData = {
+                        coins_balance: newBalance,
+                        tap_earning_energy: playerLevel.tap_earning_energy + nextBoostMaxTap.addition_value,
+                        tap_earning_energy_level: nextBoostMaxTap.level,
+                        updated_at_unix: now.unix()
+                    };
+
+                    // update earning: tap_earning_level, coins_total, coins_balance, passive_per_hour
 
                     // point history
 
@@ -196,6 +238,105 @@ module.exports = {
                     message = `Boost is yours! Energy Limit ${nextBoostMaxTap.level} lvl`;
                     break;
                 default:
+                    return res.status(400).json({
+                        status: false,
+                        message: "Invalid boost id",
+                        error: null,
+                        data: null
+                    });
+            }
+
+            // update the energy
+            if (Object.keys(updateEarningData).length > 0) {
+                await prisma.playerEarning.update({
+                    where: {
+                        player_id: playerId
+                    },
+                    data: updateEarningData
+                });
+
+                // point history
+                await prisma.pointHistory.create({
+                    data: {
+                        player_id: playerId,
+                        amount: newPlayerSpend,
+                        type: req.body.boost_id,
+                        data: yaml.dump({
+                            nominal: newPlayerSpend,
+                            previous_balance: earning.coins_balance,
+                            previous_total: earning.coins_total,
+                            new_balance: newBalance,
+                            new_total: earning.coins_total,
+                            note: message,
+                        }),
+                        created_at_unix: now.unix(),
+                    }
+                });
+
+                if (requireUpdatePlayerLevel) {
+                    // update player level
+                    await prisma.player.update({
+                        where: {
+                            id: playerId
+                        },
+                        data: {
+                            level: playerLevel.level
+                        }
+                    });
+
+
+                    // level history
+                    await prisma.levelHistory.create({
+                        data: {
+                            player_id: playerId,
+                            level: playerLevel.level,
+                            data: yaml.dump({
+                                previous_level: player.level,
+                                new_level: playerLevel.level,
+                                note: `Upgrade player to level ${playerLevel.level}`,
+                                spend: newPlayerSpend
+                            }),
+                            created_at_unix: now.unix(),
+                        }
+                    });
+
+                    // referral bonus
+                    if (player.referee_id) {
+                        await prisma.playerEarning.update({
+                            where: { player_id: player.referee_id },
+                            data: {
+                                coins_balance: {
+                                    increment: playerLevel.level_up_reward
+                                },
+                                coins_total: {
+                                    increment: playerLevel.level_up_reward
+                                },
+                                updated_at_unix: now.unix()
+                            }
+                        });
+
+                        let refereePoint = await prisma.playerEarning.findFirst({
+                            where: { player_id: player.referee_id }
+                        });
+
+                        await prisma.pointHistory.create({
+                            data: {
+                                player_id: player.referee_id,
+                                amount: playerLevel.level_up_reward,
+                                type: 'REFERRAL_BONUS',
+                                data: yaml.dump({
+                                    nominal: playerLevel.level_up_reward,
+                                    previous_balance: refereePoint.coins_balance,
+                                    previous_total: refereePoint.coins_total,
+                                    new_balance: refereePoint.coins_balance + playerLevel.level_up_reward,
+                                    new_total: refereePoint.coins_total + playerLevel.level_up_reward,
+                                    note: `Referral bonus for player level up to level ${playerLevel.level}`,
+                                }),
+                                created_at_unix: now.unix(),
+                            }
+                        });
+                    }
+                }
             }
 
             return res.json({
