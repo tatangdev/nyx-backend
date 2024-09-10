@@ -2067,6 +2067,25 @@ paths:
                             type: integer
       security:
         - bearerAuth: []
+  /v1/boost:
+    get:
+      summary: Get all boosts
+      tags:
+        - Boosts
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
   /v1/cards-v2:
     get:
       summary: Get all cards
