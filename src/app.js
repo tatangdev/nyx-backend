@@ -65,3 +65,7 @@ const { approveTasks } = require('./cron/tasks.js');
 cron.schedule('*/10 * * * *', () => {
     approveTasks();
 });
+
+cron.schedule('0 11 * * *', () => {
+    resetFullEnergyQuota();
+});

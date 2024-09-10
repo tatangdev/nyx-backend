@@ -69,6 +69,19 @@ async function approveTasks() {
     }
 }
 
+async function resetFullEnergyQuota() {
+    try {
+        await prisma.playerEarning.updateMany({
+            data: {
+                recharge_earning_energy: 6
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
-    approveTasks
+    approveTasks,
+    resetFullEnergyQuota
 };

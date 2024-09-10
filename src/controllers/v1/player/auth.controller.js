@@ -70,7 +70,10 @@ module.exports = {
                     tap_earning_energy_recovery: firstLevel.tap_earning_energy_recovery,
                     tap_earning_energy_available: firstLevel.tap_earning_energy,
                     passive_per_hour: parseInt(process.env.DEFAULT_PROFIT_PER_HOUR, 10) || 0,
-                    coins_total: parseInt(process.env.DEFAULT_COINS, 10) || 0
+                    coins_total: parseInt(process.env.DEFAULT_COINS, 10) || 0,
+                    tap_earning_level: 1,
+                    tap_earning_energy_level: 1,
+                    recharge_earning_energy: 6,
                 };
 
                 // Check if playerEarning exists, if not create it

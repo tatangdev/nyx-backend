@@ -281,9 +281,16 @@ module.exports = {
                 }
             }
 
+            // get configs
+            let configs = await prisma.config.findMany({
+                where: {
+                    is_active: true,
+                }
+            });
+
             // get levels configuration
             let playerLevels = [];
-            let levelConfig = await prisma.config.findFirst({ where: { key: 'level' } });
+            let levelConfig = configs.find(c => c.key === 'level');
             if (levelConfig) {
                 playerLevels = yaml.load(levelConfig.value);
             }
@@ -325,6 +332,15 @@ module.exports = {
                     return level.minimum_score <= newPlayerSpend ? level : acc;
                 }, playerLevels[0]);
                 if (currentLevel.level > card.player_level) {
+                    let _boostMaxTap = configs.find(c => c.key === 'boost_max_taps');
+                    let boostMaxTap = yaml.load(_boostMaxTap.value);
+                    let currentBoostMaxTap = boostMaxTap.find(b => b.level === point.tap_earning_energy_level);
+
+                    let _boostEarningTap = configs.find(c => c.key === 'boost_earnings_taps');
+                    let boostEarningTap = yaml.load(_boostEarningTap.value);
+                    let currentBoostEarningTap = boostEarningTap.find(b => b.level === point.tap_earning_level);
+
+
                     await prisma.player.update({
                         where: { id: playerId },
                         data: {
@@ -333,8 +349,8 @@ module.exports = {
                         }
                     });
 
-                    updateEarningData.tap_earning_value = currentLevel.tap_earning_value;
-                    updateEarningData.tap_earning_energy = currentLevel.tap_earning_energy;
+                    updateEarningData.tap_earning_value = currentLevel.tap_earning_value + currentBoostEarningTap.addition_value;
+                    updateEarningData.tap_earning_energy = currentLevel.tap_earning_energy + currentBoostMaxTap.addition_value;
                     updateEarningData.tap_earning_energy_recovery = currentLevel.tap_earning_energy_recovery;
                     updateEarningData.tap_earning_energy_available = point.tap_earning_energy_available + (currentLevel.tap_earning_energy - point.tap_earning_energy);
 
