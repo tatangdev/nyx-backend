@@ -4,31 +4,53 @@ const Sentry = require("@sentry/node");
 const express = require('express');
 const logger = require('morgan');
 const swaggerUi = require('swagger-ui-express');
-const fs = require('fs');
-const YAML = require('yaml');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
+const { BASE_URL = 'http://localhost:3000' } = process.env;
 
 const v1 = require('./routers/v1');
 
-const file = fs.readFileSync('./swagger.yaml', 'utf8');
-const swaggerDocument = YAML.parse(file);
+var options = {
+    explorer: true,
+    swaggerOptions: {
+        urls: [
+            {
+                url: `${BASE_URL}/docs/swagger_player.yaml`,
+                name: 'Player V1'
+            },
+            {
+                url: `${BASE_URL}/docs/swagger_admin.yaml`,
+                name: 'Admin V1'
+            },
+            {
+                url: `${BASE_URL}/docs/swagger_external.yaml`,
+                name: 'External V1'
+            }
+        ]
+    }
+};
 
 // Middleware
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
+app.use('/docs', express.static('./src/public/docs'));
 app.use('/images', express.static('./src/public/images'));
 app.use('/videos', express.static('./src/public/videos'));
 
 // Routes
 app.use('/api/v1', v1);
-app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, options));
 
-// app.get('/', (req, res) => {
-//     res.send('Hello World!');
-// });
+app.get('/', (req, res) => {
+    res.json({
+        status: true,
+        message: 'Welcome to the API Chipmunk Kombat',
+        error: null,
+        data: null
+    });
+});
 
 // Sentry error handler
 Sentry.setupExpressErrorHandler(app);
@@ -64,4 +86,8 @@ const { approveTasks } = require('./cron/tasks.js');
 
 cron.schedule('*/10 * * * *', () => {
     approveTasks();
+});
+
+cron.schedule('0 11 * * *', () => {
+    resetFullEnergyQuota();
 });

@@ -5,6 +5,7 @@ const { image } = require('../../libs/multer');
 const media = require('../../controllers/v1/media.controller');
 const card = require('../../controllers/v1/player/card.controller');
 const point = require('../../controllers/v1/player/point.controller');
+const boost = require('../../controllers/v1/player/boost.controller');
 const task = require('../../controllers/v1/player/task.controller');
 const rank = require('../../controllers/v1/player/rank.controller');
 
@@ -21,6 +22,10 @@ router.get('/cards/combo', validate, isPlayer, card.combo);
 router.post('/cards/combo', validate, isPlayer, card.submitCombo);
 router.get('/cards-v2', validate, isPlayer, card.listV2);
 router.post('/card-upgrade', validate, isPlayer, card.upgrade);
+
+// boost
+router.get('/boost', validate, isPlayer, boost.index);
+router.post('/boost', validate, isPlayer, boost.upgrade);
 
 // point
 router.get('/sync', validate, isPlayer, point.sync);

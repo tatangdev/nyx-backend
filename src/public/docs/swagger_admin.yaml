@@ -1,20 +1,20 @@
-openapi: "3.0.0"
+openapi: 3.0.3
 info:
-  title: Nyx API
-  description: Nyx API
+  title: API Chipmunk Kombat
+  description: API Admin Chipmunk Kombat
   version: 1.0.0
 servers:
-  - url: https://nyx-backend.up.railway.app/api
-  - url: http://localhost:3000/api
-  - url: https://nyx-backend-production.up.railway.app/api
+  - url: https://nyx-backend.up.railway.app/api/v1/admin
+  - url: http://localhost:3000/api/v1/admin
+  - url: https://nyx-backend-production.up.railway.app/api/v1/admin
 security:
   - bearerAuth: []
 paths:
-  /v1/admin/login:
+  /login:
     post:
       summary: Admin login
       tags:
-        - Admin - Auth
+        - Auth
       requestBody:
         required: true
         content:
@@ -43,11 +43,11 @@ paths:
                         properties:
                           token:
                             type: string
-  /v1/admin/whoami:
+  /whoami:
     get:
       summary: Get current admin
       tags:
-        - Admin - Auth
+        - Auth
       responses:
         "200":
           description: Success
@@ -71,11 +71,11 @@ paths:
                             type: boolean
       security:
         - bearerAuth: []
-  /v1/admin/users:
+  /users:
     post:
       summary: Create user
       tags:
-        - Admin - Users
+        - Users
       requestBody:
         required: true
         content:
@@ -115,7 +115,7 @@ paths:
     get:
       summary: Get all users
       tags:
-        - Admin - Users
+        - Users
       parameters:
         - name: search
           in: query
@@ -152,11 +152,11 @@ paths:
                               type: boolean
       security:
         - bearerAuth: []
-  /v1/admin/users/{id}:
+  /users/{id}:
     get:
       summary: Get user by id
       tags:
-        - Admin - Users
+        - Users
       parameters:
         - name: id
           in: path
@@ -189,7 +189,7 @@ paths:
     put:
       summary: Update user by id
       tags:
-        - Admin - Users
+        - Users
       parameters:
         - name: id
           in: path
@@ -238,11 +238,11 @@ paths:
                             type: boolean
       security:
         - bearerAuth: []
-  /v1/admin/card-categories:
+  /card-categories:
     post:
       summary: Create card category
       tags:
-        - Admin - Card Categories
+        - Card Categories
       requestBody:
         required: true
         content:
@@ -276,7 +276,7 @@ paths:
     get:
       summary: Get all card categories
       tags:
-        - Admin - Card Categories
+        - Card Categories
       parameters:
         - name: search
           in: query
@@ -311,11 +311,11 @@ paths:
                               type: boolean
       security:
         - bearerAuth: []
-  /v1/admin/card-categories/{id}:
+  /card-categories/{id}:
     get:
       summary: Get card category by id
       tags:
-        - Admin - Card Categories
+        - Card Categories
       parameters:
         - name: id
           in: path
@@ -346,7 +346,7 @@ paths:
     put:
       summary: Update card category by id
       tags:
-        - Admin - Card Categories
+        - Card Categories
       parameters:
         - name: id
           in: path
@@ -385,11 +385,11 @@ paths:
                             type: boolean
       security:
         - bearerAuth: []
-  /v1/admin/cards:
+  /cards:
     post:
       summary: Create card
       tags:
-        - Admin - Cards
+        - Cards
       requestBody:
         required: true
         content:
@@ -496,7 +496,7 @@ paths:
     get:
       summary: Get all cards
       tags:
-        - Admin - Cards
+        - Cards
       parameters:
         - name: search
           in: query
@@ -550,11 +550,11 @@ paths:
                               type: integer
       security:
         - bearerAuth: []
-  /v1/admin/cards/{id}:
+  /cards/{id}:
     get:
       summary: Get card by id
       tags:
-        - Admin - Cards
+        - Cards
       parameters:
         - name: id
           in: path
@@ -619,7 +619,7 @@ paths:
     put:
       summary: Update card by id
       tags:
-        - Admin - Cards
+        - Cards
       parameters:
         - name: id
           in: path
@@ -728,11 +728,11 @@ paths:
                             type: integer
       security:
         - bearerAuth: []
-  /v1/admin/combos:
+  /combos:
     post:
       summary: Create combo
       tags:
-        - Admin - Combos
+        - Combos
       requestBody:
         required: true
         content:
@@ -790,7 +790,7 @@ paths:
     get:
       summary: Get all combos
       tags:
-        - Admin - Combos
+        - Combos
       parameters:
         - name: date
           in: query
@@ -847,11 +847,11 @@ paths:
                               type: integer
       security:
         - bearerAuth: []
-  /v1/admin/combos/{id}:
+  /combos/{id}:
     get:
       summary: Get combo by id
       tags:
-        - Admin - Combos
+        - Combos
       parameters:
         - name: id
           in: path
@@ -899,7 +899,7 @@ paths:
     put:
       summary: Update combo by id
       tags:
-        - Admin - Combos
+        - Combos
       parameters:
         - name: id
           in: path
@@ -963,7 +963,7 @@ paths:
     delete:
       summary: Delete combo by id
       tags:
-        - Admin - Combos
+        - Combos
       parameters:
         - name: id
           in: path
@@ -982,11 +982,11 @@ paths:
                     properties:
                       data:
                         type: object
-  /v1/admin/tasks:
+  /tasks:
     post:
       summary: Create task
       tags:
-        - Admin - Tasks
+        - Tasks
       requestBody:
         required: true
         content:
@@ -1064,7 +1064,7 @@ paths:
     get:
       summary: Get all tasks
       tags:
-        - Admin - Tasks
+        - Tasks
       parameters:
         - name: search
           in: query
@@ -1111,11 +1111,11 @@ paths:
                               type: integer
       security:
         - bearerAuth: []
-  /v1/admin/tasks/{id}:
+  /tasks/{id}:
     get:
       summary: Get task by id
       tags:
-        - Admin - Tasks
+        - Tasks
       parameters:
         - name: id
           in: path
@@ -1158,7 +1158,7 @@ paths:
     put:
       summary: Update task by id
       tags:
-        - Admin - Tasks
+        - Tasks
       parameters:
         - name: id
           in: path
@@ -1222,7 +1222,7 @@ paths:
     delete:
       summary: Delete task by id
       tags:
-        - Admin - Tasks
+        - Tasks
       parameters:
         - name: id
           in: path
@@ -1241,11 +1241,11 @@ paths:
                     properties:
                       data:
                         type: object
-  /v1/admin/task-submissions:
+  /task-submissions:
     get:
       summary: Get all task submissions
       tags:
-        - Admin - Task Submissions
+        - Task Submissions
       parameters:
         - name: task_id
           in: query
@@ -1313,11 +1313,11 @@ paths:
                               format: uri
       security:
         - bearerAuth: []
-  /v1/admin/task-submissions/{id}:
+  /task-submissions/{id}:
     put:
       summary: Update task submission by id
       tags:
-        - Admin - Task Submissions
+        - Task Submissions
       parameters:
         - name: id
           in: path
@@ -1345,11 +1345,11 @@ paths:
                     properties:
                       data:
                         type: object
-  /v1/admin/levels:
+  /levels:
     post:
       summary: Create level
       tags:
-        - Admin - Levels
+        - Levels
       requestBody:
         required: true
         content:
@@ -1398,7 +1398,7 @@ paths:
     get:
       summary: Get all levels
       tags:
-        - Admin - Levels
+        - Levels
       responses:
         "200":
           description: Success
@@ -1424,11 +1424,11 @@ paths:
                               type: integer
       security:
         - bearerAuth: []
-  /v1/admin/players:
+  /players:
     get:
       summary: Get all players
       tags:
-        - Admin - Players
+        - Players
       parameters:
         - name: search
           in: query
@@ -1481,11 +1481,11 @@ paths:
                               type: integer
       security:
         - bearerAuth: []
-  /v1/admin/players/{id}:
+  /players/{id}:
     get:
       summary: Get player by id
       tags:
-        - Admin - Players
+        - Players
       parameters:
         - name: id
           in: path
@@ -1539,7 +1539,7 @@ paths:
     put:
       summary: Update player by id
       tags:
-        - Admin - Players
+        - Players
       parameters:
         - name: id
           in: path
@@ -1599,11 +1599,11 @@ paths:
                             type: integer
       security:
         - bearerAuth: []
-  /v1/admin/players/network:
+  /players/network:
     get:
       summary: Get player network
       tags:
-        - Admin - Players
+        - Players
       responses:
         "200":
           description: Success
@@ -1620,11 +1620,11 @@ paths:
                           $ref: "#/components/schemas/UserReferral"
       security:
         - bearerAuth: []
-  /v1/admin/dashboard:
+  /dashboard:
     get:
       summary: Get dashboard data
       tags:
-        - Admin - Dashboard
+        - Dashboard
       responses:
         "200":
           description: Success
@@ -1669,11 +1669,11 @@ paths:
                             example: 5971908
       security:
         - bearerAuth: []
-  /v1/admin/logs/point:
+  /logs/point:
     get:
       summary: Get points logs
       tags:
-        - Admin - Logs
+        - Logs
       parameters:
         - name: player_id
           in: query
@@ -1732,11 +1732,11 @@ paths:
                                   type: integer
       security:
         - bearerAuth: []
-  /v1/admin/logs/profit:
+  /logs/profit:
     get:
       summary: Get profits logs
       tags:
-        - Admin - Logs
+        - Logs
       parameters:
         - name: player_id
           in: query
@@ -1795,11 +1795,11 @@ paths:
                                   type: integer
       security:
         - bearerAuth: []
-  /v1/admin/logs/level:
+  /logs/level:
     get:
       summary: Get profits logs
       tags:
-        - Admin - Logs
+        - Logs
       parameters:
         - name: player_id
           in: query
@@ -1851,481 +1851,6 @@ paths:
                                   type: integer
       security:
         - bearerAuth: []
-  /v1/auth/login:
-    post:
-      summary: Player login
-      tags:
-        - Auth
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                telegram_id:
-                  type: string
-                  example: 769049677
-                username:
-                  type: string
-                  example: tatangdev
-                first_name:
-                  type: string
-                  example: Tatang
-                last_name:
-                  type: string
-                  example:
-                referral_code:
-                  type: string
-                  example:
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          token:
-                            type: string
-  /v1/auth/whoami:
-    get:
-      summary: Get current player
-      tags:
-        - Auth
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          telegram_id:
-                            type: string
-                          username:
-                            type: string
-                          first_name:
-                            type: string
-                          last_name:
-                            type: string
-                          referral_code:
-                            type: string
-                          referree_id:
-                            type: integer
-      security:
-        - bearerAuth: []
-  /v1/media/images:
-    post:
-      summary: Upload image
-      tags:
-        - Media
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                image:
-                  type: string
-                  format: binary
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          url:
-                            type: string
-      security:
-        - bearerAuth: []
-    get:
-      summary: Get all images
-      tags:
-        - Media
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            url:
-                              type: string
-      security:
-        - bearerAuth: []
-  /v1/cards/combo:
-    get:
-      summary: Get card combo
-      tags:
-        - Cards
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            bonus_coins:
-                              type: integer
-                            accquired_bonus_coins:
-                              type: integer
-                            is_submitted:
-                              type: boolean
-                            remain_seconds:
-                              type: integer
-                            submitted_at:
-                              type: string
-                              format: date-time
-                            combination:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  id:
-                                    type: integer
-                                  name:
-                                    type: string
-                                  description:
-                                    type: string
-                                  image:
-                                    type: string
-                                    format: uri
-                                  is_correct:
-                                    type: boolean
-      security:
-        - bearerAuth: []
-    post:
-      summary: Claim card combo
-      tags:
-        - Cards
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                combo:
-                  type: array
-                  items:
-                    type: integer
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          correct_combo:
-                            type: integer
-                          bonus_coins:
-                            type: integer
-                          is_submitted:
-                            type: boolean
-                          remain_seconds:
-                            type: integer
-      security:
-        - bearerAuth: []
-  /v1/boost:
-    get:
-      summary: Get all boosts
-      tags:
-        - Boosts
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-    post:
-      summary: Boost earnings
-      tags:
-        - Boosts
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                boost_id:
-                  type: string
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-  /v1/cards-v2:
-    get:
-      summary: Get all cards
-      tags:
-        - Cards
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-  /v1/card-upgrade:
-    post:
-      summary: Upgrade card
-      tags:
-        - Cards
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                card_id:
-                  type: integer
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                          card_id:
-                            type: integer
-                          level:
-                            type: integer
-                          profit_per_hour:
-                            type: integer
-  /v1/sync:
-    get:
-      summary: Sync player points
-      tags:
-        - Player
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-  /v1/tap:
-    post:
-      summary: Sync player points
-      tags:
-        - Player
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                tap_count:
-                  type: integer
-                  example: 4000
-                timestamp:
-                  type: integer
-                  example: 1723564477
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-  /v1/tasks:
-    get:
-      summary: Get all tasks
-      tags:
-        - Tasks
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            daily_streak:
-                              type: integer
-  /v1/check-task:
-    post:
-      summary: Check task
-      tags:
-        - Tasks
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                task_id:
-                  type: integer
-                image:
-                  type: string
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          day_count:
-                            type: integer
-  /v1/referral-stats:
-    get:
-      summary: Get referral stats
-      tags:
-        - Referral
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          stats:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                first_name:
-                                  type: string
-                                last_name:
-                                  type: string
-                                level:
-                                  type: integer
-                                balance_coins:
-                                  type: number
-                                  format: double
-                                earn_passive_per_hour:
-                                  type: integer
-                                referral_bonus_coins:
-                                  type: integer
-                          count:
-                            type: integer
-  /v1/rank:
-    get:
-      summary: Get player rank
-      tags:
-        - Player
-      parameters:
-        - name: level
-          in: query
-          required: false
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/BasicResponse"
-                  - type: object
-                    properties:
-                      data:
-                        type: object
 components:
   schemas:
     AnyValue:
