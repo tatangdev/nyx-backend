@@ -3,33 +3,10 @@ require("./instrument.js");
 const Sentry = require("@sentry/node");
 const express = require('express');
 const logger = require('morgan');
-const swaggerUi = require('swagger-ui-express');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
-const { BASE_URL = 'http://localhost:3000' } = process.env;
-
-const v1 = require('./routers/v1');
-
-var options = {
-    explorer: true,
-    swaggerOptions: {
-        urls: [
-            {
-                url: `${BASE_URL}/docs/swagger_player.yaml`,
-                name: 'Player V1'
-            },
-            {
-                url: `${BASE_URL}/docs/swagger_admin.yaml`,
-                name: 'Admin V1'
-            },
-            {
-                url: `${BASE_URL}/docs/swagger_external.yaml`,
-                name: 'External V1'
-            }
-        ]
-    }
-};
+const { BASE_URL = 'http://localhost:3000', ENV = 'test' } = process.env;
 
 // Middleware
 app.use(cors());
@@ -40,8 +17,32 @@ app.use('/images', express.static('./src/public/images'));
 app.use('/videos', express.static('./src/public/videos'));
 
 // Routes
+const v1 = require('./routers/v1');
 app.use('/api/v1', v1);
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, options));
+if (ENV !== 'production') {
+    const swaggerUi = require('swagger-ui-express');
+    const options = {
+        explorer: true,
+        swaggerOptions: {
+            urls: [
+                {
+                    url: `${BASE_URL}/docs/swagger_player.yaml`,
+                    name: 'Player V1'
+                },
+                {
+                    url: `${BASE_URL}/docs/swagger_admin.yaml`,
+                    name: 'Admin V1'
+                },
+                {
+                    url: `${BASE_URL}/docs/swagger_external.yaml`,
+                    name: 'External V1'
+                }
+            ]
+        }
+    };
+
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, options));
+}
 
 app.get('/', (req, res) => {
     res.json({
