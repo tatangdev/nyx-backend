@@ -1,0 +1,1894 @@
+openapi: 3.0.3
+info:
+  title: API Chipmunk Kombat
+  description: API Admin Chipmunk Kombat
+  version: 1.0.0
+servers:
+  - url: https://nyx-backend.up.railway.app/api/v1/admin
+  - url: http://localhost:3000/api/v1/admin
+  - url: https://nyx-backend-production.up.railway.app/api/v1/admin
+security:
+  - bearerAuth: []
+paths:
+  /login:
+    post:
+      summary: Admin login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: superadmin
+                password:
+                  type: string
+                  example: password
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          token:
+                            type: string
+  /whoami:
+    get:
+      summary: Get current admin
+      tags:
+        - Auth
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          username:
+                            type: string
+                          is_active:
+                            type: boolean
+                          is_superadmin:
+                            type: boolean
+      security:
+        - bearerAuth: []
+  /users:
+    post:
+      summary: Create user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: user
+                password:
+                  type: string
+                  example: password
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          username:
+                            type: string
+                          is_active:
+                            type: boolean
+                          is_superadmin:
+                            type: boolean
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: is_active
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            username:
+                              type: string
+                            is_active:
+                              type: boolean
+                            is_superadmin:
+                              type: boolean
+      security:
+        - bearerAuth: []
+  /users/{id}:
+    get:
+      summary: Get user by id
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          username:
+                            type: string
+                          is_active:
+                            type: boolean
+                          is_superadmin:
+                            type: boolean
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update user by id
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: user
+                password:
+                  type: string
+                  example: password
+                is_active:
+                  type: boolean
+                  example: true
+                is_superadmin:
+                  type: boolean
+                  example: false
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          username:
+                            type: string
+                          is_active:
+                            type: boolean
+                          is_superadmin:
+                            type: boolean
+      security:
+        - bearerAuth: []
+  /card-categories:
+    post:
+      summary: Create card category
+      tags:
+        - Card Categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          is_active:
+                            type: boolean
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all card categories
+      tags:
+        - Card Categories
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: is_active
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            is_active:
+                              type: boolean
+      security:
+        - bearerAuth: []
+  /card-categories/{id}:
+    get:
+      summary: Get card category by id
+      tags:
+        - Card Categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          is_active:
+                            type: boolean
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update card category by id
+      tags:
+        - Card Categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                is_active:
+                  type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          is_active:
+                            type: boolean
+      security:
+        - bearerAuth: []
+  /cards:
+    post:
+      summary: Create card
+      tags:
+        - Cards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                category_id:
+                  type: integer
+                levels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      level:
+                        type: integer
+                      upgrade_price:
+                        type: integer
+                      profit_per_hour_increase:
+                        type: integer
+                      profit_per_hour:
+                        type: integer
+                      price_multiplier:
+                        type: number
+                      profit_per_hour_multiplier:
+                        type: number
+                      respawn_time:
+                        type: integer
+                condition:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    card_id:
+                      type: integer
+                    card_level:
+                      type: integer
+                    invite_friend_count:
+                      type: integer
+                is_published:
+                  type: boolean
+                  example: true
+                available_duration:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          title:
+                            type: string
+                          description:
+                            type: string
+                          category_id:
+                            type: integer
+                          image_url:
+                            type: string
+                          is_published:
+                            type: boolean
+                          levels:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                level:
+                                  type: integer
+                                upgrade_price:
+                                  type: integer
+                                profit_per_hour_increase:
+                                  type: integer
+                                profit_per_hour:
+                                  type: integer
+                                price_multiplier:
+                                  type: number
+                                profit_per_hour_multiplier:
+                                  type: number
+                                respawn_time:
+                                  type: integer
+                          condition:
+                            type: object
+                            properties:
+                              card_id:
+                                type: integer
+                              level:
+                                type: integer
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all cards
+      tags:
+        - Cards
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: is_published
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: category_id
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            image:
+                              type: string
+                            category_id:
+                              type: integer
+                            is_published:
+                              type: boolean
+                            created_at_unix:
+                              type: integer
+                            updated_at_unix:
+                              type: integer
+                            available_duration:
+                              type: number
+                            published_at_unix:
+                              type: integer
+      security:
+        - bearerAuth: []
+  /cards/{id}:
+    get:
+      summary: Get card by id
+      tags:
+        - Cards
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          image:
+                            type: string
+                          category_id:
+                            type: integer
+                          is_published:
+                            type: boolean
+                          levels:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                level:
+                                  type: integer
+                                upgrade_price:
+                                  type: integer
+                                profit_per_hour:
+                                  type: integer
+                          condition:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              level:
+                                type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          available_duration:
+                            type: integer
+                          available_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update card by id
+      tags:
+        - Cards
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                category_id:
+                  type: integer
+                is_published:
+                  type: boolean
+                levels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      level:
+                        type: integer
+                      upgrade_price:
+                        type: integer
+                      profit_per_hour_increase:
+                        type: integer
+                      profit_per_hour:
+                        type: integer
+                      price_multiplier:
+                        type: number
+                      profit_per_hour_multiplier:
+                        type: number
+                      respawn_time:
+                        type: integer
+                condition:
+                  type: object
+                  properties:
+                    card_id:
+                      type: integer
+                    level:
+                      type: integer
+                available_duration:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          image:
+                            type: string
+                          category_id:
+                            type: integer
+                          is_active:
+                            type: boolean
+                          is_published:
+                            type: boolean
+                          levels:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                level:
+                                  type: integer
+                                upgrade_price:
+                                  type: integer
+                                profit_per_hour:
+                                  type: integer
+                          condition:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              level:
+                                type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          available_duration:
+                            type: integer
+                          available_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+  /combos:
+    post:
+      summary: Create combo
+      tags:
+        - Combos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date
+                combination:
+                  type: array
+                  items:
+                    type: integer
+                reward_coins:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          date:
+                            type: string
+                          combination:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                image:
+                                  type: string
+                          reward_coins:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all combos
+      tags:
+        - Combos
+      parameters:
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: per_page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            date:
+                              type: string
+                            combination:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  name:
+                                    type: string
+                                  description:
+                                    type: string
+                                  image:
+                                    type: string
+                            reward_coins:
+                              type: integer
+                            created_at_unix:
+                              type: integer
+                            updated_at_unix:
+                              type: integer
+      security:
+        - bearerAuth: []
+  /combos/{id}:
+    get:
+      summary: Get combo by id
+      tags:
+        - Combos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          date:
+                            type: string
+                          combination:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                image:
+                                  type: string
+                          reward_coins:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update combo by id
+      tags:
+        - Combos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date
+                combination:
+                  type: array
+                  items:
+                    type: integer
+                reward_coins:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          date:
+                            type: string
+                          combination:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                                image:
+                                  type: string
+                          reward_coins:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Delete combo by id
+      tags:
+        - Combos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+  /tasks:
+    post:
+      summary: Create task
+      tags:
+        - Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                image:
+                  type: string
+                type:
+                  type: string
+                reward_coins:
+                  type: integer
+                is_published:
+                  type: boolean
+                requires_admin_approval:
+                  type: boolean
+                config:
+                  type: object
+                  properties:
+                    modal_title:
+                      type: string
+                    modal_description:
+                      type: string
+                    modal_link_button:
+                      type: string
+                    modal_link_url:
+                      type: string
+                    check_in_data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          day:
+                            type: integer
+                          reward_coins:
+                            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          image:
+                            type: string
+                          type:
+                            type: string
+                          reward_coins:
+                            type: integer
+                          periodicity:
+                            type: string
+                          is_published:
+                            type: boolean
+                          config:
+                            type: object
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all tasks
+      tags:
+        - Tasks
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: is_published
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            name:
+                              type: string
+                            image:
+                              type: string
+                            type:
+                              type: string
+                            reward_coins:
+                              type: integer
+                            periodicity:
+                              type: string
+                            is_published:
+                              type: boolean
+                            created_at_unix:
+                              type: integer
+                            updated_at_unix:
+                              type: integer
+      security:
+        - bearerAuth: []
+  /tasks/{id}:
+    get:
+      summary: Get task by id
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          image:
+                            type: string
+                          type:
+                            type: string
+                          reward_coins:
+                            type: integer
+                          periodicity:
+                            type: string
+                          is_published:
+                            type: boolean
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update task by id
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                image:
+                  type: string
+                type:
+                  type: string
+                reward_coins:
+                  type: integer
+                periodicity:
+                  type: string
+                is_published:
+                  type: boolean
+                config:
+                  type: object
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          image:
+                            type: string
+                          type:
+                            type: string
+                          reward_coins:
+                            type: integer
+                          periodicity:
+                            type: string
+                          is_published:
+                            type: boolean
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+      security:
+        - bearerAuth: []
+    delete:
+      summary: Delete task by id
+      tags:
+        - Tasks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+  /task-submissions:
+    get:
+      summary: Get all task submissions
+      tags:
+        - Task Submissions
+      parameters:
+        - name: task_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: player_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: is_approved
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            player_id:
+                              type: integer
+                            player_name:
+                              type: string
+                            submitted_at_unix:
+                              type: integer
+                            is_approved:
+                              type: boolean
+                              nullable: true
+                            approved_by_admin_id:
+                              type: integer
+                              nullable: true
+                            approved_by_admin_username:
+                              type: string
+                              nullable: true
+                            task_id:
+                              type: integer
+                            task_name:
+                              type: string
+                            image:
+                              type: string
+                              format: uri
+      security:
+        - bearerAuth: []
+  /task-submissions/{id}:
+    put:
+      summary: Update task submission by id
+      tags:
+        - Task Submissions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_approved:
+                  type: boolean
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+  /levels:
+    post:
+      summary: Create level
+      tags:
+        - Levels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                levels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      level:
+                        type: integer
+                      name:
+                        type: string
+                      minimum_score:
+                        type: integer
+                      level_up_reward:
+                        type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            level:
+                              type: integer
+                            name:
+                              type: string
+                            minimum_score:
+                              type: integer
+                            level_up_reward:
+                              type: integer
+      security:
+        - bearerAuth: []
+    get:
+      summary: Get all levels
+      tags:
+        - Levels
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            level:
+                              type: integer
+                            name:
+                              type: string
+                            minimum_score:
+                              type: integer
+                            level_up_reward:
+                              type: integer
+      security:
+        - bearerAuth: []
+  /players:
+    get:
+      summary: Get all players
+      tags:
+        - Players
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            telegram_id:
+                              type: string
+                            username:
+                              type: string
+                            first_name:
+                              type: string
+                            last_name:
+                              type: string
+                            referee_id:
+                              type: integer
+                              nullable: true
+                            referral_code:
+                              type: string
+                            level:
+                              type: integer
+                            created_at_unix:
+                              type: integer
+                            updated_at_unix:
+                              type: integer
+                            points_balance:
+                              type: integer
+                            points_total:
+                              type: integer
+                            spending_amount:
+                              type: integer
+                            profit_per_hour:
+                              type: integer
+      security:
+        - bearerAuth: []
+  /players/{id}:
+    get:
+      summary: Get player by id
+      tags:
+        - Players
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          telegram_id:
+                            type: string
+                          username:
+                            type: string
+                          first_name:
+                            type: string
+                          last_name:
+                            type: string
+                          referee_id:
+                            type: integer
+                            nullable: true
+                          referral_code:
+                            type: string
+                          level:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          points_balance:
+                            type: integer
+                          points_total:
+                            type: integer
+                          spending_amount:
+                            type: integer
+                          profit_per_hour:
+                            type: integer
+      security:
+        - bearerAuth: []
+    put:
+      summary: Update player by id
+      tags:
+        - Players
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                points_balance:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          telegram_id:
+                            type: string
+                          username:
+                            type: string
+                          first_name:
+                            type: string
+                          last_name:
+                            type: string
+                          referee_id:
+                            type: integer
+                            nullable: true
+                          referral_code:
+                            type: string
+                          level:
+                            type: integer
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          points_balance:
+                            type: integer
+                          points_total:
+                            type: integer
+                          spending_amount:
+                            type: integer
+                          profit_per_hour:
+                            type: integer
+      security:
+        - bearerAuth: []
+  /players/network:
+    get:
+      summary: Get player network
+      tags:
+        - Players
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/UserReferral"
+      security:
+        - bearerAuth: []
+  /dashboard:
+    get:
+      summary: Get dashboard data
+      tags:
+        - Dashboard
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          player_count:
+                            type: integer
+                            example: 6
+                          card_category_count:
+                            type: integer
+                            example: 5
+                          card_count:
+                            type: integer
+                            example: 30
+                          level_count:
+                            type: integer
+                            example: 7
+                          player_level_count:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                level:
+                                  type: integer
+                                  example: 1
+                                count:
+                                  type: integer
+                                  example: 5
+                          spend_amount:
+                            type: integer
+                            example: 28092
+                          point_amount:
+                            type: integer
+                            example: 5971908
+      security:
+        - bearerAuth: []
+  /logs/point:
+    get:
+      summary: Get points logs
+      tags:
+        - Logs
+      parameters:
+        - name: player_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 6
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                player_id:
+                                  type: integer
+                                player_name:
+                                  type: string
+                                amount:
+                                  type: integer
+                                type:
+                                  type: string
+                                data:
+                                  type: string
+                                created_at_unix:
+                                  type: integer
+      security:
+        - bearerAuth: []
+  /logs/profit:
+    get:
+      summary: Get profits logs
+      tags:
+        - Logs
+      parameters:
+        - name: player_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 6
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                player_id:
+                                  type: integer
+                                player_name:
+                                  type: string
+                                amount:
+                                  type: integer
+                                type:
+                                  type: string
+                                data:
+                                  type: string
+                                created_at_unix:
+                                  type: integer
+      security:
+        - bearerAuth: []
+  /logs/level:
+    get:
+      summary: Get profits logs
+      tags:
+        - Logs
+      parameters:
+        - name: player_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                            example: 6
+                          items:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                player_id:
+                                  type: integer
+                                player_name:
+                                  type: string
+                                level:
+                                  type: integer
+                                data:
+                                  type: string
+                                created_at_unix:
+                                  type: integer
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    AnyValue:
+      anyOf:
+        - type: string
+        - type: number
+        - type: integer
+        - type: boolean
+        - type: array
+          items: {}
+        - type: object
+    BasicResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        error:
+          type: string
+    UserReferral:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        username:
+          type: string
+          example: "player"
+        name:
+          type: string
+          example: "John Doe"
+        referral:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserReferral"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
