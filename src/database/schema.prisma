@@ -45,10 +45,24 @@ model Player {
   referee_id      Int?
   referral_code   String? @unique
   level           Int     @default(1) // deprecated
+  phone_number    String?
   created_at_unix Int?
   updated_at_unix Int?
 
   @@map("players")
+}
+
+model Otp {
+  id              Int     @id @default(autoincrement())
+  player_id       Int
+  otp             String
+  is_verified     Boolean @default(false)
+  ip_address      String?
+  agent           String?
+  expired_at_unix Int?
+  created_at_unix Int?
+
+  @@map("otps")
 }
 
 model PlayerEarning {
