@@ -41,7 +41,7 @@ app.use('/videos', express.static('./src/public/videos'));
 
 // Routes
 app.use('/api/v1', v1);
-app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(null, options));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, options));
 
 app.get('/', (req, res) => {
     res.json({
