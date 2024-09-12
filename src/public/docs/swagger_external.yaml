@@ -10,34 +10,120 @@ servers:
 tags:
   - name: Auth
 paths:
-  /user/info:
-    get:
-      # tags:
-      summary: User Information
-      operationId: userInformation
-      parameters:
-        - name: userId
-          in: query
-          schema:
-            type: string
-            example: "1"
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
+  /login:
+    post:
+      tags:
+        - Auth
+      summary: Login By Phone Number
+      operationId: loginByPhoneNumber
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                userId:
+                agent:
                   type: string
-                  example: "1"
+                  example: chrome
+                ip_address:
+                  type: string
+                  example: 127.0.0.1
+                phone_number:
+                  type: string
+                  example: "6577777777"
       responses:
         "200":
-          description: ""
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          telegram_id:
+                            type: string
+  /otp/verify:
+    post:
+      tags:
+        - Auth
+      summary: Verify OTP
+      operationId: verifyOTP
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                otp:
+                  type: string
+                telegram_id:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          token:
+                            type: string
+  /verify:
+    get:
+      tags:
+        - Auth
+      summary: Verify Token
+      operationId: verifyToken
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          telegram_id:
+                            type: string
+                          username:
+                            type: string
+                          first_name:
+                            type: string
+                          last_name:
+                            type: string
+                          referee_id:
+                            type: string
+                          referral_code:
+                            type: string
+                          level:
+                            type: integer
+                          phone_number:
+                            type: string
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          role:
+                            type: string
+                          iat:
+                            type: integer
+      security:
+        - bearerAuth: []
   /user/referrals:
     get:
       # tags:
@@ -183,44 +269,6 @@ paths:
       responses:
         "200":
           description: ""
-  /verify:
-    get:
-      # tags:
-      summary: Verify Token
-      operationId: verifyToken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: string
-                  example: "12"
-      responses:
-        "200":
-          description: ""
-    post:
-      summary: Verify Telegram Code
-      operationId: verifyTelegramCode
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                code:
-                  type: string
-                  example: "123456"
-                phone:
-                  type: string
-                  example: "081288001122"
-                token:
-                  type: string
-                  example: ZnSf4
-      responses:
-        "200":
-          description: ""
   /buy:
     post:
       # tags:
@@ -276,70 +324,6 @@ paths:
               #   "price": 0.00015,
               #   "txid": "0x6e303cb7cc97c1d70511f0b7cb2021364a82a2f584186504c0aecdbfcf90d226"
               # }
-      responses:
-        "200":
-          description: ""
-  /send-code:
-    post:
-      # tags:
-      summary: Send Code
-      operationId: sendCode
-      parameters:
-        - name: userId
-          in: query
-          schema:
-            type: string
-            example: "1"
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                telegramID:
-                  type: string
-                  example: "0778"
-            example:
-              telegramID: "0778"
-      responses:
-        "200":
-          description: ""
-  /verify-code:
-    post:
-      # tags:
-      summary: Verify Code
-      operationId: verifyCode
-      parameters:
-        - name: userId
-          in: query
-          schema:
-            type: string
-            example: "1"
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                code:
-                  type: number
-                  example: 123456
-                telegramID:
-                  type: string
-                  example: "0778"
-            example:
-              code: 123456
-              telegramID: "0778"
       responses:
         "200":
           description: ""
@@ -399,28 +383,6 @@ paths:
                 "":
                   type: string
                   example: ""
-      responses:
-        "200":
-          description: ""
-  /login:
-    post:
-      summary: Login By Phone Number
-      operationId: loginByPhoneNumber
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                agent:
-                  type: string
-                  example: chrome
-                ip:
-                  type: string
-                  example: 127.0.0.1
-                phone:
-                  type: string
-                  example: "081288001122"
       responses:
         "200":
           description: ""
