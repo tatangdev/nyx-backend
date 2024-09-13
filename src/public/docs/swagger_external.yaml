@@ -1,7 +1,20 @@
 openapi: 3.0.3
 info:
   title: API Chipmunk Kombat
-  description: API External Chipmunk Kombat
+  description: >-
+    Welcome to the **Chipmunk Kombat API**! This API provides access to external features and data from the Chipmunk Kombat game.
+
+    ### Overview:
+    - This API is designed for users who have played the game.
+    - You can integrate your gameplay data and retrieve relevant information through this API.
+
+    ### Telegram Bot Integration:
+    To use this API, you first need to connect your phone number via our Telegram bot. Follow these steps:
+    1. Open our bot on Telegram: [t.me/t2e_game_bot](https://t.me/t2e_game_bot).
+    2. Run the command `/connect` to begin the phone number verification process.
+    3. Follow the bot’s instructions to complete the connection.
+
+    Once your phone number is connected, you'll be able to access the full functionality of the API.
   version: 1.0.0
 servers:
   - url: https://nyx-backend.up.railway.app/api/v1/external
