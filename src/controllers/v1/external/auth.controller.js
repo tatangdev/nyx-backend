@@ -1,10 +1,17 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient({ log: ['query'] });
-const OTP = require('otp');
 const moment = require('moment-timezone');
 const jwt = require('jsonwebtoken');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 const bot = require('../../../libs/telegraf');
+
+function generateOtp(length = 6) {
+    const min = Math.pow(10, length - 1);
+    const max = Math.pow(10, length) - 1;
+    let otp = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    return otp.toString().padStart(length, '0');
+}
 
 module.exports = {
     login: async (req, res, next) => {
@@ -36,8 +43,7 @@ module.exports = {
                 });
             }
 
-            let otp = new OTP();
-            let otpCode = otp.totp();
+            let otpCode = generateOtp();
 
             let existingOtp = await prisma.otp.findFirst({
                 where: {
