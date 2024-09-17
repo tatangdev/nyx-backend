@@ -5,6 +5,7 @@ const cardCategory = require('../../controllers/v1/admin/cardCategory.controller
 const level = require('../../controllers/v1/admin/level.controller');
 const card = require('../../controllers/v1/admin/card.controller');
 const dashboard = require('../../controllers/v1/admin/dashboard.controller');
+const broadcast = require('../../controllers/v1/admin/broadcast.controller');
 const player = require('../../controllers/v1/admin/player.controller');
 const history = require('../../controllers/v1/admin/history.controller');
 const task = require('../../controllers/v1/admin/task.controller');
@@ -69,5 +70,8 @@ router.get('/combos', validate, isAdmin, combo.index);
 router.get('/combos/:id', validate, isAdmin, combo.show);
 router.put('/combos/:id', validate, isAdmin, combo.update);
 router.delete('/combos/:id', validate, isAdmin, combo.destroy);
+
+// broadcast
+router.post('/broadcasts', validate, isAdmin, broadcast.send);
 
 module.exports = router;

@@ -1851,6 +1851,55 @@ paths:
                                   type: integer
       security:
         - bearerAuth: []
+  /broadcasts:
+    post:
+      summary: Create broadcast
+      tags:
+        - Broadcasts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: |-
+                    ⚡️ *COME AND GET IT!* ⚡️
+
+                    We're adding more and more exchanges for you to become a part of *our family*!
+
+                    And today we're thrilled to announce that the *$CHPMNK* token will become available on the *BitGet* exchange!
+
+                    Don't forget to use our [referral link](https://your-referral-link.com) to sign up!
+                image_url:
+                  type: string
+                  example: https://ik.imagekit.io/taetang/chipmunk/Image%20from%20Telegram_gaW9_4qpQ.jpeg
+                telegram_ids:
+                  type: array
+                  items:
+                    type: string
+                    example: 769049677
+                type:
+                  type: string
+                  enum: [text, image]
+                  example: image
+                is_all_players:
+                  type: boolean
+                  example: false
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
 components:
   schemas:
     AnyValue:
