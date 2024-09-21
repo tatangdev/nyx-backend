@@ -81,7 +81,33 @@ async function resetFullEnergyQuota() {
     }
 }
 
+async function resetAttendance() {
+    try {
+        let now = moment().tz(TIMEZONE);
+        let yesterday = now.add(-1, 'days').unix();
+        let attendances = await prisma.attendance.updateMany({
+            data: {
+                days: 0,
+                last_attendance: yesterday
+            },
+            where: {
+                days: {
+                    gte: 10,
+                },
+                last_attendance: {
+                    lt: yesterday
+                }
+            }
+        });
+
+        console.log('Reset attendance:', attendances);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     approveTasks,
-    resetFullEnergyQuota
+    resetFullEnergyQuota,
+    resetAttendance
 };
