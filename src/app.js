@@ -83,10 +83,11 @@ app.listen(port, () => {
 });
 
 const cron = require('node-cron');
-const { approveTasks } = require('./cron/tasks.js');
+const { approveTasks, resetAttendance } = require('./cron/tasks.js');
 
 cron.schedule('*/10 * * * *', () => {
     approveTasks();
+    resetAttendance();
 });
 
 cron.schedule('0 11 * * *', () => {
