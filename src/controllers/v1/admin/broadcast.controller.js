@@ -48,8 +48,8 @@ module.exports = {
     //                     console.log("chatId", chatId);
     //                     try {
     //                         await bot.telegram.sendMessage(chatId, message, {
-    //                             parse_mode: 'Markdown',
-    //                             // parse_mode: 'MarkdownV2',
+    //                             parse_mode: 'MarkdownV2',
+    //                             // parse_mode: 'MarkdownV2V2',
     //                             // reply_markup: inlineButtons
     //                         });
     //                     } catch (err) {
@@ -70,8 +70,8 @@ module.exports = {
     //                     try {
     //                         await bot.telegram.sendPhoto(chatId, image_url, {
     //                             caption: message,
-    //                             parse_mode: 'Markdown',
-    //                             // parse_mode: 'MarkdownV2',
+    //                             parse_mode: 'MarkdownV2',
+    //                             // parse_mode: 'MarkdownV2V2',
     //                             // reply_markup: inlineButtons
     //                         });
     //                     } catch (err) {
@@ -161,7 +161,7 @@ module.exports = {
                     telegram_ids.forEach(async (chatId) => {
                         try {
                             await bot.telegram.sendMessage(chatId, message, {
-                                parse_mode: 'Markdown',
+                                parse_mode: 'MarkdownV2',
                             });
                         } catch (err) {
                             console.error(`Failed to send message to ${chatId}: ${err.message}`);
@@ -177,7 +177,7 @@ module.exports = {
                         try {
                             await bot.telegram.sendPhoto(chatId, image_url, {
                                 caption: message,
-                                parse_mode: 'Markdown',
+                                parse_mode: 'MarkdownV2',
                             });
                         } catch (err) {
                             console.error(`Failed to send image to ${chatId}: ${err.message}`);
