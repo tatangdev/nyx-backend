@@ -254,7 +254,7 @@ module.exports = {
                         }
 
                         dayCount = attendance.days + 1;
-                        const maxReward = Math.max(...attendanceConfigValue.map(item => item.days));
+                        const maxReward = Math.max(...attendanceConfigValue.map(item => item.day));
                         if (dayCount > maxReward) {
                             return res.status(400).json({
                                 status: false,
