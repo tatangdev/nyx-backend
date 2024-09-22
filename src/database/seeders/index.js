@@ -1,6 +1,5 @@
 require('dotenv').config();
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient({ log: ['query'] });
+const prisma = require('../../libs/prisma');
 const bcrypt = require('bcrypt');
 
 const moment = require('moment-timezone');

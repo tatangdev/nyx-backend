@@ -96,8 +96,7 @@ cron.schedule('0 11 * * *', () => {
 
 
 // telegram bot
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient({ log: ['query'] });
+const prisma = require('./libs/prisma');
 const bot = require('./libs/telegraf.js');
 
 bot.command('connect', async (ctx) => {
