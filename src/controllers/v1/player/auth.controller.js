@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient({ log: ['query'] });
+const prisma = require('../../../libs/prisma');
 const { uid } = require('uid');
 const jwt = require('jsonwebtoken');
 const yaml = require('js-yaml');

@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient({ log: ['query'] });
+const prisma = require('../../../libs/prisma');
 const yaml = require('js-yaml');
 
 module.exports = {
@@ -63,4 +62,4 @@ module.exports = {
             next(error);
         }
     }
-}
+};

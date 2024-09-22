@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient({ log: ['query'] });
+const prisma = require('../../../libs/prisma');
 const moment = require('moment-timezone');
 const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 const yaml = require('js-yaml');

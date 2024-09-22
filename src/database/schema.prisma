@@ -217,3 +217,26 @@ model Attendance {
 
   @@map("attendances")
 }
+
+model BroadcastMessage {
+  id              Int     @id @default(autoincrement())
+  type            String
+  message         String
+  image_url       String?
+  created_at_unix Int?
+
+  @@map("broadcast_messages")
+}
+
+model BroadcastMessageMapping {
+  id              Int     @id @default(autoincrement())
+  message_id      Int
+  telegram_id     String
+  is_sent         Boolean @default(false)
+  is_failed       Boolean @default(false)
+  error_message   String?
+  created_at_unix Int?
+  updated_at_unix Int?
+
+  @@map("broadcast_message_mappings")
+}
