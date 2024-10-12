@@ -122,6 +122,7 @@ module.exports = {
                 // Handle referral bonuses
                 if (isNewUser && referee) {
                     const referralCoins = levelData[0].level_up_reward;
+                    const referralCoupons = levelData[0].level_up_reward_coupons;
 
                     // player
                     await prisma.playerEarning.update({
@@ -138,6 +139,7 @@ module.exports = {
                         data: {
                             coins_total: { increment: referralCoins },
                             coins_balance: { increment: referralCoins },
+                            coupons_balance: { increment: referralCoupons },
                         }
                     });
 
@@ -174,6 +176,20 @@ module.exports = {
                                 created_at_unix: now.unix(),
                             }
                         ]
+                    });
+
+                    // Coupons
+                    await prisma.couponHistory.create({
+                        data: {
+                            player_id: referee.id,
+                            amount: referralCoupons,
+                            type: 'REFERRAL',
+                            data: yaml.dump({
+                                previous_balance: refereeEarning.coupons_balance,
+                                new_balance: refereeEarning.coupons_balance + referralCoupons,
+                            }),
+                            created_at_unix: now.unix(),
+                        }
                     });
                 }
 
@@ -213,6 +229,7 @@ module.exports = {
             if (playerEarning) {
                 user.point = playerEarning.coins_balance;
                 user.profit_per_hour = playerEarning.passive_per_hour;
+                user.coupons_balance = playerEarning.coupons_balance / 100;
             }
 
             return res.status(200).json({

@@ -80,9 +80,30 @@ paths:
                             type: string
                           last_name:
                             type: string
+                          referee_id:
+                            type: integer
+                            nullable: true
                           referral_code:
                             type: string
-                          referree_id:
+                          level:
+                            type: integer
+                          phone_number:
+                            type: string
+                            nullable: true
+                          created_at_unix:
+                            type: integer
+                          updated_at_unix:
+                            type: integer
+                          role:
+                            type: string
+                          iat:
+                            type: integer
+                          point:
+                            type: integer
+                          profit_per_hour:
+                            type: number
+                            format: float
+                          coupons_balance:
                             type: integer
       security:
         - bearerAuth: []
@@ -341,6 +362,60 @@ paths:
                     properties:
                       data:
                         type: object
+                        properties:
+                          passive_earnings:
+                            type: object
+                            properties:
+                              per_hour:
+                                type: number
+                                format: float
+                              per_second:
+                                type: number
+                                format: float
+                              last_earned:
+                                type: integer
+                          tap_earnings:
+                            type: object
+                            properties:
+                              per_tap:
+                                type: number
+                              max_taps:
+                                type: integer
+                              available_taps:
+                                type: integer
+                              recovery_per_second:
+                                type: number
+                          level:
+                            type: object
+                            properties:
+                              current_level:
+                                type: integer
+                              current_level_name:
+                                type: string
+                              current_level_image_url:
+                                type: string
+                              current_level_score:
+                                type: integer
+                              next_level:
+                                type: integer
+                              next_level_name:
+                                type: string
+                              next_level_image_url:
+                                type: string
+                              next_level_score:
+                                type: integer
+                              next_level_percentage:
+                                type: number
+                                format: float
+                          total_coins:
+                            type: integer
+                          balance:
+                            type: integer
+                          coupons_balance:
+                            type: number
+                            format: float
+                          last_sync:
+                            type: integer
   /tap:
     post:
       summary: Sync player points
@@ -371,6 +446,60 @@ paths:
                     properties:
                       data:
                         type: object
+                        properties:
+                          passive_earnings:
+                            type: object
+                            properties:
+                              per_hour:
+                                type: number
+                                format: float
+                              per_second:
+                                type: number
+                                format: float
+                              last_earned:
+                                type: integer
+                          tap_earnings:
+                            type: object
+                            properties:
+                              per_tap:
+                                type: number
+                              max_taps:
+                                type: integer
+                              available_taps:
+                                type: integer
+                              recovery_per_second:
+                                type: number
+                          level:
+                            type: object
+                            properties:
+                              current_level:
+                                type: integer
+                              current_level_name:
+                                type: string
+                              current_level_image_url:
+                                type: string
+                              current_level_score:
+                                type: integer
+                              next_level:
+                                type: integer
+                              next_level_name:
+                                type: string
+                              next_level_image_url:
+                                type: string
+                              next_level_score:
+                                type: integer
+                              next_level_percentage:
+                                type: number
+                                format: float
+                          total_coins:
+                            type: integer
+                          balance:
+                            type: integer
+                          coupons_balance:
+                            type: number
+                            format: float
+                          last_sync:
+                            type: integer
   /tasks:
     get:
       summary: Get all tasks

@@ -1479,6 +1479,8 @@ paths:
                               type: integer
                             profit_per_hour:
                               type: integer
+                            coupons_balance:
+                              type: number
       security:
         - bearerAuth: []
   /players/{id}:
@@ -1534,6 +1536,8 @@ paths:
                             type: integer
                           profit_per_hour:
                             type: integer
+                          coupons_balance:
+                            type: number
       security:
         - bearerAuth: []
     put:

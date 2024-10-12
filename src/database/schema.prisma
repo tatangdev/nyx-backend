@@ -73,6 +73,7 @@ model PlayerEarning {
   coins_total      Int
   coins_balance    Int
   coins_spent      Int?
+  coupons_balance  Int @default(0)
 
   tap_earning_value            Int?
   tap_earning_energy           Int?
@@ -239,4 +240,15 @@ model BroadcastMessageMapping {
   updated_at_unix Int?
 
   @@map("broadcast_message_mappings")
+}
+
+model CouponHistory {
+  id              Int     @id @default(autoincrement())
+  player_id       Int
+  amount          Int
+  type            String
+  data            String?
+  created_at_unix Int?
+
+  @@map("coupon_histories")
 }
