@@ -71,6 +71,15 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message:"Player ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             let playerId = parseInt(req.params.id);
             let player = await prisma.player.findUnique({
                 where: { id: playerId },
@@ -117,6 +126,15 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message:"Player ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             const now = moment().tz(TIMEZONE);
             let playerId = parseInt(req.params.id);
             let { points_balance: pointsBalance } = req.body;

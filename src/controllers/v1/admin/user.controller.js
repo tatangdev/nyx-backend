@@ -85,6 +85,15 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "User ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             let user = await prisma.user.findUnique({
                 where: { id: parseInt(req.params.id) }
             });
@@ -111,6 +120,15 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "User ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+            
             let userId = parseInt(req.params.id);
 
             if (req.user.id === userId) {

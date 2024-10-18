@@ -284,6 +284,15 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Card ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             let card = await prisma.card.findUnique({
                 where: { id: parseInt(req.params.id) },
             });
@@ -311,6 +320,15 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Card ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+            
             const now = moment().tz(TIMEZONE);
             let { name, description, image, category_id, levels, is_published, condition } = req.body;
 

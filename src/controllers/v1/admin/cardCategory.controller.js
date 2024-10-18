@@ -68,6 +68,15 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Card category id is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             let cardCategory = await prisma.cardCategory.findUnique({
                 where: {
                     id: parseInt(req.params.id)
@@ -97,6 +106,15 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Card category id is required",
+                    error: null,
+                    data: null
+                });
+            }
+            
             let { name, is_active } = req.body;
             let cardCategoryId = parseInt(req.params.id);
 
