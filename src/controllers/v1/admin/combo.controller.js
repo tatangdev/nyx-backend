@@ -173,6 +173,15 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Combo ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             const id = parseInt(req.params.id);
             const combo = await prisma.cardCombo.findUnique({
                 where: {
@@ -215,6 +224,15 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Combo ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             const id = parseInt(req.params.id);
             const { date, combination, reward_coins } = req.body;
 
@@ -285,6 +303,15 @@ module.exports = {
 
     destroy: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Combo ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             const id = parseInt(req.params.id);
             const combo = await prisma.cardCombo.findUnique({
                 where: {

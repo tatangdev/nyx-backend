@@ -51,6 +51,7 @@ module.exports = {
                 pe.coins_total AS points_total,
                 pe.coins_total - pe.coins_balance AS spending_amount,
                 pe.passive_per_hour AS profit_per_hour,
+                CAST(pe.coupons_balance AS FLOAT)/100 AS coupons_balance,
                 CAST(ucc.count AS INTEGER) AS upgraded_card_cnt
             FROM players p
             INNER JOIN player_earnings pe ON pe.player_id = p.id
@@ -70,6 +71,15 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message:"Player ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             let playerId = parseInt(req.params.id);
             let player = await prisma.player.findUnique({
                 where: { id: playerId },
@@ -88,7 +98,8 @@ module.exports = {
                 points_balance: 0,
                 points_total: 0,
                 spending_amount: 0,
-                profit_per_hour: 0
+                profit_per_hour: 0,
+                coupons_balance: 0,
             };
 
             let playerEarnings = await prisma.playerEarning.findFirst({
@@ -99,6 +110,7 @@ module.exports = {
                 response.points_total = playerEarnings.coins_total;
                 response.spending_amount = playerEarnings.coins_total - playerEarnings.coins_balance;
                 response.profit_per_hour = playerEarnings.passive_per_hour;
+                response.coupons_balance = playerEarnings.coupons_balance / 100;
             }
 
             return res.status(200).json({
@@ -114,6 +126,15 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message:"Player ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             const now = moment().tz(TIMEZONE);
             let playerId = parseInt(req.params.id);
             let { points_balance: pointsBalance } = req.body;

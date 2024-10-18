@@ -35,7 +35,6 @@ module.exports = {
                         const remainSeconds = moment(now).endOf('day').diff(now, 'seconds');
                         const dailyStreakRewardValue = yaml.load(task.config);
 
-
                         let isCompleted = false;
                         let dayCount = 1;
 
@@ -293,6 +292,7 @@ module.exports = {
                             data: {
                                 coins_balance: point.coins_balance + reward.reward_coins,
                                 coins_total: point.coins_total + reward.reward_coins,
+                                coupons_balance: point.coupons_balance + reward.reward_coupons,
                                 updated_at_unix: todayDate.unix()
                             }
                         });
@@ -312,6 +312,18 @@ module.exports = {
                                 }),
                                 created_at_unix: todayDate.unix()
                             }
+                        });
+
+                        // Coupons
+                        await prisma.couponHistory.create({
+                            player_id: referee.id,
+                            amount: referralCoupons,
+                            type: 'DAILY_STREAK',
+                            data: yaml.dump({
+                                previous_balance: refereeEarning.coupons_balance,
+                                new_balance: refereeEarning.coupons_balance + referralCoupons,
+                            }),
+                            created_at_unix: now.unix(),
                         });
                     }
 

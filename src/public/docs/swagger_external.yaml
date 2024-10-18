@@ -27,8 +27,8 @@ paths:
     post:
       tags:
         - Auth
-      summary: Login By Phone Number
-      operationId: loginByPhoneNumber
+      summary: Login By Telegram ID
+      operationId: loginByTelegramID
       requestBody:
         content:
           application/json:
@@ -41,9 +41,9 @@ paths:
                 ip_address:
                   type: string
                   example: 127.0.0.1
-                phone_number:
+                telegram_id:
                   type: string
-                  example: "6577777777"
+                  example: "769049677"
       responses:
         "200":
           description: Success
@@ -75,6 +75,7 @@ paths:
                   type: string
                 telegram_id:
                   type: string
+                  example: "769049677"
       responses:
         "200":
           description: Success
@@ -119,286 +120,117 @@ paths:
                             type: string
                           last_name:
                             type: string
-                          referee_id:
-                            type: string
                           referral_code:
                             type: string
-                          level:
+                          referee:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              telegram_id:
+                                type: string
+                              username:
+                                type: string
+                              first_name:
+                                type: string
+                              last_name:
+                                type: string
+                          passive_earnings:
+                            type: object
+                            properties:
+                              coins_per_hour:
+                                type: integer
+                              coins_per_second:
+                                type: number
+                                format: float
+                          tap_earnings:
+                            type: object
+                            properties:
+                              coins_per_tap:
+                                type: integer
+                              max_taps_allowed:
+                                type: integer
+                              current_taps_available:
+                                type: integer
+                              tap_recovery_rate_per_second:
+                                type: number
+                                format: float
+                          level_info:
+                            type: object
+                            properties:
+                              current_level:
+                                type: integer
+                              level_name:
+                                type: string
+                              level_image_url:
+                                type: string
+                              level_score:
+                                type: integer
+                          total_earned_coins:
                             type: integer
-                          phone_number:
-                            type: string
-                          created_at_unix:
-                            type: integer
-                          updated_at_unix:
-                            type: integer
-                          role:
-                            type: string
-                          iat:
+                          current_balance:
                             type: integer
       security:
         - bearerAuth: []
-  /user/referrals:
-    get:
-      # tags:
-      summary: User Referral
-      operationId: userReferral
-      parameters:
-        - name: limit
-          in: query
-          schema:
-            type: string
-            example: "10"
-        - name: page
-          in: query
-          schema:
-            type: string
-            example: "1"
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: string
-                  example: "1"
-      responses:
-        "200":
-          description: ""
-  /leaderboard:
-    get:
-      # tags:
-      summary: Leaderboard
-      operationId: leaderboard
-      parameters:
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: string
-                  example: "1"
-      responses:
-        "200":
-          description: ""
-  /my-transactions:
-    get:
-      # tags:
-      summary: My Transactions
-      operationId: myTransactions
-      parameters:
-        - name: limit
-          in: query
-          schema:
-            type: string
-            example: "2"
-        - name: page
-          in: query
-          schema:
-            type: string
-            example: "1"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: string
-                  example: "1"
-      responses:
-        "200":
-          description: ""
-  /live-transactions:
-    get:
-      # tags:
-      summary: Live Transactions
-      operationId: liveTransactions
-      parameters:
-        - name: limit
-          in: query
-          schema:
-            type: string
-            example: "2"
-        - name: page
-          in: query
-          schema:
-            type: string
-            example: "1"
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: string
-                  example: "1"
-      responses:
-        "200":
-          description: ""
-  /batch:
-    get:
-      # tags:
-      summary: Batch Information
-      operationId: batchInformation
-      parameters:
-        - name: type
-          in: query
-          schema:
-            type: string
-            example: PRESALE
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                userId:
-                  type: string
-                  example: "1"
-      responses:
-        "200":
-          description: ""
-  /buy:
-    post:
-      # tags:
-      summary: Buy Coins
-      operationId: buyCoins
-      parameters:
-        - name: userId
-          in: query
-          schema:
-            type: string
-            example: "1"
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                chain:
-                  type: string
-                  example: BSC
-                type:
-                  type: string
-                  example: PRIVATESELL
-                fromAddress:
-                  type: string
-                  example: 0xfBE24bF11676f5249d4bc66bcBA97391AA062bE3
-                toAddress:
-                  type: string
-                  example: 0x0B2bAd20F2c33d4eABDB026A27d0C6E744290122
-                amount:
-                  type: string
-                  example: 0.048
-                price:
-                  type: string
-                  example: 0.00015
-                txid:
-                  type: string
-                  example: 0x6e303cb7cc97c1d70511f0b7cb2021364a82a2f584186504c0aecdbfcf90d226
-
-          text/plain:
-            example: >-
-              #  {
-              #   "chain": "BSC",
-              #   "type": "PRIVATESELL",
-              #   "fromAddress": "0xfBE24bF11676f5249d4bc66bcBA97391AA062bE3",
-              #   "toAddress": "0x0B2bAd20F2c33d4eABDB026A27d0C6E744290122",
-              #   "amount": 0.047999999999999994,
-              #   "price": 0.00015,
-              #   "txid": "0x6e303cb7cc97c1d70511f0b7cb2021364a82a2f584186504c0aecdbfcf90d226"
-              # }
-      responses:
-        "200":
-          description: ""
-  /user:
-    get:
-      summary: User Information
-      operationId: userInformation1
-      parameters:
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                "":
-                  type: string
-                  example: ""
-      responses:
-        "200":
-          description: ""
   /referrals:
     get:
-      summary: User Referrals
-      operationId: userReferrals
-      parameters:
-        - name: orderBy
-          in: query
-          schema:
-            type: string
-            example: desc
-        - name: limit
-          in: query
-          schema:
-            type: string
-            example: "10"
-        - name: offset
-          in: query
-          schema:
-            type: string
-            example: "10"
-        - name: token
-          in: header
-          schema:
-            type: string
-            example: bearer ...
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                "":
-                  type: string
-                  example: ""
+      tags:
+        - Referrals
+      summary: Get Referrals
+      operationId: getReferrals
       responses:
         "200":
-          description: ""
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          total_items:
+                            type: integer
+                          referrals:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                total_items:
+                                  type: integer
+                                referrals:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      id:
+                                        type: integer
+                                      telegram_id:
+                                        type: string
+                                      first_name:
+                                        type: string
+                                      last_name:
+                                        type: string
+                                      level:
+                                        type: integer
+                                      current_balance:
+                                        type: integer
+                                      total_earned_coins:
+                                        type: integer
+                                      passive_earnings:
+                                        type: object
+                                        properties:
+                                          coins_per_hour:
+                                            type: integer
+                                          coins_per_second:
+                                            type: number
+                                            format: float
+                                      referral_bonus_coins:
+                                        type: integer
+      security:
+        - bearerAuth: []
 components:
   schemas:
     AnyValue:

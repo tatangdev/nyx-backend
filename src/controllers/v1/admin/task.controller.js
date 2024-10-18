@@ -264,6 +264,15 @@ module.exports = {
 
     show: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Task ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             let task = await prisma.task.findUnique({
                 where: {
                     id: Number(req.params.id)
@@ -295,6 +304,15 @@ module.exports = {
 
     update: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Task ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             let errorCnt = 0;
             const now = moment().tz(TIMEZONE);
             const { id } = req.params; // Assume the task ID is passed as a URL parameter
@@ -496,6 +514,15 @@ module.exports = {
 
     destroy: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Task ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             let task = await prisma.task.delete({
                 where: {
                     id: Number(req.params.id)
@@ -564,6 +591,15 @@ module.exports = {
 
     approval: async (req, res, next) => {
         try {
+            if (!req.params.id) {
+                return res.status(400).json({
+                    status: false,
+                    message: "Submission ID is required",
+                    error: null,
+                    data: null
+                });
+            }
+
             let todayDate = moment().tz(TIMEZONE);
             let submission = await prisma.taskSubmission.findFirst({
                 where: {

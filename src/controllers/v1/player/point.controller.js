@@ -113,6 +113,7 @@ module.exports = {
                 level: levelData,
                 total_coins: totalCoins,
                 balance: balanceCoins,
+                coupons_balance: playerEarning.coupons_balance/100,
                 last_sync: now.unix(),
             };
 
@@ -280,6 +281,7 @@ module.exports = {
                 level: levelData,
                 total_coins: totalCoins,
                 balance: balanceCoins,
+                coupons_balance: playerEarning.coupons_balance/100,
                 last_sync: currentTimeInSeconds,
             };
 
