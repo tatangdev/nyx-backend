@@ -2,16 +2,22 @@ require('dotenv').config();
 require("./instrument.js");
 const Sentry = require("@sentry/node");
 const express = require('express');
-const logger = require('morgan');
+const morgan = require('morgan');
+const logger = require('./libs/winston.js');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 const { BASE_URL = 'http://localhost:3000', ENV = 'test' } = process.env;
+const path = require('path');
+const fs = require('fs');
+const moment = require('moment-timezone');
+const TIMEZONE = process.env.TIMEZONE || 'Asia/Jakarta';
 
 // Middleware
 app.use(cors());
-app.use(logger('dev'));
 app.use(express.json());
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'));
 app.use('/docs', express.static('./src/public/docs'));
 app.use('/images', express.static('./src/public/images'));
 app.use('/videos', express.static('./src/public/videos'));
@@ -44,12 +50,33 @@ if (ENV !== 'production') {
     app.use('/docs', swaggerUi.serve, swaggerUi.setup(null, options));
 }
 
+// Middleware to log requests
+app.use(morgan('dev'));
+morgan.token('body', (req) => JSON.stringify(req.body));
+morgan.token('timestamp', () => moment().tz(TIMEZONE));
+app.use(morgan(function (tokens, req, res) {
+    return `body: ${tokens.body(req)}\nTimestamp: ${tokens.timestamp()}\n`;
+}));
+
 app.get('/', (req, res) => {
     res.json({
         status: true,
         message: 'Welcome to the API Chipmunk Kombat',
         error: null,
         data: null
+    });
+});
+
+app.get('/logs/errors', (req, res) => {
+    const logFilePath = path.join(__dirname, '../logs/error.log');
+
+    fs.readFile(logFilePath, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Unable to read log file' });
+        }
+
+        const logs = data.split('\n').filter(log => log).map(log => JSON.parse(log));
+        res.render('logs', { logs });
     });
 });
 
@@ -68,7 +95,16 @@ app.use((req, res, next) => {
 
 // 500 handler
 app.use((err, req, res, next) => {
-    console.log(err);
+    logger.error({
+        message: err.message,
+        stack: err.stack,
+        method: req.method,
+        endpoint: req.originalUrl,
+        body: req.body,
+        query: req.query,
+        params: req.params
+    });
+
     res.status(500).json({
         status: false,
         message: 'Something broke!',
