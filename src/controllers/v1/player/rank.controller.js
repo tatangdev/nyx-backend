@@ -6,7 +6,7 @@ module.exports = {
         try {
             let playerId = req.user.id;
             let player = await prisma.player.findFirst({ where: { id: playerId } });
-            let level = Number(req.query.level) || player.level;
+            let level = req.query.level ? Number(req.query.level) : player.level;
 
             let levelConfig = await prisma.config.findFirst({ where: { key: `level` } });
             let levelConfigValue = yaml.load(levelConfig.value);

@@ -339,7 +339,6 @@ module.exports = {
                     let boostEarningTap = yaml.load(_boostEarningTap.value);
                     let currentBoostEarningTap = boostEarningTap.find(b => b.level === point.tap_earning_level);
 
-
                     await prisma.player.update({
                         where: { id: playerId },
                         data: {
@@ -539,7 +538,6 @@ module.exports = {
                 isSubmitted = true;
                 submittedAt = moment.unix(comboSubmission.created_at_unix).tz(TIMEZONE).format();
             }
-
 
             return res.status(200).json({
                 status: true,

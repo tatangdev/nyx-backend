@@ -66,7 +66,6 @@ async function main() {
                 }
             });
 
-
             // console.log({
             //     id: player.id,
             //     coins_spent: player.coins_spent,
@@ -74,8 +73,6 @@ async function main() {
             //     correct_level: correctLevel.level
             // });
         }
-
-
 
         // if (dataIndex == 0) {
         //     console.log(correctLevel);

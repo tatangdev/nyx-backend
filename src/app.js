@@ -95,6 +95,15 @@ app.use((req, res, next) => {
 
 // 500 handler
 app.use((err, req, res, next) => {
+    if (err.message === 'Insufficient balance') {
+        return res.status(400).json({
+            status: false,
+            message: err.message,
+            error: err.errors,
+            data: null
+        });
+    }
+
     logger.error({
         message: err.message,
         stack: err.stack,
@@ -104,6 +113,8 @@ app.use((err, req, res, next) => {
         query: req.query,
         params: req.params
     });
+
+    console.log(err);
 
     res.status(500).json({
         status: false,

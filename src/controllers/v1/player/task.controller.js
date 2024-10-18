@@ -60,7 +60,6 @@ module.exports = {
                             }
                         }
 
-
                         const todayReward = dailyStreakRewardValue.find(item => item.day === dayCount) || { reward_coins: 0 };
 
                         return {
@@ -130,232 +129,63 @@ module.exports = {
 
     check: async (req, res, next) => {
         try {
-            const playerId = req.user.id;
-            const { task_id: taskId, image } = req.body;
-            const todayDate = moment().tz(TIMEZONE);
+            await prisma.$transaction(async (prisma) => {
+                const playerId = req.user.id;
+                const { task_id: taskId, image } = req.body;
+                const todayDate = moment().tz(TIMEZONE);
 
-            let task = await prisma.task.findFirst({ where: { id: taskId } });
-            if (!task) {
-                return res.status(400).json({
-                    status: false,
-                    message: `Task with ID '${taskId}' not recognized. Please check the task ID and try again.`,
-                    error: "Invalid task ID",
-                    data: null
-                });
-            }
-            if (task.requires_admin_approval && !image) {
-                return res.status(400).json({
-                    status: false,
-                    message: "Please upload the required image to submit this task.",
-                    error: "Image required",
-                    data: null
-                });
-            }
-
-            let taskSubmitted = await prisma.taskSubmission.findFirst({
-                where: {
-                    player_id: playerId,
-                    task_id: taskId,
-                    is_approved: null
-                }
-            });
-
-
-            switch (task.type) {
-                case 'invite_friends':
-                    if (taskSubmitted) {
-                        return res.status(400).json({
-                            status: false,
-                            message: "You have already submitted this task.",
-                            error: null,
-                            data: null
-                        });
-                    }
-
-                    const referral = yaml.load(task.config);
-                    let inviteCount = await prisma.player.findMany({
-                        where: {
-                            referee_id: playerId
-                        }
-                    });
-                    if (inviteCount.length < referral.referee_count) {
-                        return res.status(400).json({
-                            status: false,
-                            message: `You need to invite ${referral.referee_count} friends to complete this task.`,
-                            error: "Invite friends required",
-                            data: null
-                        });
-                    }
-
-                    // Process the reward
-                    const point = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
-                    await prisma.playerEarning.update({
-                        where: { id: point.id },
-                        data: {
-                            coins_balance: point.coins_balance + task.reward_coins,
-                            coins_total: point.coins_total + task.reward_coins,
-                            updated_at_unix: todayDate.unix()
-                        }
-                    });
-
-                    await prisma.pointHistory.create({
-                        data: {
-                            player_id: playerId,
-                            amount: task.reward_coins,
-                            type: 'TASK',
-                            data: yaml.dump({
-                                nominal: task.reward_coins,
-                                previous_balance: point.coins_balance,
-                                previous_total: point.coins_total,
-                                new_balance: point.coins_balance + task.reward_coins,
-                                new_total: point.coins_total + task.reward_coins,
-                                note: `Task reward for completing '${task.name}'`
-                            }),
-                            created_at_unix: todayDate.unix()
-                        }
-                    });
-
-                    await prisma.taskSubmission.create({
-                        data: {
-                            player_id: playerId,
-                            task_id: taskId,
-                            submitted_at_unix: todayDate.unix(),
-                            completed_at_unix: task.requires_admin_approval ? null : todayDate.unix(),
-                            image: task.requires_admin_approval ? image : null,
-                        }
-                    });
-
-                    return res.status(200).json({
-                        status: true,
-                        message: `Congratulations! You have completed the task '${task.name}'.`,
-                        error: null,
+                let task = await prisma.task.findFirst({ where: { id: taskId } });
+                if (!task) {
+                    return res.status(400).json({
+                        status: false,
+                        message: `Task with ID '${taskId}' not recognized. Please check the task ID and try again.`,
+                        error: "Invalid task ID",
                         data: null
                     });
-                case 'daily_check_in': {
-                    const attendance = await prisma.attendance.findFirst({ where: { player_id: playerId } });
-                    const attendanceConfigValue = yaml.load(task.config);
-
-                    let dayCount = 1;
-                    let daysDiff = 1;
-
-                    if (attendance) {
-                        const lastAttendDate = moment.unix(attendance.last_attendance).tz(TIMEZONE);
-                        daysDiff = moment(todayDate).startOf('day').diff(moment(lastAttendDate).startOf('day'), 'days');
-
-                        if (daysDiff < 1) {
-                            return res.status(400).json({
-                                status: false,
-                                message: "You have already checked in today. Please try again tomorrow.",
-                                error: "Daily check-in limit reached",
-                                data: null
-                            });
-                        }
-
-                        dayCount = attendance.days + 1;
-                        const maxReward = Math.max(...attendanceConfigValue.map(item => item.day));
-                        if (dayCount > maxReward) {
-                            return res.status(400).json({
-                                status: false,
-                                message: "You have reached the maximum daily streak reward.",
-                                error: "Daily check-in limit reached",
-                                data: null
-                            });
-                        }
-
-                        // validate day count
-                        dayCount = daysDiff > 1 ? 1 : dayCount;
-
-                        await prisma.attendance.update({
-                            where: { id: attendance.id },
-                            data: {
-                                days: dayCount,
-                                last_attendance: todayDate.unix(),
-                                // last_attendance: 1724173199
-                            }
-                        });
-                    } else {
-                        await prisma.attendance.create({
-                            data: {
-                                player_id: playerId,
-                                last_attendance: todayDate.unix(),
-                            }
-                        });
-                    }
-
-                    // Process the reward
-                    const reward = attendanceConfigValue.find(item => item.day === dayCount);
-                    if (reward) {
-                        const point = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
-
-                        await prisma.playerEarning.update({
-                            where: { id: point.id },
-                            data: {
-                                coins_balance: point.coins_balance + reward.reward_coins,
-                                coins_total: point.coins_total + reward.reward_coins,
-                                coupons_balance: point.coupons_balance + reward.reward_coupons,
-                                updated_at_unix: todayDate.unix()
-                            }
-                        });
-
-                        await prisma.pointHistory.create({
-                            data: {
-                                player_id: playerId,
-                                amount: reward.reward_coins,
-                                type: 'DAILY_STREAK',
-                                data: yaml.dump({
-                                    nominal: reward.reward_coins,
-                                    previous_balance: point.coins_balance,
-                                    previous_total: point.coins_total,
-                                    new_balance: point.coins_balance + reward.reward_coins,
-                                    new_total: point.coins_total + reward.reward_coins,
-                                    note: `Daily streak reward for ${dayCount} days`
-                                }),
-                                created_at_unix: todayDate.unix()
-                            }
-                        });
-
-                        // Coupons
-                        await prisma.couponHistory.create({
-                            player_id: referee.id,
-                            amount: referralCoupons,
-                            type: 'DAILY_STREAK',
-                            data: yaml.dump({
-                                previous_balance: refereeEarning.coupons_balance,
-                                new_balance: refereeEarning.coupons_balance + referralCoupons,
-                            }),
-                            created_at_unix: now.unix(),
-                        });
-                    }
-
-                    return res.status(200).json({
-                        status: true,
-                        message: attendance
-                            ? daysDiff > 1
-                                ? "Your streak has been reset due to inactivity. Start fresh from today!"
-                                : `Great job! Your daily streak is now ${dayCount} days.`
-                            : "Welcome! Your daily streak starts today. Keep it going!",
-                        error: null,
-                        data: {
-                            days: dayCount
-                        }
+                }
+                if (task.requires_admin_approval && !image) {
+                    return res.status(400).json({
+                        status: false,
+                        message: "Please upload the required image to submit this task.",
+                        error: "Image required",
+                        data: null
                     });
                 }
-                // Future task cases can be added here
-                default:
-                    if (taskSubmitted) {
-                        let message = "You have already submitted this task.";
-                        if (task.requires_admin_approval && !taskSubmitted.is_approved) {
-                            message = "You have already submitted this task. Please wait for the approval.";
-                        }
-                        return res.status(400).json({
-                            status: false,
-                            message,
-                            error: null,
-                            data: null
-                        });
-                    }
 
-                    if (!task.requires_admin_approval) {
+                let taskSubmitted = await prisma.taskSubmission.findFirst({
+                    where: {
+                        player_id: playerId,
+                        task_id: taskId,
+                        is_approved: null
+                    }
+                });
+
+                switch (task.type) {
+                    case 'invite_friends':
+                        if (taskSubmitted) {
+                            return res.status(400).json({
+                                status: false,
+                                message: "You have already submitted this task.",
+                                error: null,
+                                data: null
+                            });
+                        }
+
+                        const referral = yaml.load(task.config);
+                        let inviteCount = await prisma.player.findMany({
+                            where: {
+                                referee_id: playerId
+                            }
+                        });
+                        if (inviteCount.length < referral.referee_count) {
+                            return res.status(400).json({
+                                status: false,
+                                message: `You need to invite ${referral.referee_count} friends to complete this task.`,
+                                error: "Invite friends required",
+                                data: null
+                            });
+                        }
+
                         // Process the reward
                         const point = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
                         await prisma.playerEarning.update({
@@ -383,25 +213,199 @@ module.exports = {
                                 created_at_unix: todayDate.unix()
                             }
                         });
-                    }
 
-                    await prisma.taskSubmission.create({
-                        data: {
-                            player_id: playerId,
-                            task_id: taskId,
-                            submitted_at_unix: todayDate.unix(),
-                            completed_at_unix: task.requires_admin_approval ? null : todayDate.unix(),
-                            image: task.requires_admin_approval ? image : null,
+                        await prisma.taskSubmission.create({
+                            data: {
+                                player_id: playerId,
+                                task_id: taskId,
+                                submitted_at_unix: todayDate.unix(),
+                                completed_at_unix: task.requires_admin_approval ? null : todayDate.unix(),
+                                image: task.requires_admin_approval ? image : null,
+                            }
+                        });
+
+                        return res.status(200).json({
+                            status: true,
+                            message: `Congratulations! You have completed the task '${task.name}'.`,
+                            error: null,
+                            data: null
+                        });
+                    case 'daily_check_in': {
+                        const attendance = await prisma.attendance.findFirst({ where: { player_id: playerId } });
+                        const attendanceConfigValue = yaml.load(task.config);
+
+                        let dayCount = 1;
+                        let daysDiff = 1;
+
+                        if (attendance) {
+                            const lastAttendDate = moment.unix(attendance.last_attendance).tz(TIMEZONE);
+                            daysDiff = moment(todayDate).startOf('day').diff(moment(lastAttendDate).startOf('day'), 'days');
+
+                            if (daysDiff < 1) {
+                                return res.status(400).json({
+                                    status: false,
+                                    message: "You have already checked in today. Please try again tomorrow.",
+                                    error: "Daily check-in limit reached",
+                                    data: null
+                                });
+                            }
+
+                            dayCount = attendance.days + 1;
+                            const maxReward = Math.max(...attendanceConfigValue.map(item => item.day));
+                            if (dayCount > maxReward) {
+                                return res.status(400).json({
+                                    status: false,
+                                    message: "You have reached the maximum daily streak reward.",
+                                    error: "Daily check-in limit reached",
+                                    data: null
+                                });
+                            }
+
+                            // validate day count
+                            dayCount = daysDiff > 1 ? 1 : dayCount;
+
+                            await prisma.attendance.update({
+                                where: { id: attendance.id },
+                                data: {
+                                    days: dayCount,
+                                    last_attendance: todayDate.unix(),
+                                    // last_attendance: 1724173199
+                                }
+                            });
+                        } else {
+                            await prisma.attendance.create({
+                                data: {
+                                    player_id: playerId,
+                                    last_attendance: todayDate.unix(),
+                                }
+                            });
                         }
-                    });
 
-                    return res.status(200).json({
-                        status: true,
-                        message: `Congratulations! You have completed the task '${task.name}'.`,
-                        error: null,
-                        data: null
-                    });
-            }
+                        // Process the reward
+                        const reward = attendanceConfigValue.find(item => item.day === dayCount);
+                        if (reward) {
+                            const point = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
+
+                            await prisma.playerEarning.update({
+                                where: { id: point.id },
+                                data: {
+                                    coins_balance: point.coins_balance + reward.reward_coins,
+                                    coins_total: point.coins_total + reward.reward_coins,
+                                    coupons_balance: point.coupons_balance + reward.reward_coupons,
+                                    updated_at_unix: todayDate.unix()
+                                }
+                            });
+
+                            await prisma.pointHistory.create({
+                                data: {
+                                    player_id: playerId,
+                                    amount: reward.reward_coins,
+                                    type: 'DAILY_STREAK',
+                                    data: yaml.dump({
+                                        nominal: reward.reward_coins,
+                                        previous_balance: point.coins_balance,
+                                        previous_total: point.coins_total,
+                                        new_balance: point.coins_balance + reward.reward_coins,
+                                        new_total: point.coins_total + reward.reward_coins,
+                                        note: `Daily streak reward for ${dayCount} days`
+                                    }),
+                                    created_at_unix: todayDate.unix()
+                                }
+                            });
+
+                            // Coupons
+                            if (reward.reward_coupons > 0) {
+                                await prisma.couponHistory.create({
+                                    data: {
+                                        player_id: playerId,
+                                        amount: reward.reward_coupons,
+                                        type: 'DAILY_STREAK',
+                                        data: yaml.dump({
+                                            previous_balance: point.coupons_balance,
+                                            new_balance: point.coupons_balance + reward.reward_coupons,
+                                        }),
+                                        created_at_unix: todayDate.unix()
+                                    }
+                                });
+                            }
+                        }
+
+                        return res.status(200).json({
+                            status: true,
+                            message: attendance
+                                ? daysDiff > 1
+                                    ? "Your streak has been reset due to inactivity. Start fresh from today!"
+                                    : `Great job! Your daily streak is now ${dayCount} days.`
+                                : "Welcome! Your daily streak starts today. Keep it going!",
+                            error: null,
+                            data: {
+                                days: dayCount
+                            }
+                        });
+                    }
+                    // Future task cases can be added here
+                    default:
+                        if (taskSubmitted) {
+                            let message = "You have already submitted this task.";
+                            if (task.requires_admin_approval && !taskSubmitted.is_approved) {
+                                message = "You have already submitted this task. Please wait for the approval.";
+                            }
+                            return res.status(400).json({
+                                status: false,
+                                message,
+                                error: null,
+                                data: null
+                            });
+                        }
+
+                        if (!task.requires_admin_approval) {
+                            // Process the reward
+                            const point = await prisma.playerEarning.findFirst({ where: { player_id: playerId } });
+                            await prisma.playerEarning.update({
+                                where: { id: point.id },
+                                data: {
+                                    coins_balance: point.coins_balance + task.reward_coins,
+                                    coins_total: point.coins_total + task.reward_coins,
+                                    updated_at_unix: todayDate.unix()
+                                }
+                            });
+
+                            await prisma.pointHistory.create({
+                                data: {
+                                    player_id: playerId,
+                                    amount: task.reward_coins,
+                                    type: 'TASK',
+                                    data: yaml.dump({
+                                        nominal: task.reward_coins,
+                                        previous_balance: point.coins_balance,
+                                        previous_total: point.coins_total,
+                                        new_balance: point.coins_balance + task.reward_coins,
+                                        new_total: point.coins_total + task.reward_coins,
+                                        note: `Task reward for completing '${task.name}'`
+                                    }),
+                                    created_at_unix: todayDate.unix()
+                                }
+                            });
+                        }
+
+                        await prisma.taskSubmission.create({
+                            data: {
+                                player_id: playerId,
+                                task_id: taskId,
+                                submitted_at_unix: todayDate.unix(),
+                                completed_at_unix: task.requires_admin_approval ? null : todayDate.unix(),
+                                image: task.requires_admin_approval ? image : null,
+                            }
+                        });
+
+                        return res.status(200).json({
+                            status: true,
+                            message: `Congratulations! You have completed the task '${task.name}'.`,
+                            error: null,
+                            data: null
+                        });
+                }
+            });
         } catch (error) {
             next(error);
         }

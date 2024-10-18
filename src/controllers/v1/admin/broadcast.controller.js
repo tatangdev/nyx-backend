@@ -56,14 +56,12 @@ const sendBroadcastMessage = async (broadcastMessageId) => {
                             break;
                     }
 
-
                     await prisma.broadcastMessageMapping.update({
                         where: { id: recipient.id },
                         data: { is_sent: true, updated_at_unix: moment().unix() }
                     });
                 } catch (error) {
                     console.error(`Failed to send ${broadcastMessage.type} to ${recipient.telegram_id}: ${error.message}`);
-
 
                     if (error.code === 400) {
                         const errorMessage = error.description || 'chat not found';
@@ -80,7 +78,6 @@ const sendBroadcastMessage = async (broadcastMessageId) => {
                     }
                 }
             }
-
 
             await delay(1000);
         }
@@ -139,7 +136,6 @@ module.exports = {
                     where: recipientFilter
                 });
 
-
                 newBroadcastMessage = await prisma.broadcastMessage.create({
                     data: {
                         type: type,
@@ -148,7 +144,6 @@ module.exports = {
                         created_at_unix: now.unix()
                     }
                 });
-
 
                 const messageMappings = recipients.map(recipient => ({
                     message_id: newBroadcastMessage.id,

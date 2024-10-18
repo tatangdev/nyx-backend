@@ -283,7 +283,6 @@ module.exports = {
                         }
                     });
 
-
                     // level history
                     await prisma.levelHistory.create({
                         data: {
