@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Logs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .log-entry {
+            background-color: #ffffff;
+            border: 1px solid #e0e4e8;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .log-entry:hover {
+            transform: translateY(-3px);
+        }
+
+        .log-entry h3 {
+            font-size: 20px;
+            color: #e74c3c;
+            margin-top: 0;
+        }
+
+        .log-entry p {
+            margin: 8px 0;
+        }
+
+        .log-entry span {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        pre {
+            background-color: #f4f7fa;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid #e0e4e8;
+        }
+
+        .timestamp {
+            font-style: italic;
+            color: #7f8c8d;
+        }
+
+        .refresh-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .refresh-btn:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .log-entry {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Error Logs</h1>
+        <a href="/logs/errors" class="refresh-btn">Refresh Logs</a>
+
+        <% if (logs.length> 0) { %>
+            <% logs.forEach(function(log) { %>
+                <div class="log-entry">
+                    <h3>Error: <%= log.message %>
+                    </h3>
+                    <p><span>Endpoint:</span>
+                        <%= log.endpoint %>
+                    </p>
+                    <p><span>Method:</span>
+                        <%= log.method %>
+                    </p>
+                    <p><span>Request Body:</span>
+                    <pre><%= JSON.stringify(log.body, null, 2) %></pre>
+                    </p>
+                    <p><span>Query Params:</span>
+                    <pre><%= JSON.stringify(log.query, null, 2) %></pre>
+                    </p>
+                    <p><span>Route Params:</span>
+                    <pre><%= JSON.stringify(log.params, null, 2) %></pre>
+                    </p>
+                    <p><span>Stack Trace:</span>
+                    <pre><%= log.stack %></pre>
+                    </p>
+                    <p class="timestamp"><span>Timestamp:</span>
+                        <%= new Date(log.timestamp).toLocaleString() %>
+                    </p>
+                </div>
+                <% }) %>
+                    <% } else { %>
+                        <p>No logs found.</p>
+                        <% } %>
+    </div>
+</body>
+
+</html>
