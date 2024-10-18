@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js"
+    "dev": "nodemon ./src/app.js",
+    "clear-log": "rm -rf ./logs/*"
   },
   "prisma": {
     "schema": "./src/database/schema.prisma",
