@@ -29,6 +29,9 @@ An intuitive and powerful dashboard allows admins to efficiently manage the game
 - [Player API Documentation](https://nyx-backend.up.railway.app/docs/?urls.primaryName=Player+V1) – Detailed documentation for the player-side API.
 - [Admin API Documentation](https://nyx-backend.up.railway.app/docs/?urls.primaryName=Admin+V1) – Documentation covering the admin-side API, including features and controls.
 
+## Demo
+Try the game live on Telegram: [Telegram Bot Demo Game](https://t.me/t2e_game_bot)
+
 ## Technologies Used
 - [Express.js](https://expressjs.com/) – Node.js framework for building server-side applications.
 - [Prisma](https://www.prisma.io/) – Object-Relational Mapper for managing data interactions with PostgreSQL.
